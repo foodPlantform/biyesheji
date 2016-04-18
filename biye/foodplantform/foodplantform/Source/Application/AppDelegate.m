@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-
+#import "BaseTabBarController.h"
 @interface AppDelegate ()
 
 @end
@@ -16,7 +16,19 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
     // Override point for customization after application launch.
+    //1.创建窗口
+    self.window = [[UIWindow alloc]initWithFrame:[[UIScreen mainScreen]bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
+    
+    //2.设置窗口的跟控制器(这个tabbar是我封装的，在BaseClass文件夹里
+    BaseTabBarController * tabBarVC = [[BaseTabBarController alloc]init];
+    self.window.rootViewController = tabBarVC;
+    
+    //3.显示窗口
+    [self.window makeKeyAndVisible];
     return YES;
 }
 
