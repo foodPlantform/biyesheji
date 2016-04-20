@@ -18,10 +18,10 @@
 		2E62F65D1CC42C680041EE52 /* JGProgressHUDRingIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E62F6551CC42C680041EE52 /* JGProgressHUDRingIndicatorView.m */; };
 		2E62F6601CC4318A0041EE52 /* BaseTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E62F65F1CC4318A0041EE52 /* BaseTabBarController.m */; };
 		2E62F6771CC46DF00041EE52 /* AddressListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E62F6761CC46DF00041EE52 /* AddressListViewController.m */; };
-		2E62F6791CC484A40041EE52 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E62F6781CC484A40041EE52 /* Assets.xcassets */; };
 		2E62F67F1CC4D3EB0041EE52 /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E62F67E1CC4D3EB0041EE52 /* MessageViewController.m */; };
 		2E62F6821CC4D4D70041EE52 /* MessageTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E62F6811CC4D4D70041EE52 /* MessageTableView.m */; };
 		2E62F6851CC4D70B0041EE52 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E62F6841CC4D70B0041EE52 /* MessageTableViewCell.m */; };
+		2E8A4F7B1CC7681100AB505C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E8A4F7A1CC7681100AB505C /* Assets.xcassets */; };
 		F81060C21CC34A3200941121 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F81060C11CC34A3200941121 /* main.m */; };
 		F81060CE1CC34A3200941121 /* foodplantform.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F81060CC1CC34A3200941121 /* foodplantform.xcdatamodeld */; };
 		F81060D31CC34A3200941121 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F81060D11CC34A3200941121 /* LaunchScreen.storyboard */; };
@@ -33,9 +33,9 @@
 		F810610C1CC34B7300941121 /* 05.m in Sources */ = {isa = PBXBuildFile; fileRef = F810610B1CC34B7300941121 /* 05.m */; };
 		F810610F1CC34B7C00941121 /* 06.m in Sources */ = {isa = PBXBuildFile; fileRef = F810610E1CC34B7C00941121 /* 06.m */; };
 		F81061151CC34B9000941121 /* 08.m in Sources */ = {isa = PBXBuildFile; fileRef = F81061141CC34B9000941121 /* 08.m */; };
-		F87C8E691CC753A2007D9D6E /* foodlistTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F87C8E681CC753A2007D9D6E /* foodlistTableViewCell.m */; settings = {ASSET_TAGS = (); }; };
-		F87C8E6C1CC753C0007D9D6E /* foodlistTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F87C8E6B1CC753C0007D9D6E /* foodlistTableViewController.m */; settings = {ASSET_TAGS = (); }; };
-		F8A9B5901CC764EF0070605C /* food.png in Resources */ = {isa = PBXBuildFile; fileRef = F8A9B58F1CC764EF0070605C /* food.png */; settings = {ASSET_TAGS = (); }; };
+		F87C8E691CC753A2007D9D6E /* foodlistTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F87C8E681CC753A2007D9D6E /* foodlistTableViewCell.m */; };
+		F87C8E6C1CC753C0007D9D6E /* foodlistTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F87C8E6B1CC753C0007D9D6E /* foodlistTableViewController.m */; };
+		F8A9B5901CC764EF0070605C /* food.png in Resources */ = {isa = PBXBuildFile; fileRef = F8A9B58F1CC764EF0070605C /* food.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,13 +71,13 @@
 		2E62F65F1CC4318A0041EE52 /* BaseTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseTabBarController.m; sourceTree = "<group>"; };
 		2E62F6751CC46DF00041EE52 /* AddressListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddressListViewController.h; sourceTree = "<group>"; };
 		2E62F6761CC46DF00041EE52 /* AddressListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddressListViewController.m; sourceTree = "<group>"; };
-		2E62F6781CC484A40041EE52 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2E62F67D1CC4D3EB0041EE52 /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
 		2E62F67E1CC4D3EB0041EE52 /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
 		2E62F6801CC4D4D70041EE52 /* MessageTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTableView.h; sourceTree = "<group>"; };
 		2E62F6811CC4D4D70041EE52 /* MessageTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageTableView.m; sourceTree = "<group>"; };
 		2E62F6831CC4D70B0041EE52 /* MessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTableViewCell.h; sourceTree = "<group>"; };
 		2E62F6841CC4D70B0041EE52 /* MessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageTableViewCell.m; sourceTree = "<group>"; };
+		2E8A4F7A1CC7681100AB505C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F81060BD1CC34A3200941121 /* foodplantform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = foodplantform.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F81060C11CC34A3200941121 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F81060CD1CC34A3200941121 /* foodplantform.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = foodplantform.xcdatamodel; sourceTree = "<group>"; };
@@ -245,6 +245,7 @@
 		F81060BF1CC34A3200941121 /* foodplantform */ = {
 			isa = PBXGroup;
 			children = (
+				2E8A4F7A1CC7681100AB505C /* Assets.xcassets */,
 				F81060E81CC34A9500941121 /* Source */,
 				F81060D11CC34A3200941121 /* LaunchScreen.storyboard */,
 				F81060D41CC34A3200941121 /* Info.plist */,
@@ -257,7 +258,6 @@
 		F81060C01CC34A3200941121 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				2E62F6781CC484A40041EE52 /* Assets.xcassets */,
 				F81060C11CC34A3200941121 /* main.m */,
 			);
 			name = "Supporting Files";
@@ -509,8 +509,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2E62F6791CC484A40041EE52 /* Assets.xcassets in Resources */,
 				F81060D31CC34A3200941121 /* LaunchScreen.storyboard in Resources */,
+				2E8A4F7B1CC7681100AB505C /* Assets.xcassets in Resources */,
 				F8A9B5901CC764EF0070605C /* food.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
