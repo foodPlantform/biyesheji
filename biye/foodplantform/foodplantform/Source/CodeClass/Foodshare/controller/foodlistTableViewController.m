@@ -7,7 +7,7 @@
 //
 
 #import "foodlistTableViewController.h"
-
+#import "foodlistTableViewCell.h"
 @interface foodlistTableViewController ()
 
 @end
@@ -15,13 +15,10 @@
 @implementation foodlistTableViewController
 
 - (void)viewDidLoad {
+  
     [super viewDidLoad];
+    [self.tableView registerClass:[foodlistTableViewCell class] forCellReuseIdentifier:@"cell"];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,23 +30,28 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 #warning Incomplete implementation, return the number of sections
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 #warning Incomplete implementation, return the number of rows
-    return 0;
+    return 10;
 }
 
-/*
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    foodlistTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
     
-    // Configure the cell...
+    cell.foodPic.image = [UIImage imageNamed:@"美食"];
+    cell.foodName.text = @"delicious food";
     
     return cell;
 }
-*/
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 100;
+}
 
 /*
 // Override to support conditional editing of the table view.

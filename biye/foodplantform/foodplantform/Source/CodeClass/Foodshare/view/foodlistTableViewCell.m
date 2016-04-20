@@ -10,6 +10,24 @@
 
 @implementation foodlistTableViewCell
 
+-(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+    
+        [self p_setView];
+    }
+    return self;
+}
+
+-(void)p_setView
+{
+    self.foodPic = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 90, 90)];
+    [self.contentView addSubview:_foodPic];
+    self.foodName = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(self.foodPic.frame)+10, 5, kScreenWidth - 100, 45)];
+    [self.contentView addSubview:_foodName];
+    
+    
+}
 - (void)awakeFromNib {
     // Initialization code
 }

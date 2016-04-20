@@ -9,6 +9,10 @@
 #ifndef Project_APPHeader_h
 #define Project_APPHeader_h
 
+#define kScreenWidth [[UIScreen mainScreen] bounds].size.width // 屏幕的宽度
+#define kScreenHeight [[UIScreen mainScreen] bounds].size.height // 屏幕的高度
+
+
 
 
 

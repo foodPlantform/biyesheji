@@ -1,0 +1,21 @@
+//
+//  foodPlantform.pch
+//  foodplantform
+//
+//  Created by 马文豪 on 16/4/20.
+//  Copyright © 2016年 马文豪. All rights reserved.
+//
+
+#ifndef foodPlantform_pch
+#define foodPlantform_pch
+
+
+#import "APPHeader.h"
+#import "IMPHeader.h"
+#import "KEYHeader.h"
+#import "URLHeader.h"
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#endif /* foodPlantform_pch */

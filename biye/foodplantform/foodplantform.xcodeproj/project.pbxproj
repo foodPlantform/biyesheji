@@ -35,7 +35,6 @@
 		F81061151CC34B9000941121 /* 08.m in Sources */ = {isa = PBXBuildFile; fileRef = F81061141CC34B9000941121 /* 08.m */; };
 		F87C8E691CC753A2007D9D6E /* foodlistTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F87C8E681CC753A2007D9D6E /* foodlistTableViewCell.m */; };
 		F87C8E6C1CC753C0007D9D6E /* foodlistTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F87C8E6B1CC753C0007D9D6E /* foodlistTableViewController.m */; };
-		F8A9B5901CC764EF0070605C /* food.png in Resources */ = {isa = PBXBuildFile; fileRef = F8A9B58F1CC764EF0070605C /* food.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,11 +103,11 @@
 		F810610E1CC34B7C00941121 /* 06.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = 06.m; sourceTree = "<group>"; };
 		F81061131CC34B9000941121 /* 08.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 08.h; sourceTree = "<group>"; };
 		F81061141CC34B9000941121 /* 08.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = 08.m; sourceTree = "<group>"; };
+		F83F23C41CC7B7990045486D /* foodPlantform.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foodPlantform.pch; sourceTree = "<group>"; };
 		F87C8E671CC753A2007D9D6E /* foodlistTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foodlistTableViewCell.h; sourceTree = "<group>"; };
 		F87C8E681CC753A2007D9D6E /* foodlistTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = foodlistTableViewCell.m; sourceTree = "<group>"; };
 		F87C8E6A1CC753C0007D9D6E /* foodlistTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foodlistTableViewController.h; sourceTree = "<group>"; };
 		F87C8E6B1CC753C0007D9D6E /* foodlistTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = foodlistTableViewController.m; sourceTree = "<group>"; };
-		F8A9B58F1CC764EF0070605C /* food.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = food.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -251,6 +250,7 @@
 				F81060D41CC34A3200941121 /* Info.plist */,
 				F81060CC1CC34A3200941121 /* foodplantform.xcdatamodeld */,
 				F81060C01CC34A3200941121 /* Supporting Files */,
+				F83F23C41CC7B7990045486D /* foodPlantform.pch */,
 			);
 			path = foodplantform;
 			sourceTree = "<group>";
@@ -379,7 +379,6 @@
 		F81060F81CC34A9500941121 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				F8A9B58F1CC764EF0070605C /* food.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -511,7 +510,6 @@
 			files = (
 				F81060D31CC34A3200941121 /* LaunchScreen.storyboard in Resources */,
 				2E8A4F7B1CC7681100AB505C /* Assets.xcassets in Resources */,
-				F8A9B5901CC764EF0070605C /* food.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -673,6 +671,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/foodplantform/foodPlantform.pch";
 				INFOPLIST_FILE = foodplantform/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MWH.foodplantform;
@@ -684,6 +684,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/foodplantform/foodPlantform.pch";
 				INFOPLIST_FILE = foodplantform/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = MWH.foodplantform;
