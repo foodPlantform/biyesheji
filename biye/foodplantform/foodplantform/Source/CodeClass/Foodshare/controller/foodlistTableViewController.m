@@ -1,22 +1,22 @@
 //
-//  foodTableViewController.m
+//  foodlistTableViewController.m
 //  foodplantform
 //
-//  Created by 马文豪 on 16/4/17.
+//  Created by 马文豪 on 16/4/20.
 //  Copyright © 2016年 马文豪. All rights reserved.
 //
 
-#import "foodTableViewController.h"
+#import "foodlistTableViewController.h"
 
-@interface foodTableViewController ()
+@interface foodlistTableViewController ()
 
 @end
 
-@implementation foodTableViewController
+@implementation foodlistTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"hello");
+    
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     

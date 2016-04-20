@@ -9,6 +9,8 @@
 #import "BaseTabBarController.h"
 #import "AddressListViewController.h"
 #import "MessageViewController.h"
+#import "foodlistTableViewController.h"
+
 @interface BaseTabBarController ()
 
 @end
@@ -20,9 +22,7 @@
     
     //首页
    
-    //美食
-    
-    //消息界面
+       //消息界面
     MessageViewController * messageVC = [[MessageViewController alloc]init];
     [self setUpOneChildViewController:messageVC image:[UIImage imageNamed:@"消息"] title:@"消息"];
     
@@ -30,6 +30,10 @@
     AddressListViewController * addressListVC = [[AddressListViewController alloc]init];
     [self setUpOneChildViewController:addressListVC image:[UIImage imageNamed:@"通讯录"] title:@"通讯录"];
     
+    //美食
+    foodlistTableViewController *foodlistVc = [[foodlistTableViewController alloc]init];
+    [self setUpOneChildViewController:foodlistVc image:[UIImage imageNamed:@"food"] title:@"美食"];
+
     //我的
 }
 
