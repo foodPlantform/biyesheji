@@ -25,7 +25,7 @@
     
     //美食
     foodlistTableViewController *foodlistVc = [[foodlistTableViewController alloc]init];
-    [self setUpOneChildViewController:foodlistVc image:[UIImage imageNamed:@"美食1"] title:@"美食"];
+    [self setUpOneChildViewController:foodlistVc image:[UIImage imageNamed:@"美食1"]  title:@"美食"];
     
        //消息界面
     MessageViewController * messageVC = [[MessageViewController alloc]init];
