@@ -32,9 +32,11 @@
 		F81061091CC34B6C00941121 /* 04.m in Sources */ = {isa = PBXBuildFile; fileRef = F81061081CC34B6C00941121 /* 04.m */; };
 		F810610C1CC34B7300941121 /* 05.m in Sources */ = {isa = PBXBuildFile; fileRef = F810610B1CC34B7300941121 /* 05.m */; };
 		F810610F1CC34B7C00941121 /* 06.m in Sources */ = {isa = PBXBuildFile; fileRef = F810610E1CC34B7C00941121 /* 06.m */; };
-		F81061151CC34B9000941121 /* 08.m in Sources */ = {isa = PBXBuildFile; fileRef = F81061141CC34B9000941121 /* 08.m */; };
 		F87C8E691CC753A2007D9D6E /* foodlistTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F87C8E681CC753A2007D9D6E /* foodlistTableViewCell.m */; };
 		F87C8E6C1CC753C0007D9D6E /* foodlistTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F87C8E6B1CC753C0007D9D6E /* foodlistTableViewController.m */; };
+		F8E2C1B41CC8D276005A2579 /* HCSStarRatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = F8E2C1B11CC8D276005A2579 /* HCSStarRatingView.m */; settings = {ASSET_TAGS = (); }; };
+		F8E2C1B51CC8D276005A2579 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = F8E2C1B21CC8D276005A2579 /* LICENSE */; settings = {ASSET_TAGS = (); }; };
+		F8E2C1B61CC8D276005A2579 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = F8E2C1B31CC8D276005A2579 /* README.md */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,13 +103,15 @@
 		F810610B1CC34B7300941121 /* 05.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = 05.m; sourceTree = "<group>"; };
 		F810610D1CC34B7C00941121 /* 06.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 06.h; sourceTree = "<group>"; };
 		F810610E1CC34B7C00941121 /* 06.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = 06.m; sourceTree = "<group>"; };
-		F81061131CC34B9000941121 /* 08.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 08.h; sourceTree = "<group>"; };
-		F81061141CC34B9000941121 /* 08.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = 08.m; sourceTree = "<group>"; };
 		F83F23C41CC7B7990045486D /* foodPlantform.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foodPlantform.pch; sourceTree = "<group>"; };
 		F87C8E671CC753A2007D9D6E /* foodlistTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foodlistTableViewCell.h; sourceTree = "<group>"; };
 		F87C8E681CC753A2007D9D6E /* foodlistTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = foodlistTableViewCell.m; sourceTree = "<group>"; };
 		F87C8E6A1CC753C0007D9D6E /* foodlistTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foodlistTableViewController.h; sourceTree = "<group>"; };
 		F87C8E6B1CC753C0007D9D6E /* foodlistTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = foodlistTableViewController.m; sourceTree = "<group>"; };
+		F8E2C1B01CC8D276005A2579 /* HCSStarRatingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HCSStarRatingView.h; sourceTree = "<group>"; };
+		F8E2C1B11CC8D276005A2579 /* HCSStarRatingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HCSStarRatingView.m; sourceTree = "<group>"; };
+		F8E2C1B21CC8D276005A2579 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		F8E2C1B31CC8D276005A2579 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -386,9 +390,8 @@
 		F81060F91CC34A9500941121 /* TheThird */ = {
 			isa = PBXGroup;
 			children = (
+				F8E2C1AE1CC8D276005A2579 /* HCSStarRatingView */,
 				2E62F6451CC42C680041EE52 /* JGProgressHUD */,
-				F81061131CC34B9000941121 /* 08.h */,
-				F81061141CC34B9000941121 /* 08.m */,
 			);
 			path = TheThird;
 			sourceTree = "<group>";
@@ -426,6 +429,25 @@
 				F87C8E681CC753A2007D9D6E /* foodlistTableViewCell.m */,
 			);
 			path = view;
+			sourceTree = "<group>";
+		};
+		F8E2C1AE1CC8D276005A2579 /* HCSStarRatingView */ = {
+			isa = PBXGroup;
+			children = (
+				F8E2C1AF1CC8D276005A2579 /* HCSStarRatingView */,
+				F8E2C1B21CC8D276005A2579 /* LICENSE */,
+				F8E2C1B31CC8D276005A2579 /* README.md */,
+			);
+			path = HCSStarRatingView;
+			sourceTree = "<group>";
+		};
+		F8E2C1AF1CC8D276005A2579 /* HCSStarRatingView */ = {
+			isa = PBXGroup;
+			children = (
+				F8E2C1B01CC8D276005A2579 /* HCSStarRatingView.h */,
+				F8E2C1B11CC8D276005A2579 /* HCSStarRatingView.m */,
+			);
+			path = HCSStarRatingView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -508,6 +530,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F8E2C1B51CC8D276005A2579 /* LICENSE in Resources */,
 				F81060D31CC34A3200941121 /* LaunchScreen.storyboard in Resources */,
 				2E8A4F7B1CC7681100AB505C /* Assets.xcassets in Resources */,
 			);
@@ -531,6 +554,7 @@
 				2E62F6601CC4318A0041EE52 /* BaseTabBarController.m in Sources */,
 				2E62F6441CC42BC20041EE52 /* BaseViewController.m in Sources */,
 				2E62F6571CC42C680041EE52 /* JGProgressHUDAnimation.m in Sources */,
+				F8E2C1B61CC8D276005A2579 /* README.md in Sources */,
 				2E62F67F1CC4D3EB0041EE52 /* MessageViewController.m in Sources */,
 				2E62F65B1CC42C680041EE52 /* JGProgressHUDIndicatorView.m in Sources */,
 				2E62F6851CC4D70B0041EE52 /* MessageTableViewCell.m in Sources */,
@@ -538,12 +562,12 @@
 				F81060CE1CC34A3200941121 /* foodplantform.xcdatamodeld in Sources */,
 				F81061091CC34B6C00941121 /* 04.m in Sources */,
 				F810610C1CC34B7300941121 /* 05.m in Sources */,
+				F8E2C1B41CC8D276005A2579 /* HCSStarRatingView.m in Sources */,
 				2E62F6581CC42C680041EE52 /* JGProgressHUDFadeAnimation.m in Sources */,
 				F87C8E691CC753A2007D9D6E /* foodlistTableViewCell.m in Sources */,
 				2E62F6821CC4D4D70041EE52 /* MessageTableView.m in Sources */,
 				F81060C21CC34A3200941121 /* main.m in Sources */,
 				2E62F65D1CC42C680041EE52 /* JGProgressHUDRingIndicatorView.m in Sources */,
-				F81061151CC34B9000941121 /* 08.m in Sources */,
 				F81060FA1CC34A9500941121 /* AppDelegate.m in Sources */,
 				F87C8E6C1CC753C0007D9D6E /* foodlistTableViewController.m in Sources */,
 				F810610F1CC34B7C00941121 /* 06.m in Sources */,

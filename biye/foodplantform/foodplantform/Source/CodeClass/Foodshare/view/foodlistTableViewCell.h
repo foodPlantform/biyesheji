@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "HCSStarRatingView.h"
 @interface foodlistTableViewCell : UITableViewCell
 
 @property(nonatomic,strong)UIImageView *foodPic;
 @property(nonatomic,strong)UILabel *foodName;
 @property(nonatomic,strong)UILabel *userName;
+@property(nonatomic,strong)HCSStarRatingView *starScore;
 @end
