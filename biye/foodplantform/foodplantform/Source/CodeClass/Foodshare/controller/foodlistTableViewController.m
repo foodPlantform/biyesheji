@@ -44,6 +44,7 @@
     
     cell.foodPic.image = [UIImage imageNamed:@"美食"];
     cell.foodName.text = @"delicious food";
+    cell.starScore.value  = 3;
     
     return cell;
 }
