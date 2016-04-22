@@ -24,6 +24,7 @@
     self.foodPic = [[UIImageView alloc]initWithFrame:CGRectMake(5, 5, 90, 90)];
     [self.contentView addSubview:_foodPic];
     self.foodName = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(self.foodPic.frame)+10, 5, kScreenWidth - 100, 45)];
+
     [self.contentView addSubview:_foodName];
     self.starScore = [[HCSStarRatingView alloc]initWithFrame:CGRectMake(CGRectGetMinX(self.foodName.frame), CGRectGetMaxY(self.foodName.frame), 100, 45)];
     self.starScore.maximumValue = 5;
