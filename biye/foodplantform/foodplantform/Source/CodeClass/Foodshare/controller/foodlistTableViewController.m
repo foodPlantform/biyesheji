@@ -8,6 +8,7 @@
 
 #import "foodlistTableViewController.h"
 #import "foodlistTableViewCell.h"
+#import "loginViewController.h"
 @interface foodlistTableViewController ()
 
 @end
@@ -17,6 +18,7 @@
 - (void)viewDidLoad {
   
     [super viewDidLoad];
+    self.view.backgroundColor = [UIColor whiteColor];
     [self.tableView registerClass:[foodlistTableViewCell class] forCellReuseIdentifier:@"cell"];
     
 }
@@ -54,6 +56,17 @@
     return 100;
 }
 
+
+
+// cell点击事件
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    loginViewController *logVc = [[loginViewController alloc]init];
+    UINavigationController *logNc =  [[UINavigationController alloc]initWithRootViewController:logVc];
+    [self.navigationController presentViewController:logNc  animated:YES completion:^{
+        
+    }];
+}
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -32,6 +32,10 @@
 		F81061091CC34B6C00941121 /* 04.m in Sources */ = {isa = PBXBuildFile; fileRef = F81061081CC34B6C00941121 /* 04.m */; };
 		F810610C1CC34B7300941121 /* 05.m in Sources */ = {isa = PBXBuildFile; fileRef = F810610B1CC34B7300941121 /* 05.m */; };
 		F810610F1CC34B7C00941121 /* 06.m in Sources */ = {isa = PBXBuildFile; fileRef = F810610E1CC34B7C00941121 /* 06.m */; };
+		F814C9741CCBEFFA00825CDF /* regViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F814C9731CCBEFFA00825CDF /* regViewController.m */; settings = {ASSET_TAGS = (); }; };
+		F814C9771CCBF01E00825CDF /* regView.m in Sources */ = {isa = PBXBuildFile; fileRef = F814C9761CCBF01E00825CDF /* regView.m */; settings = {ASSET_TAGS = (); }; };
+		F814C97A1CCBF9D600825CDF /* loginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F814C9791CCBF9D600825CDF /* loginViewController.m */; settings = {ASSET_TAGS = (); }; };
+		F814C97D1CCBF9E600825CDF /* loginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F814C97C1CCBF9E600825CDF /* loginView.m */; settings = {ASSET_TAGS = (); }; };
 		F87C8E691CC753A2007D9D6E /* foodlistTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F87C8E681CC753A2007D9D6E /* foodlistTableViewCell.m */; };
 		F87C8E6C1CC753C0007D9D6E /* foodlistTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F87C8E6B1CC753C0007D9D6E /* foodlistTableViewController.m */; };
 		F8E2C1B41CC8D276005A2579 /* HCSStarRatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = F8E2C1B11CC8D276005A2579 /* HCSStarRatingView.m */; settings = {ASSET_TAGS = (); }; };
@@ -103,6 +107,14 @@
 		F810610B1CC34B7300941121 /* 05.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = 05.m; sourceTree = "<group>"; };
 		F810610D1CC34B7C00941121 /* 06.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 06.h; sourceTree = "<group>"; };
 		F810610E1CC34B7C00941121 /* 06.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = 06.m; sourceTree = "<group>"; };
+		F814C9721CCBEFFA00825CDF /* regViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = regViewController.h; sourceTree = "<group>"; };
+		F814C9731CCBEFFA00825CDF /* regViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = regViewController.m; sourceTree = "<group>"; };
+		F814C9751CCBF01E00825CDF /* regView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = regView.h; sourceTree = "<group>"; };
+		F814C9761CCBF01E00825CDF /* regView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = regView.m; sourceTree = "<group>"; };
+		F814C9781CCBF9D600825CDF /* loginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loginViewController.h; sourceTree = "<group>"; };
+		F814C9791CCBF9D600825CDF /* loginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = loginViewController.m; sourceTree = "<group>"; };
+		F814C97B1CCBF9E600825CDF /* loginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loginView.h; sourceTree = "<group>"; };
+		F814C97C1CCBF9E600825CDF /* loginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = loginView.m; sourceTree = "<group>"; };
 		F83F23C41CC7B7990045486D /* foodPlantform.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foodPlantform.pch; sourceTree = "<group>"; };
 		F87C8E671CC753A2007D9D6E /* foodlistTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foodlistTableViewCell.h; sourceTree = "<group>"; };
 		F87C8E681CC753A2007D9D6E /* foodlistTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = foodlistTableViewCell.m; sourceTree = "<group>"; };
@@ -317,6 +329,7 @@
 		F81060ED1CC34A9500941121 /* CodeClass */ = {
 			isa = PBXGroup;
 			children = (
+				F814C96E1CCBEFCF00825CDF /* registerAndLogin */,
 				F87C8E601CC75263007D9D6E /* Foodshare */,
 				2E62F6691CC46D0A0041EE52 /* Message */,
 				2E62F66D1CC46D0A0041EE52 /* AddressBook */,
@@ -394,6 +407,45 @@
 				2E62F6451CC42C680041EE52 /* JGProgressHUD */,
 			);
 			path = TheThird;
+			sourceTree = "<group>";
+		};
+		F814C96E1CCBEFCF00825CDF /* registerAndLogin */ = {
+			isa = PBXGroup;
+			children = (
+				F814C96F1CCBEFCF00825CDF /* controller */,
+				F814C9701CCBEFCF00825CDF /* model */,
+				F814C9711CCBEFCF00825CDF /* view */,
+			);
+			path = registerAndLogin;
+			sourceTree = "<group>";
+		};
+		F814C96F1CCBEFCF00825CDF /* controller */ = {
+			isa = PBXGroup;
+			children = (
+				F814C9721CCBEFFA00825CDF /* regViewController.h */,
+				F814C9731CCBEFFA00825CDF /* regViewController.m */,
+				F814C9781CCBF9D600825CDF /* loginViewController.h */,
+				F814C9791CCBF9D600825CDF /* loginViewController.m */,
+			);
+			path = controller;
+			sourceTree = "<group>";
+		};
+		F814C9701CCBEFCF00825CDF /* model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		F814C9711CCBEFCF00825CDF /* view */ = {
+			isa = PBXGroup;
+			children = (
+				F814C9751CCBF01E00825CDF /* regView.h */,
+				F814C9761CCBF01E00825CDF /* regView.m */,
+				F814C97B1CCBF9E600825CDF /* loginView.h */,
+				F814C97C1CCBF9E600825CDF /* loginView.m */,
+			);
+			path = view;
 			sourceTree = "<group>";
 		};
 		F87C8E601CC75263007D9D6E /* Foodshare */ = {
@@ -553,6 +605,8 @@
 				2E62F65A1CC42C680041EE52 /* JGProgressHUDIndeterminateIndicatorView.m in Sources */,
 				2E62F6601CC4318A0041EE52 /* BaseTabBarController.m in Sources */,
 				2E62F6441CC42BC20041EE52 /* BaseViewController.m in Sources */,
+				F814C9741CCBEFFA00825CDF /* regViewController.m in Sources */,
+				F814C97A1CCBF9D600825CDF /* loginViewController.m in Sources */,
 				2E62F6571CC42C680041EE52 /* JGProgressHUDAnimation.m in Sources */,
 				F8E2C1B61CC8D276005A2579 /* README.md in Sources */,
 				2E62F67F1CC4D3EB0041EE52 /* MessageViewController.m in Sources */,
@@ -574,7 +628,9 @@
 				F81061061CC34B6400941121 /* 03.m in Sources */,
 				2E62F6591CC42C680041EE52 /* JGProgressHUDFadeZoomAnimation.m in Sources */,
 				2E62F65C1CC42C680041EE52 /* JGProgressHUDPieIndicatorView.m in Sources */,
+				F814C9771CCBF01E00825CDF /* regView.m in Sources */,
 				F81060FD1CC34B2C00941121 /* O1.m in Sources */,
+				F814C97D1CCBF9E600825CDF /* loginView.m in Sources */,
 				2E62F6771CC46DF00041EE52 /* AddressListViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
