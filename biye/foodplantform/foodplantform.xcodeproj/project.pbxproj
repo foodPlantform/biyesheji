@@ -36,6 +36,10 @@
 		F814C9771CCBF01E00825CDF /* regView.m in Sources */ = {isa = PBXBuildFile; fileRef = F814C9761CCBF01E00825CDF /* regView.m */; settings = {ASSET_TAGS = (); }; };
 		F814C97A1CCBF9D600825CDF /* loginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F814C9791CCBF9D600825CDF /* loginViewController.m */; settings = {ASSET_TAGS = (); }; };
 		F814C97D1CCBF9E600825CDF /* loginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F814C97C1CCBF9E600825CDF /* loginView.m */; settings = {ASSET_TAGS = (); }; };
+		F82872641CCCFDA40096F4CC /* loadupFoodView.m in Sources */ = {isa = PBXBuildFile; fileRef = F82872631CCCFDA40096F4CC /* loadupFoodView.m */; settings = {ASSET_TAGS = (); }; };
+		F82872671CCCFDC70096F4CC /* uploadFoodViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F82872661CCCFDC70096F4CC /* uploadFoodViewController.m */; settings = {ASSET_TAGS = (); }; };
+		F828726E1CCD02C20096F4CC /* mineTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F828726D1CCD02C20096F4CC /* mineTableViewController.m */; settings = {ASSET_TAGS = (); }; };
+		F82872741CCD050B0096F4CC /* personTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F82872731CCD050B0096F4CC /* personTableViewCell.m */; settings = {ASSET_TAGS = (); }; };
 		F87C8E691CC753A2007D9D6E /* foodlistTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F87C8E681CC753A2007D9D6E /* foodlistTableViewCell.m */; };
 		F87C8E6C1CC753C0007D9D6E /* foodlistTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F87C8E6B1CC753C0007D9D6E /* foodlistTableViewController.m */; };
 		F8E2C1B41CC8D276005A2579 /* HCSStarRatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = F8E2C1B11CC8D276005A2579 /* HCSStarRatingView.m */; settings = {ASSET_TAGS = (); }; };
@@ -115,6 +119,14 @@
 		F814C9791CCBF9D600825CDF /* loginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = loginViewController.m; sourceTree = "<group>"; };
 		F814C97B1CCBF9E600825CDF /* loginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loginView.h; sourceTree = "<group>"; };
 		F814C97C1CCBF9E600825CDF /* loginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = loginView.m; sourceTree = "<group>"; };
+		F82872621CCCFDA40096F4CC /* loadupFoodView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = loadupFoodView.h; sourceTree = "<group>"; };
+		F82872631CCCFDA40096F4CC /* loadupFoodView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = loadupFoodView.m; sourceTree = "<group>"; };
+		F82872651CCCFDC70096F4CC /* uploadFoodViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = uploadFoodViewController.h; sourceTree = "<group>"; };
+		F82872661CCCFDC70096F4CC /* uploadFoodViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = uploadFoodViewController.m; sourceTree = "<group>"; };
+		F828726C1CCD02C20096F4CC /* mineTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mineTableViewController.h; sourceTree = "<group>"; };
+		F828726D1CCD02C20096F4CC /* mineTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mineTableViewController.m; sourceTree = "<group>"; };
+		F82872721CCD050B0096F4CC /* personTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = personTableViewCell.h; sourceTree = "<group>"; };
+		F82872731CCD050B0096F4CC /* personTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = personTableViewCell.m; sourceTree = "<group>"; };
 		F83F23C41CC7B7990045486D /* foodPlantform.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foodPlantform.pch; sourceTree = "<group>"; };
 		F87C8E671CC753A2007D9D6E /* foodlistTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foodlistTableViewCell.h; sourceTree = "<group>"; };
 		F87C8E681CC753A2007D9D6E /* foodlistTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = foodlistTableViewCell.m; sourceTree = "<group>"; };
@@ -329,6 +341,7 @@
 		F81060ED1CC34A9500941121 /* CodeClass */ = {
 			isa = PBXGroup;
 			children = (
+				F82872681CCD02B00096F4CC /* mine */,
 				F814C96E1CCBEFCF00825CDF /* registerAndLogin */,
 				F87C8E601CC75263007D9D6E /* Foodshare */,
 				2E62F6691CC46D0A0041EE52 /* Message */,
@@ -448,6 +461,41 @@
 			path = view;
 			sourceTree = "<group>";
 		};
+		F82872681CCD02B00096F4CC /* mine */ = {
+			isa = PBXGroup;
+			children = (
+				F82872691CCD02B00096F4CC /* controller */,
+				F828726A1CCD02B00096F4CC /* model */,
+				F828726B1CCD02B00096F4CC /* view */,
+			);
+			path = mine;
+			sourceTree = "<group>";
+		};
+		F82872691CCD02B00096F4CC /* controller */ = {
+			isa = PBXGroup;
+			children = (
+				F828726C1CCD02C20096F4CC /* mineTableViewController.h */,
+				F828726D1CCD02C20096F4CC /* mineTableViewController.m */,
+			);
+			path = controller;
+			sourceTree = "<group>";
+		};
+		F828726A1CCD02B00096F4CC /* model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
+		F828726B1CCD02B00096F4CC /* view */ = {
+			isa = PBXGroup;
+			children = (
+				F82872721CCD050B0096F4CC /* personTableViewCell.h */,
+				F82872731CCD050B0096F4CC /* personTableViewCell.m */,
+			);
+			path = view;
+			sourceTree = "<group>";
+		};
 		F87C8E601CC75263007D9D6E /* Foodshare */ = {
 			isa = PBXGroup;
 			children = (
@@ -463,6 +511,8 @@
 			children = (
 				F87C8E6A1CC753C0007D9D6E /* foodlistTableViewController.h */,
 				F87C8E6B1CC753C0007D9D6E /* foodlistTableViewController.m */,
+				F82872651CCCFDC70096F4CC /* uploadFoodViewController.h */,
+				F82872661CCCFDC70096F4CC /* uploadFoodViewController.m */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -479,6 +529,8 @@
 			children = (
 				F87C8E671CC753A2007D9D6E /* foodlistTableViewCell.h */,
 				F87C8E681CC753A2007D9D6E /* foodlistTableViewCell.m */,
+				F82872621CCCFDA40096F4CC /* loadupFoodView.h */,
+				F82872631CCCFDA40096F4CC /* loadupFoodView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -603,6 +655,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E62F65A1CC42C680041EE52 /* JGProgressHUDIndeterminateIndicatorView.m in Sources */,
+				F82872671CCCFDC70096F4CC /* uploadFoodViewController.m in Sources */,
 				2E62F6601CC4318A0041EE52 /* BaseTabBarController.m in Sources */,
 				2E62F6441CC42BC20041EE52 /* BaseViewController.m in Sources */,
 				F814C9741CCBEFFA00825CDF /* regViewController.m in Sources */,
@@ -620,12 +673,15 @@
 				2E62F6581CC42C680041EE52 /* JGProgressHUDFadeAnimation.m in Sources */,
 				F87C8E691CC753A2007D9D6E /* foodlistTableViewCell.m in Sources */,
 				2E62F6821CC4D4D70041EE52 /* MessageTableView.m in Sources */,
+				F82872641CCCFDA40096F4CC /* loadupFoodView.m in Sources */,
 				F81060C21CC34A3200941121 /* main.m in Sources */,
 				2E62F65D1CC42C680041EE52 /* JGProgressHUDRingIndicatorView.m in Sources */,
 				F81060FA1CC34A9500941121 /* AppDelegate.m in Sources */,
 				F87C8E6C1CC753C0007D9D6E /* foodlistTableViewController.m in Sources */,
 				F810610F1CC34B7C00941121 /* 06.m in Sources */,
 				F81061061CC34B6400941121 /* 03.m in Sources */,
+				F82872741CCD050B0096F4CC /* personTableViewCell.m in Sources */,
+				F828726E1CCD02C20096F4CC /* mineTableViewController.m in Sources */,
 				2E62F6591CC42C680041EE52 /* JGProgressHUDFadeZoomAnimation.m in Sources */,
 				2E62F65C1CC42C680041EE52 /* JGProgressHUDPieIndicatorView.m in Sources */,
 				F814C9771CCBF01E00825CDF /* regView.m in Sources */,

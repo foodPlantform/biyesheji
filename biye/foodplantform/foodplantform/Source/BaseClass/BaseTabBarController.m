@@ -10,6 +10,7 @@
 #import "AddressListViewController.h"
 #import "MessageViewController.h"
 #import "foodlistTableViewController.h"
+#import "mineTableViewController.h"
 
 @interface BaseTabBarController ()
 
@@ -38,6 +39,8 @@
 
 
     //我的
+    mineTableViewController *mineVC = [[mineTableViewController alloc]init];
+    [self setUpOneChildViewController:mineVC image:[UIImage imageNamed:@"美食1"] title:@"我的"];
 }
 
 /**
