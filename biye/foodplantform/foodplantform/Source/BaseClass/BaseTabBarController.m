@@ -40,7 +40,7 @@
 
     //我的
     mineTableViewController *mineVC = [[mineTableViewController alloc]init];
-    [self setUpOneChildViewController:mineVC image:[UIImage imageNamed:@"美食1"] title:@"我的"];
+    [self setUpOneChildViewController:mineVC image:[UIImage imageNamed:@"我的"] title:@"我的"];
 }
 
 /**

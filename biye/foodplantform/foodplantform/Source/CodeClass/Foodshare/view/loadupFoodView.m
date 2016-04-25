@@ -20,6 +20,7 @@
 
 -(void)p_setView
 {
+    self.backgroundColor = [UIColor whiteColor];
     // 美食名称
     self.foodName = [[UITextField alloc]initWithFrame:CGRectMake(0, 80, kScreenWidth, 50)];
     self.foodName.placeholder = @"美食名称";

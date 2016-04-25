@@ -15,7 +15,6 @@
         self.picture = [[UIImageView alloc]initWithFrame:CGRectMake(kScreenWidth/3.0, 10, kScreenWidth/3.0, kScreenWidth/3.0)];
         self.picture.layer.cornerRadius = 50;
         self.picture.layer.masksToBounds = YES;
-        self.picture.backgroundColor = [UIColor blueColor];
         [self.contentView addSubview:_picture];
     }
     return self;

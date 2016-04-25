@@ -12,7 +12,7 @@
 
 
 @interface mineTableViewController ()
-
+@property(nonatomic,strong)UITapGestureRecognizer *tap;
 @end
 
 @implementation mineTableViewController
@@ -21,6 +21,7 @@
     [super viewDidLoad];
     [self.tableView registerClass:[personTableViewCell class] forCellReuseIdentifier:@"pCell"];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+    //self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -49,6 +50,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0 && indexPath.row == 0) {
         personTableViewCell *pCell =  [tableView dequeueReusableCellWithIdentifier:@"pCell"];
+        
+        // 去掉点击时候的灰色
+        pCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        pCell.picture.image = [UIImage imageNamed:@"我的1"];
+        // 给imageview添加点击手势
+        self.tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction)];
         return pCell;
     }
     else
@@ -57,13 +64,26 @@
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
         
         if (indexPath.section == 0 && indexPath.row == 1) {
-            cell.textLabel.text = @"美食";
+            cell.textLabel.text = @"我的美食";
         }
+        if (indexPath.section == 0 && indexPath.row == 2) {
+            cell.textLabel.text = @"我的订单";
+        }
+        if (indexPath.section == 0 && indexPath.row == 3) {
+            cell.textLabel.text = @"设置";
+        }
+        
         
         return cell;
 
     }
 }
+// 点击imageview的事件
+-(void)tapAction
+{
+    
+}
+// 点击cell事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0 && indexPath.row == 1) {

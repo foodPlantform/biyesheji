@@ -122,7 +122,7 @@
         }
         else
         {
-            self.lv.rec.text = @"外卖";
+            self.lv.sty.text = @"外卖";
         }
     }
 
