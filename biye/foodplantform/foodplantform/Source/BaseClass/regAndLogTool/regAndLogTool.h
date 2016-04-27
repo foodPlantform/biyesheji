@@ -8,6 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+
+
 @interface regAndLogTool : NSObject
+
++(regAndLogTool *)shareTools;
 
 @end

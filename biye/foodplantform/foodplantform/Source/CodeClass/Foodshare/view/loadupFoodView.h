@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface loadupFoodView : UIView
+@property(nonatomic,strong)UIScrollView *scrollView;
 @property(nonatomic,strong)UITextField *foodName;
 @property(nonatomic,strong)UITextField *address;
 @property(nonatomic,strong)UITextField *foodDes;
@@ -18,4 +19,5 @@
 @property(nonatomic,strong)UIImageView *picture;
 @property(nonatomic,strong)UILabel *rec;
 @property(nonatomic,strong)UILabel *sty;
+@property(nonatomic,strong)UIButton *upBtn;
 @end

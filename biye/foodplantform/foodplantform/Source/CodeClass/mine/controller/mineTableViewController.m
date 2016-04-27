@@ -9,6 +9,7 @@
 #import "mineTableViewController.h"
 #import "personTableViewCell.h"
 #import "uploadFoodViewController.h"
+#import "loginViewController.h"
 
 
 @interface mineTableViewController ()
@@ -81,7 +82,8 @@
 // 点击imageview的事件
 -(void)tapAction
 {
-    
+    loginViewController *loginVc = [[loginViewController alloc]init];
+    [self.navigationController pushViewController:loginVc animated:YES];
 }
 // 点击cell事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

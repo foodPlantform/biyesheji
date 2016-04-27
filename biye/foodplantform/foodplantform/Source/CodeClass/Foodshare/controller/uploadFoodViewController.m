@@ -26,8 +26,20 @@
     [self.lv.imgBtn addTarget:self action:@selector(imgBtnAction) forControlEvents:UIControlEventTouchUpInside];
     [self.lv.chooseRec addTarget:self action:@selector(chooseRecAction) forControlEvents:UIControlEventTouchUpInside];
     [self.lv.chooseSty addTarget:self action:@selector(chooseStyAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.lv.upBtn addTarget:self action:@selector(upBtnAction) forControlEvents:UIControlEventTouchUpInside];
     // Do any additional setup after loading the view.
 }
+
+#pragma ====长传按钮事件=====
+-(void)upBtnAction
+{
+    if ([self.lv.foodName.text isEqualToString:@""] || [self.lv.foodDes.text isEqualToString:@""] || [self.lv.address.text isEqualToString:@""] || [self.lv.rec.text isEqualToString:@""] || [self.lv.sty.text isEqualToString:@""] || self.lv.picture.image == nil) {
+        UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请输入完整内容" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+        [message show];
+    }
+}
+
+
 
 #pragma ====选择照片====
 // 选取照片

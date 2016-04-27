@@ -8,6 +8,18 @@
 
 #import "regAndLogTool.h"
 
+static regAndLogTool *rlt;
 @implementation regAndLogTool
++(regAndLogTool *)shareTools
+{
+    static dispatch_once_t once_token;
+    if (rlt == nil) {
+        dispatch_once(&once_token, ^{
+            rlt = [[regAndLogTool alloc]init];
+        });
+    }
+    return rlt;
+}
+
 
 @end
