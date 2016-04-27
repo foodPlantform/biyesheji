@@ -64,7 +64,7 @@
             // 4. 解析
             NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:nil];
             
-            NSLog(@"%@",dict);
+            NSLog(@"%@",dict );
         }
     }
   
