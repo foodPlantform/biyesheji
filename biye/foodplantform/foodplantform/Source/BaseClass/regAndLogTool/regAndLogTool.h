@@ -13,5 +13,6 @@
 @interface regAndLogTool : NSObject
 
 +(regAndLogTool *)shareTools;
+-(NSString *)registeruserwithName:(NSString *)userName password:(NSString *)passWord;
 
 @end

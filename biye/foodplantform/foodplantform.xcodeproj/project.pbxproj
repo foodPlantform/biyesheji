@@ -40,6 +40,8 @@
 		F82872671CCCFDC70096F4CC /* uploadFoodViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F82872661CCCFDC70096F4CC /* uploadFoodViewController.m */; settings = {ASSET_TAGS = (); }; };
 		F828726E1CCD02C20096F4CC /* mineTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F828726D1CCD02C20096F4CC /* mineTableViewController.m */; settings = {ASSET_TAGS = (); }; };
 		F82872741CCD050B0096F4CC /* personTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F82872731CCD050B0096F4CC /* personTableViewCell.m */; settings = {ASSET_TAGS = (); }; };
+		F8329EAD1CD112A800E12987 /* regAndLogTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F8329EAC1CD112A800E12987 /* regAndLogTool.m */; settings = {ASSET_TAGS = (); }; };
+		F8329EB01CD1190E00E12987 /* userModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F8329EAF1CD1190E00E12987 /* userModel.m */; settings = {ASSET_TAGS = (); }; };
 		F87C8E691CC753A2007D9D6E /* foodlistTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F87C8E681CC753A2007D9D6E /* foodlistTableViewCell.m */; };
 		F87C8E6C1CC753C0007D9D6E /* foodlistTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F87C8E6B1CC753C0007D9D6E /* foodlistTableViewController.m */; };
 		F8E2C1B41CC8D276005A2579 /* HCSStarRatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = F8E2C1B11CC8D276005A2579 /* HCSStarRatingView.m */; settings = {ASSET_TAGS = (); }; };
@@ -127,6 +129,10 @@
 		F828726D1CCD02C20096F4CC /* mineTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mineTableViewController.m; sourceTree = "<group>"; };
 		F82872721CCD050B0096F4CC /* personTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = personTableViewCell.h; sourceTree = "<group>"; };
 		F82872731CCD050B0096F4CC /* personTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = personTableViewCell.m; sourceTree = "<group>"; };
+		F8329EAB1CD112A800E12987 /* regAndLogTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = regAndLogTool.h; sourceTree = "<group>"; };
+		F8329EAC1CD112A800E12987 /* regAndLogTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = regAndLogTool.m; sourceTree = "<group>"; };
+		F8329EAE1CD1190E00E12987 /* userModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = userModel.h; sourceTree = "<group>"; };
+		F8329EAF1CD1190E00E12987 /* userModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = userModel.m; sourceTree = "<group>"; };
 		F83F23C41CC7B7990045486D /* foodPlantform.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foodPlantform.pch; sourceTree = "<group>"; };
 		F87C8E671CC753A2007D9D6E /* foodlistTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = foodlistTableViewCell.h; sourceTree = "<group>"; };
 		F87C8E681CC753A2007D9D6E /* foodlistTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = foodlistTableViewCell.m; sourceTree = "<group>"; };
@@ -330,6 +336,7 @@
 		F81060EC1CC34A9500941121 /* BaseClass */ = {
 			isa = PBXGroup;
 			children = (
+				F8329EAA1CD1128F00E12987 /* regAndLogTool */,
 				2E62F6421CC42BC20041EE52 /* BaseViewController.h */,
 				2E62F6431CC42BC20041EE52 /* BaseViewController.m */,
 				2E62F65E1CC4318A0041EE52 /* BaseTabBarController.h */,
@@ -446,6 +453,8 @@
 		F814C9701CCBEFCF00825CDF /* model */ = {
 			isa = PBXGroup;
 			children = (
+				F8329EAE1CD1190E00E12987 /* userModel.h */,
+				F8329EAF1CD1190E00E12987 /* userModel.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -494,6 +503,15 @@
 				F82872731CCD050B0096F4CC /* personTableViewCell.m */,
 			);
 			path = view;
+			sourceTree = "<group>";
+		};
+		F8329EAA1CD1128F00E12987 /* regAndLogTool */ = {
+			isa = PBXGroup;
+			children = (
+				F8329EAB1CD112A800E12987 /* regAndLogTool.h */,
+				F8329EAC1CD112A800E12987 /* regAndLogTool.m */,
+			);
+			path = regAndLogTool;
 			sourceTree = "<group>";
 		};
 		F87C8E601CC75263007D9D6E /* Foodshare */ = {
@@ -660,6 +678,7 @@
 				2E62F6441CC42BC20041EE52 /* BaseViewController.m in Sources */,
 				F814C9741CCBEFFA00825CDF /* regViewController.m in Sources */,
 				F814C97A1CCBF9D600825CDF /* loginViewController.m in Sources */,
+				F8329EB01CD1190E00E12987 /* userModel.m in Sources */,
 				2E62F6571CC42C680041EE52 /* JGProgressHUDAnimation.m in Sources */,
 				F8E2C1B61CC8D276005A2579 /* README.md in Sources */,
 				2E62F67F1CC4D3EB0041EE52 /* MessageViewController.m in Sources */,
@@ -685,6 +704,7 @@
 				2E62F6591CC42C680041EE52 /* JGProgressHUDFadeZoomAnimation.m in Sources */,
 				2E62F65C1CC42C680041EE52 /* JGProgressHUDPieIndicatorView.m in Sources */,
 				F814C9771CCBF01E00825CDF /* regView.m in Sources */,
+				F8329EAD1CD112A800E12987 /* regAndLogTool.m in Sources */,
 				F81060FD1CC34B2C00941121 /* O1.m in Sources */,
 				F814C97D1CCBF9E600825CDF /* loginView.m in Sources */,
 				2E62F6771CC46DF00041EE52 /* AddressListViewController.m in Sources */,

@@ -9,4 +9,5 @@
 #ifndef Project_IMPHeader_h
 #define Project_IMPHeader_h
 
+#import "regAndLogTool.h"
 #endif
