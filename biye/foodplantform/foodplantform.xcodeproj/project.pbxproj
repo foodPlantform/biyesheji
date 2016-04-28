@@ -22,6 +22,10 @@
 		2E62F6821CC4D4D70041EE52 /* MessageTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E62F6811CC4D4D70041EE52 /* MessageTableView.m */; };
 		2E62F6851CC4D70B0041EE52 /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E62F6841CC4D70B0041EE52 /* MessageTableViewCell.m */; };
 		2E8A4F7B1CC7681100AB505C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E8A4F7A1CC7681100AB505C /* Assets.xcassets */; };
+		D38BD8CA1CD207020055F023 /* LrdOutputView.m in Sources */ = {isa = PBXBuildFile; fileRef = D38BD8C21CD207020055F023 /* LrdOutputView.m */; };
+		D38BD8CB1CD207020055F023 /* PinDanCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D38BD8C41CD207020055F023 /* PinDanCell.m */; };
+		D38BD8CC1CD207020055F023 /* PinDanVcr.m in Sources */ = {isa = PBXBuildFile; fileRef = D38BD8C71CD207020055F023 /* PinDanVcr.m */; };
+		D38BD8CD1CD207020055F023 /* SendPindanVC.m in Sources */ = {isa = PBXBuildFile; fileRef = D38BD8C91CD207020055F023 /* SendPindanVC.m */; };
 		F81060C21CC34A3200941121 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F81060C11CC34A3200941121 /* main.m */; };
 		F81060CE1CC34A3200941121 /* foodplantform.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F81060CC1CC34A3200941121 /* foodplantform.xcdatamodeld */; };
 		F81060D31CC34A3200941121 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F81060D11CC34A3200941121 /* LaunchScreen.storyboard */; };
@@ -32,21 +36,21 @@
 		F81061091CC34B6C00941121 /* 04.m in Sources */ = {isa = PBXBuildFile; fileRef = F81061081CC34B6C00941121 /* 04.m */; };
 		F810610C1CC34B7300941121 /* 05.m in Sources */ = {isa = PBXBuildFile; fileRef = F810610B1CC34B7300941121 /* 05.m */; };
 		F810610F1CC34B7C00941121 /* 06.m in Sources */ = {isa = PBXBuildFile; fileRef = F810610E1CC34B7C00941121 /* 06.m */; };
-		F814C9741CCBEFFA00825CDF /* regViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F814C9731CCBEFFA00825CDF /* regViewController.m */; settings = {ASSET_TAGS = (); }; };
-		F814C9771CCBF01E00825CDF /* regView.m in Sources */ = {isa = PBXBuildFile; fileRef = F814C9761CCBF01E00825CDF /* regView.m */; settings = {ASSET_TAGS = (); }; };
-		F814C97A1CCBF9D600825CDF /* loginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F814C9791CCBF9D600825CDF /* loginViewController.m */; settings = {ASSET_TAGS = (); }; };
-		F814C97D1CCBF9E600825CDF /* loginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F814C97C1CCBF9E600825CDF /* loginView.m */; settings = {ASSET_TAGS = (); }; };
-		F82872641CCCFDA40096F4CC /* loadupFoodView.m in Sources */ = {isa = PBXBuildFile; fileRef = F82872631CCCFDA40096F4CC /* loadupFoodView.m */; settings = {ASSET_TAGS = (); }; };
-		F82872671CCCFDC70096F4CC /* uploadFoodViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F82872661CCCFDC70096F4CC /* uploadFoodViewController.m */; settings = {ASSET_TAGS = (); }; };
-		F828726E1CCD02C20096F4CC /* mineTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F828726D1CCD02C20096F4CC /* mineTableViewController.m */; settings = {ASSET_TAGS = (); }; };
-		F82872741CCD050B0096F4CC /* personTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F82872731CCD050B0096F4CC /* personTableViewCell.m */; settings = {ASSET_TAGS = (); }; };
-		F8329EAD1CD112A800E12987 /* regAndLogTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F8329EAC1CD112A800E12987 /* regAndLogTool.m */; settings = {ASSET_TAGS = (); }; };
-		F8329EB01CD1190E00E12987 /* userModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F8329EAF1CD1190E00E12987 /* userModel.m */; settings = {ASSET_TAGS = (); }; };
+		F814C9741CCBEFFA00825CDF /* regViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F814C9731CCBEFFA00825CDF /* regViewController.m */; };
+		F814C9771CCBF01E00825CDF /* regView.m in Sources */ = {isa = PBXBuildFile; fileRef = F814C9761CCBF01E00825CDF /* regView.m */; };
+		F814C97A1CCBF9D600825CDF /* loginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F814C9791CCBF9D600825CDF /* loginViewController.m */; };
+		F814C97D1CCBF9E600825CDF /* loginView.m in Sources */ = {isa = PBXBuildFile; fileRef = F814C97C1CCBF9E600825CDF /* loginView.m */; };
+		F82872641CCCFDA40096F4CC /* loadupFoodView.m in Sources */ = {isa = PBXBuildFile; fileRef = F82872631CCCFDA40096F4CC /* loadupFoodView.m */; };
+		F82872671CCCFDC70096F4CC /* uploadFoodViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F82872661CCCFDC70096F4CC /* uploadFoodViewController.m */; };
+		F828726E1CCD02C20096F4CC /* mineTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F828726D1CCD02C20096F4CC /* mineTableViewController.m */; };
+		F82872741CCD050B0096F4CC /* personTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F82872731CCD050B0096F4CC /* personTableViewCell.m */; };
+		F8329EAD1CD112A800E12987 /* regAndLogTool.m in Sources */ = {isa = PBXBuildFile; fileRef = F8329EAC1CD112A800E12987 /* regAndLogTool.m */; };
+		F8329EB01CD1190E00E12987 /* userModel.m in Sources */ = {isa = PBXBuildFile; fileRef = F8329EAF1CD1190E00E12987 /* userModel.m */; };
 		F87C8E691CC753A2007D9D6E /* foodlistTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F87C8E681CC753A2007D9D6E /* foodlistTableViewCell.m */; };
 		F87C8E6C1CC753C0007D9D6E /* foodlistTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F87C8E6B1CC753C0007D9D6E /* foodlistTableViewController.m */; };
-		F8E2C1B41CC8D276005A2579 /* HCSStarRatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = F8E2C1B11CC8D276005A2579 /* HCSStarRatingView.m */; settings = {ASSET_TAGS = (); }; };
-		F8E2C1B51CC8D276005A2579 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = F8E2C1B21CC8D276005A2579 /* LICENSE */; settings = {ASSET_TAGS = (); }; };
-		F8E2C1B61CC8D276005A2579 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = F8E2C1B31CC8D276005A2579 /* README.md */; settings = {ASSET_TAGS = (); }; };
+		F8E2C1B41CC8D276005A2579 /* HCSStarRatingView.m in Sources */ = {isa = PBXBuildFile; fileRef = F8E2C1B11CC8D276005A2579 /* HCSStarRatingView.m */; };
+		F8E2C1B51CC8D276005A2579 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = F8E2C1B21CC8D276005A2579 /* LICENSE */; };
+		F8E2C1B61CC8D276005A2579 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = F8E2C1B31CC8D276005A2579 /* README.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,6 +93,14 @@
 		2E62F6831CC4D70B0041EE52 /* MessageTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageTableViewCell.h; sourceTree = "<group>"; };
 		2E62F6841CC4D70B0041EE52 /* MessageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageTableViewCell.m; sourceTree = "<group>"; };
 		2E8A4F7A1CC7681100AB505C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D38BD8C11CD207020055F023 /* LrdOutputView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LrdOutputView.h; sourceTree = "<group>"; };
+		D38BD8C21CD207020055F023 /* LrdOutputView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LrdOutputView.m; sourceTree = "<group>"; };
+		D38BD8C31CD207020055F023 /* PinDanCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinDanCell.h; sourceTree = "<group>"; };
+		D38BD8C41CD207020055F023 /* PinDanCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PinDanCell.m; sourceTree = "<group>"; };
+		D38BD8C61CD207020055F023 /* PinDanVcr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PinDanVcr.h; sourceTree = "<group>"; };
+		D38BD8C71CD207020055F023 /* PinDanVcr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PinDanVcr.m; sourceTree = "<group>"; };
+		D38BD8C81CD207020055F023 /* SendPindanVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SendPindanVC.h; sourceTree = "<group>"; };
+		D38BD8C91CD207020055F023 /* SendPindanVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SendPindanVC.m; sourceTree = "<group>"; };
 		F81060BD1CC34A3200941121 /* foodplantform.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = foodplantform.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F81060C11CC34A3200941121 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F81060CD1CC34A3200941121 /* foodplantform.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = foodplantform.xcdatamodel; sourceTree = "<group>"; };
@@ -257,6 +269,53 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		D38BD8BD1CD207020055F023 /* PinDanList */ = {
+			isa = PBXGroup;
+			children = (
+				D38BD8BE1CD207020055F023 /* Model */,
+				D38BD8BF1CD207020055F023 /* View */,
+				D38BD8C51CD207020055F023 /* ViewCotroller */,
+			);
+			path = PinDanList;
+			sourceTree = "<group>";
+		};
+		D38BD8BE1CD207020055F023 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		D38BD8BF1CD207020055F023 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				D38BD8C01CD207020055F023 /* LrdOutputView */,
+				D38BD8C31CD207020055F023 /* PinDanCell.h */,
+				D38BD8C41CD207020055F023 /* PinDanCell.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		D38BD8C01CD207020055F023 /* LrdOutputView */ = {
+			isa = PBXGroup;
+			children = (
+				D38BD8C11CD207020055F023 /* LrdOutputView.h */,
+				D38BD8C21CD207020055F023 /* LrdOutputView.m */,
+			);
+			path = LrdOutputView;
+			sourceTree = "<group>";
+		};
+		D38BD8C51CD207020055F023 /* ViewCotroller */ = {
+			isa = PBXGroup;
+			children = (
+				D38BD8C61CD207020055F023 /* PinDanVcr.h */,
+				D38BD8C71CD207020055F023 /* PinDanVcr.m */,
+				D38BD8C81CD207020055F023 /* SendPindanVC.h */,
+				D38BD8C91CD207020055F023 /* SendPindanVC.m */,
+			);
+			path = ViewCotroller;
+			sourceTree = "<group>";
+		};
 		F81060B41CC34A3200941121 = {
 			isa = PBXGroup;
 			children = (
@@ -348,6 +407,7 @@
 		F81060ED1CC34A9500941121 /* CodeClass */ = {
 			isa = PBXGroup;
 			children = (
+				D38BD8BD1CD207020055F023 /* PinDanList */,
 				F82872681CCD02B00096F4CC /* mine */,
 				F814C96E1CCBEFCF00825CDF /* registerAndLogin */,
 				F87C8E601CC75263007D9D6E /* Foodshare */,
@@ -677,6 +737,7 @@
 				2E62F6601CC4318A0041EE52 /* BaseTabBarController.m in Sources */,
 				2E62F6441CC42BC20041EE52 /* BaseViewController.m in Sources */,
 				F814C9741CCBEFFA00825CDF /* regViewController.m in Sources */,
+				D38BD8CA1CD207020055F023 /* LrdOutputView.m in Sources */,
 				F814C97A1CCBF9D600825CDF /* loginViewController.m in Sources */,
 				F8329EB01CD1190E00E12987 /* userModel.m in Sources */,
 				2E62F6571CC42C680041EE52 /* JGProgressHUDAnimation.m in Sources */,
@@ -700,6 +761,9 @@
 				F810610F1CC34B7C00941121 /* 06.m in Sources */,
 				F81061061CC34B6400941121 /* 03.m in Sources */,
 				F82872741CCD050B0096F4CC /* personTableViewCell.m in Sources */,
+				D38BD8CB1CD207020055F023 /* PinDanCell.m in Sources */,
+				D38BD8CD1CD207020055F023 /* SendPindanVC.m in Sources */,
+				D38BD8CC1CD207020055F023 /* PinDanVcr.m in Sources */,
 				F828726E1CCD02C20096F4CC /* mineTableViewController.m in Sources */,
 				2E62F6591CC42C680041EE52 /* JGProgressHUDFadeZoomAnimation.m in Sources */,
 				2E62F65C1CC42C680041EE52 /* JGProgressHUDPieIndicatorView.m in Sources */,

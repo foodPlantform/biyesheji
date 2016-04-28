@@ -11,7 +11,7 @@
 #import "MessageViewController.h"
 #import "foodlistTableViewController.h"
 #import "mineTableViewController.h"
-
+#import "PinDanVcr.h"
 @interface BaseTabBarController ()
 
 @end
@@ -24,6 +24,9 @@
     //首页
    
     
+    PinDanVcr *pindanVcr = [[PinDanVcr alloc] init];
+    [self setUpOneChildViewController:pindanVcr image:[UIImage imageNamed:@"首页"] title:@"首页"];
+
     //美食
     foodlistTableViewController *foodlistVc = [[foodlistTableViewController alloc]init];
     [self setUpOneChildViewController:foodlistVc image:[UIImage imageNamed:@"美食1"]  title:@"美食"];
