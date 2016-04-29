@@ -109,7 +109,7 @@
     locationManager.delegate = self;
     
 #pragma mark 4.是否使用后台定位服务
-    locationManager.allowsBackgroundLocationUpdates = NO;//❤️同时必须在info中设置Required
+    locationManager.allowsBackgroundLocationUpdates = YES;//❤️同时必须在info中设置Required
 #pragma mark 5.开始定位
     [locationManager startUpdatingLocation];
 }
