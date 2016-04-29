@@ -6,10 +6,15 @@
 //  Copyright © 2016年 马文豪. All rights reserved.
 //
 
+#import "KCMainViewController.h"
+
+#import "DateHelper.h"
+#import "NSDate+CalculateDay.h"
+#import "KMDatePicker.h"
 #import "SendPindanVC.h"
 #define PinDanCellJianJu 20
 
-@interface SendPindanVC ()
+@interface SendPindanVC ()<UITextFieldDelegate,KCLocationLongPressToDoDelegate,KMDatePickerDelegate>
 
 
 //拼单人数
@@ -81,6 +86,7 @@
 //    [_foodNameTf setValue:[UIFont boldSystemFontOfSize:3] forKeyPath:@"_placeholderLabel.font"];
 
     _foodNameTf.placeholder = @"请输入您想吃的美食";
+    _foodNameTf.delegate =self;
     [self.view addSubview:_foodNameTf];
     _foodPersonLB = [[UILabel alloc] initWithFrame:CGRectMake(PinDanCellJianJu, CGRectGetMaxY(_foodNameLB.frame)+PinDanCellJianJu*2, CGRectGetWidth(_foodNameLB.frame), 10)];
     
@@ -111,23 +117,26 @@
     
     [self.view addSubview:_foodTimeLB];
     
-    _foodTimeTf = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(_foodNameTf.frame), CGRectGetMinY(_foodTimeLB.frame)-10, kScreenWidth/3.0+20, 30)];
-    
-    
+    _foodTimeTf = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(_foodNameTf.frame), CGRectGetMinY(_foodTimeLB.frame)-10, kScreenWidth/2.0+20, 30)];
+    _foodTimeTf.font = [UIFont systemFontOfSize:17];
+
+    _foodTimeTf.delegate = self;
+    _foodTimeTf.tag = 1000;
     _foodTimeTf.placeholder = @"请输入您想约的时间";
     [self.view addSubview:_foodTimeTf];
 
     
     _foodLocationLB = [[UILabel alloc] initWithFrame:CGRectMake(PinDanCellJianJu, CGRectGetMaxY(_foodTimeLB.frame)+PinDanCellJianJu*2, CGRectGetWidth(_foodNameLB.frame), 10)];
-    _foodLocationLB.text = [NSString stringWithFormat:@"我要地点: "] ;
+    _foodLocationLB.text = [NSString stringWithFormat:@"约吃地点: "] ;
     
     [self.view addSubview:_foodLocationLB];
 
     
-    _foodLocationTf = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(_foodNameTf.frame), CGRectGetMinY(_foodLocationLB.frame)-10, kScreenWidth/3.0+20, 30)];
-    
-    
-    _foodLocationTf.placeholder = @"请输入您想约的地点";
+    _foodLocationTf = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(_foodNameTf.frame), CGRectGetMinY(_foodLocationLB.frame)-10, kScreenWidth/2.0+20, 30)];
+    _foodLocationTf.font = [UIFont systemFontOfSize:17];
+    _foodLocationTf.delegate = self;
+    _foodLocationTf.tag = 1001;
+    _foodLocationTf.placeholder = @"点击获取地址";
     [self.view addSubview:_foodLocationTf];
 
 }
@@ -143,6 +152,70 @@
     {
         
     }
+}
+#pragma mark - UITextFieldDelegate
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (textField.tag == 1000)
+    {
+        [self set_upTimePicker];
+    }}
+
+#pragma mark - 用户是否可以编辑
+//用户是否可以编辑
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    if (textField.tag == 1001) {
+        
+        KCMainViewController *vc =[[KCMainViewController alloc ] init];
+        vc.delegate = self;
+        vc.navigationItem.title = @"长按选择地址";
+         vc.tabBarController.tabBar.hidden=YES;
+        [self.navigationController pushViewController:vc animated:YES];
+        _foodLocationTf.font = [UIFont systemFontOfSize:12];
+
+        return NO;
+    }
+    else
+    {
+        return YES;
+    }
+}
+#pragma mark - KCMainViewControllerdelegate
+-(void)KCMainViewControllerLongProessGetLoaction:(NSString *)longPressPlacemarkStr
+{
+    _foodLocationTf.text = longPressPlacemarkStr;
+}
+#pragma mark - KMDatePickerdelegate
+
+- (void)set_upTimePicker
+{
+    CGRect rect = [[UIScreen mainScreen] bounds];
+    rect = CGRectMake(0.0, 0.0, rect.size.width, 216.0);
+    // 年月日时分
+    KMDatePicker *datePicker = [[KMDatePicker alloc]
+                                initWithFrame:rect
+                                delegate:self
+                                datePickerStyle:KMDatePickerStyleYearMonthDayHourMinute];
+    _foodTimeTf.inputView = datePicker;
+    
+}
+- (void)datePicker:(KMDatePicker *)datePicker didSelectDate:(KMDatePickerDateModel *)datePickerDate
+{
+    NSString *dateStr = [NSString stringWithFormat:@"%@-%@-%@ %@:%@ %@",
+                         datePickerDate.year,
+                         datePickerDate.month,
+                         datePickerDate.day,
+                         datePickerDate.hour,
+                         datePickerDate.minute,
+                         datePickerDate.weekdayName
+                         ];
+    _foodTimeTf.font = [UIFont systemFontOfSize:12];
+
+    _foodTimeTf.text = dateStr;
+
+}
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
 }
 
 - (void)didReceiveMemoryWarning {
