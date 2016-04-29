@@ -9,6 +9,7 @@
 #import "regViewController.h"
 #import "regView.h"
 
+
 @interface regViewController ()
 @property(nonatomic,strong)regView *rv;
 @end
@@ -52,10 +53,29 @@
         }
         else
         {
-            if ( [[[regAndLogTool shareTools] registeruserwithName:self.rv.userName.text password:self.rv.pwStr.text] isEqualToString:@"400"]) {
+            if ( [[[regAndLogTool shareTools] registeruserwithName:self.rv.userName.text password:self.rv.pwStr.text] isEqualToString:@"数据插入成功"]) {
                 NSLog(@"注册成功");
+                UIAlertView *mes1 = [[UIAlertView alloc]initWithTitle:@"提示" message:@"注册成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+                [mes1 show];
+                loginViewController *loginVc = [[loginViewController alloc]init];
+                [self .navigationController pushViewController:loginVc animated:YES];
+                return;
+                
             }
-           
+            
+            if ( [[[regAndLogTool shareTools] registeruserwithName:self.rv.userName.text password:self.rv.pwStr.text] isEqualToString:@"用户名已存在"]) {
+                NSLog(@"用户名已存在");
+                UIAlertView *mes2 = [[UIAlertView alloc]initWithTitle:@"提示" message:@"用户名已存在" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+                [mes2 show];
+                
+            }
+            
+            if ( [[[regAndLogTool shareTools] registeruserwithName:self.rv.userName.text password:self.rv.pwStr.text] isEqualToString:@"数据插入失败"]) {
+                NSLog(@"注册失败");
+                UIAlertView *mes3 = [[UIAlertView alloc]initWithTitle:@"提示" message:@"注册失败" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+                [mes3 show];
+                
+            }
         }
     }
   
