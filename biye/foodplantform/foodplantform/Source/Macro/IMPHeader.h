@@ -8,7 +8,8 @@
 
 #ifndef Project_IMPHeader_h
 #define Project_IMPHeader_h
-
+// 常用model类的引用
+#import "foodModel.h"
 // 工具数据引用
 #import "regAndLogTool.h"
 
@@ -16,8 +17,11 @@
 #import "loginViewController.h"
 
 // 常用第三方引用
+#import "AFNetworking.h"
 #import "AFHTTPRequestOperation.h"
 #import "AFHTTPRequestOperationManager.h"
+#import <MobileCoreServices/MobileCoreServices.h>
+#import <SystemConfiguration/SystemConfiguration.h>
 
 
 #endif

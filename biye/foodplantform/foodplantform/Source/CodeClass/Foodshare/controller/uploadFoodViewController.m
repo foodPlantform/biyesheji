@@ -8,6 +8,8 @@
 
 #import "uploadFoodViewController.h"
 #import "loadupFoodView.h"
+#import "uploadTool.h"
+
 @interface uploadFoodViewController ()
 @property(nonatomic,strong)loadupFoodView *lv;
 @property(nonatomic,assign)BOOL isFullScreen;
@@ -30,12 +32,25 @@
     // Do any additional setup after loading the view.
 }
 
-#pragma ====长传按钮事件=====
+#pragma ====上传按钮事件=====
 -(void)upBtnAction
 {
+    NSData *data = UIImagePNGRepresentation(self.lv.picture.image);
+    NSString *s = [data base64Encoding];
+    NSLog(@"==%@",s);
+    
+    
     if ([self.lv.foodName.text isEqualToString:@""] || [self.lv.foodDes.text isEqualToString:@""] || [self.lv.address.text isEqualToString:@""] || [self.lv.rec.text isEqualToString:@""] || [self.lv.sty.text isEqualToString:@""] || self.lv.picture.image == nil) {
         UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请输入完整内容" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
         [message show];
+    }
+    else
+    {
+        NSMutableArray *picArr = [NSMutableArray arrayWithObjects:self.lv.picture.image, nil];
+        [[uploadTool shareTool]postDataWithUrl:imgUrl params:nil imageDatas:picArr success:nil failure:nil];
+        
+        
+       
     }
 }
 

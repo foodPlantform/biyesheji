@@ -10,6 +10,7 @@
 #import "personTableViewCell.h"
 #import "uploadFoodViewController.h"
 #import "loginViewController.h"
+#import "orderViewController.h"
 
 
 @interface mineTableViewController ()
@@ -57,6 +58,8 @@
         pCell.picture.image = [UIImage imageNamed:@"我的1"];
         // 给imageview添加点击手势
         self.tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction)];
+        [pCell.picture addGestureRecognizer:_tap];
+        pCell.picture.userInteractionEnabled = YES;
         return pCell;
     }
     else
@@ -65,7 +68,7 @@
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
         
         if (indexPath.section == 0 && indexPath.row == 1) {
-            cell.textLabel.text = @"我的美食";
+            cell.textLabel.text = @"上传美食";
         }
         if (indexPath.section == 0 && indexPath.row == 2) {
             cell.textLabel.text = @"我的订单";
@@ -83,7 +86,11 @@
 -(void)tapAction
 {
     loginViewController *loginVc = [[loginViewController alloc]init];
-    [self.navigationController pushViewController:loginVc animated:YES];
+    UINavigationController *loginNc = [[UINavigationController alloc]initWithRootViewController:loginVc];
+    [self.navigationController presentViewController:loginNc animated:YES completion:^{
+        
+    }];
+    
 }
 // 点击cell事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -91,6 +98,10 @@
     if (indexPath.section == 0 && indexPath.row == 1) {
         uploadFoodViewController *upVc = [[uploadFoodViewController alloc]init];
         [self.navigationController pushViewController:upVc animated:YES];
+    }
+    if (indexPath.section == 0 && indexPath.row == 2) {
+        orderViewController *ordVc = [[orderViewController alloc]init];
+        [self.navigationController pushViewController:ordVc animated:YES];
     }
 }
 

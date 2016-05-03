@@ -45,6 +45,8 @@ static regAndLogTool *rlt;
     NSMutableString *regStr = [dict valueForKey:@"result"];
     return regStr;
     
+
+    
 }
 
 

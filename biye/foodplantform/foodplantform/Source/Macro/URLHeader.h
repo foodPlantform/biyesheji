@@ -8,5 +8,6 @@
 
 #ifndef Project_URLHeader_h
 #define Project_URLHeader_h
+#define imgUrl @"http://zhaohm.com.cn/hm/hmweb/mwh/imgmwh"
 
 #endif
