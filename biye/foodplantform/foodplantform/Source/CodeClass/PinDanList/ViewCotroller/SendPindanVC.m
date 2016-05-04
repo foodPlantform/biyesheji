@@ -39,6 +39,8 @@
 @property(nonatomic,strong)UITextField *foodLocationTf;
 
 
+@property(nonatomic,strong)CLPlacemark *placeMark;
+
 @end
 
 @implementation SendPindanVC
@@ -152,6 +154,30 @@
     {
         
     }
+    
+    [self sendOrder];
+
+}
+#pragma mark - 发布订单
+- (void)sendOrder
+{
+    //往GameScore表添加一条user_order为小明，分数为78的数据
+    BmobObject *user_order = [BmobObject objectWithClassName:@"user_order"];
+    [user_order setObject:[NSNumber numberWithInteger:_foodPersonNumLB.text.integerValue] forKey:@"order_num"];
+    [user_order setObject:_foodNameTf.text forKey:@"order_name"];
+
+    [user_order setObject:_foodPersonLBTf.text forKey:@"order_target"];
+
+    [user_order setObject:nil forKey:@"order_time"];
+    [user_order setObject:nil forKey:@"order_loaction"];
+
+   // [user_order setObject:@78 forKey:@"score"];
+    [user_order saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+        //进行操作
+        NSLog(@"error----------%@",error);
+        NSLog(@"isSuccessful--------%d",isSuccessful);
+    }];
+
 }
 #pragma mark - UITextFieldDelegate
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
@@ -181,9 +207,13 @@
     }
 }
 #pragma mark - KCMainViewControllerdelegate
--(void)KCMainViewControllerLongProessGetLoaction:(NSString *)longPressPlacemarkStr
+-(void)KCMainViewControllerLongProessGetLoaction:(NSString *)longPressPlacemarkStr place:(CLPlacemark *)placeMark
 {
     _foodLocationTf.text = longPressPlacemarkStr;
+    
+    
+    _placeMark = placeMark;
+    NSLog(@"----------%@",placeMark);
 }
 #pragma mark - KMDatePickerdelegate
 

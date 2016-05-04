@@ -22,6 +22,6 @@
 #import "AFHTTPRequestOperationManager.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <SystemConfiguration/SystemConfiguration.h>
-
+#import <BmobSDK/Bmob.h>
 
 #endif

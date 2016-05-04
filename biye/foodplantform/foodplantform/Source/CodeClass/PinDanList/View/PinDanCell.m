@@ -16,11 +16,15 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self)
     {
-        [self setPanDanCellView];
+        
     }
     return self;
 }
-
+-(void)setModel:(BmobOrderModel *)model
+{
+    _model = model;
+    [self setPanDanCellView];
+}
 - (void)setPanDanCellView
 {
    /*
@@ -45,7 +49,7 @@
     [self.contentView addSubview:_userSexAgeLB];
     
     _foodNameLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_userImgV.frame), CGRectGetMaxY(_userImgV.frame)+PinDanCellJianJu*2, kScreenWidth/2.0, 10)];
-    _foodNameLB.text = [NSString stringWithFormat:@"   我要吃 :  测试数据"] ;
+    _foodNameLB.text = [NSString stringWithFormat:@"   我要吃 :  %@",_model.name] ;
     
     [self.contentView addSubview:_foodNameLB];
     
@@ -56,8 +60,7 @@
     
     [self.contentView addSubview:_foodPersonLB];
         _foodPersonNumLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_userImgV.frame), CGRectGetMaxY(_foodPersonLB.frame)+PinDanCellJianJu*2, kScreenWidth/2.0, 10)];
-    
-    _foodPersonNumLB.text = [NSString stringWithFormat:@"约吃人数:  测试数据／测试数据"] ;
+    _foodPersonNumLB.text = [NSString stringWithFormat:@"约吃人数:  %@／%@",_model.currentPersonNum,_model.personMaxNum] ;
     
     [self.contentView addSubview:_foodPersonNumLB];
 
@@ -70,12 +73,12 @@
     [self.contentView addSubview:_addPindanBtn];
 
     _foodTimeLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_userImgV.frame), CGRectGetMaxY(_foodPersonNumLB.frame)+PinDanCellJianJu*2, kScreenWidth/2.0, 10)];
-    _foodTimeLB.text = [NSString stringWithFormat:@"约吃时间:  测试数据"] ;
+    _foodTimeLB.text = [NSString stringWithFormat:@"约吃时间:  %@",_model.time] ;
     
     [self.contentView addSubview:_foodTimeLB];
 
     _foodLocationLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_userImgV.frame), CGRectGetMaxY(_foodTimeLB.frame)+PinDanCellJianJu*2, kScreenWidth/2.0, 10)];
-    _foodLocationLB.text = [NSString stringWithFormat:@"我要地点:  测试数据"] ;
+    _foodLocationLB.text = [NSString stringWithFormat:@"约吃地点:  测试数据"] ;
     
     [self.contentView addSubview:_foodLocationLB];
 //    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(5, CGRectGetHeight(self.frame)-1, kScreenWidth-10, 1)];

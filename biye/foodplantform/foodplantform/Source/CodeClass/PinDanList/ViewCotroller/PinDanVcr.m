@@ -8,13 +8,15 @@
 #import <CoreLocation/CoreLocation.h>
 #import "PinDanVcr.h"
 #import "LrdOutputView.h"
-
+#import "BmobOrderModel.h"
 #import "SendPindanVC.h"
 
 #import "PinDanCell.h"
 @interface PinDanVcr ()<LrdOutputViewDelegate,CLLocationManagerDelegate>
 {
     CLLocationManager *locationManager;
+    
+    NSMutableArray *_orderArr;
 }
 @end
 
@@ -61,6 +63,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    _orderArr = [[NSMutableArray alloc] initWithCapacity:0];
+    //查找user_order表
+    BmobQuery   *user_orderQuery = [BmobQuery queryWithClassName:@"user_order"];
+    //查找user_order表里面里面的所有数据
+   [user_orderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+       for (BmobObject *obj in array)
+       {
+           if (obj) {
+               BmobOrderModel *model = [[BmobOrderModel alloc] initWithBomdModel:obj];
+               [_orderArr addObject:model];
+
+           }
+        }
+       [self.tableView reloadData];
+   }];
    // [[UIApplication sharedApplication]openURL:[NSURL URLWithString:@"sms://13888888888"]];
     
     
@@ -163,7 +180,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 #warning Incomplete implementation, return the number of rows
-    return 10;
+    return _orderArr.count;
 }
 
 
@@ -171,6 +188,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     PinDanCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PinDanCell" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.model = _orderArr[indexPath.row];
     //cell.textLabel.text = @"测试";
     // Configure the cell...
     

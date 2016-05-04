@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "BmobOrderModel.h"
 @interface PinDanCell : UITableViewCell
 
 //用户头像
@@ -29,5 +29,5 @@
 //加入拼单
 
 @property(nonatomic,strong)UIButton *addPindanBtn;
-
+@property(nonatomic,strong)BmobOrderModel *model;
 @end
