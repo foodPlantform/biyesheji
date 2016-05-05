@@ -10,7 +10,7 @@
 #import "foodlistTableViewCell.h"
 #import "loginViewController.h"
 @interface foodlistTableViewController ()
-
+@property(nonatomic,strong)NSMutableArray *dataArr;
 @end
 
 @implementation foodlistTableViewController
@@ -20,6 +20,14 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     [self.tableView registerClass:[foodlistTableViewCell class] forCellReuseIdentifier:@"cell"];
+
+    self.dataArr = [NSMutableArray array];
+    [[uploadTool shareTool] getuploadDataWithPassValue:^(NSArray *upArr) {
+        self.dataArr = upArr;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+    }];
     
 }
 
@@ -37,15 +45,19 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 #warning Incomplete implementation, return the number of rows
-    return 10;
+    return self.dataArr.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     foodlistTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+    foodModel *fm = [[foodModel alloc]init];
+    fm = self.dataArr[indexPath.row];
+    [cell.foodPic sd_setImageWithURL:[NSURL URLWithString:fm.picUrl]];
+    NSLog(@"%@",fm.picUrl);
+    cell.foodName.text = fm.foodName;
+    NSLog(@"%@",fm.foodName);
     
-    cell.foodPic.image = [UIImage imageNamed:@"美食"];
-    cell.foodName.text = @"delicious food";
     cell.starScore.value  = 3;
     
     return cell;

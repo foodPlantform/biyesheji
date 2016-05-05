@@ -35,9 +35,7 @@
 #pragma ====上传按钮事件=====
 -(void)upBtnAction
 {
-    NSData *data = UIImagePNGRepresentation(self.lv.picture.image);
-    NSString *s = [data base64Encoding];
-    NSLog(@"==%@",s);
+    
     
     
     if ([self.lv.foodName.text isEqualToString:@""] || [self.lv.foodDes.text isEqualToString:@""] || [self.lv.address.text isEqualToString:@""] || [self.lv.rec.text isEqualToString:@""] || [self.lv.sty.text isEqualToString:@""] || self.lv.picture.image == nil) {
@@ -46,9 +44,16 @@
     }
     else
     {
-        NSMutableArray *picArr = [NSMutableArray arrayWithObjects:self.lv.picture.image, nil];
-        [[uploadTool shareTool]postDataWithUrl:imgUrl params:nil imageDatas:picArr success:nil failure:nil];
+        foodModel *fm = [[foodModel alloc]init];
+        fm.foodName = @"mwh";
+        fm.foodDes = @"22";
+        fm.address = @"33";
+        fm.rec = @"1";
+        fm.sty = @"1";
+        NSString *name = @"aw";
         
+        
+        [[uploadTool shareTool] uploadWith:fm username:@"qw" image:self.lv.picture.image];
         
        
     }

@@ -81,4 +81,62 @@ static uploadTool *ut;
     
 }
 
+-(void)uploadWith:(foodModel *)stuff username:(NSString *)userName image:(UIImage *)img
+{
+    self.uploadObject = [BmobObject objectWithClassName:@"food_message"];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    NSDate *date = [NSDate  dateWithTimeIntervalSinceNow:3600*2];
+    [formatter setDateFormat:@"yyyyMMddHHmmss"];
+    NSString * strdate = [formatter stringFromDate:date];
+    NSString *fileName = [NSString stringWithFormat:@"%@%@.JPEG",userName,strdate];
+    NSData *imageData = UIImageJPEGRepresentation(img, 0.01);
+    BmobFile *file = [[BmobFile alloc]initWithFileName:fileName withFileData:imageData];
+    [file saveInBackground:^(BOOL isSuccessful, NSError *error) {
+        if (isSuccessful) {
+            [_uploadObject setObject:file forKey:@"file"];
+            [_uploadObject setObject:userName forKey:@"username"];
+            [_uploadObject setObject:stuff.foodName forKey:@"foodname"];
+            [_uploadObject setObject:stuff.foodDes forKey:@"fooddes"];
+            [_uploadObject setObject:stuff.address forKey:@"address"];
+            [_uploadObject setObject:stuff.rec forKey:@"rec"];
+            [_uploadObject setObject:stuff.sty forKey:@"sty"];
+            [_uploadObject setObject:file.url forKey:@"picurl"];
+            [_uploadObject saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+                if (isSuccessful) {
+                    [[regAndLogTool shareTools] messageShowWith:@"上传成功" cancelStr:@"确定"];
+                }
+                else
+                {
+                    [[regAndLogTool shareTools] messageShowWith:@"上传失败" cancelStr:@"确定"];
+                }
+            }];
+
+        }
+    }];
+    
+}
+
+// 获取上传的数据
+-(void)getuploadDataWithPassValue:(uploadData)passvalue
+{
+    NSMutableArray *tempArr = [[NSMutableArray alloc]init];
+    BmobQuery *query = [[BmobQuery alloc]initWithClassName:@"food_message"];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        for (BmobObject *obj in array) {
+            foodModel *fm = [[foodModel alloc]init];
+            fm.fid = [obj objectForKey:@"objectid"];
+            fm.foodName =[obj objectForKey:@"foodname"];
+            fm.foodDes =[obj objectForKey:@"fooddes"];
+            fm.address =[obj objectForKey:@"address"];
+            fm.rec =[obj objectForKey: @"rec"];
+            fm.sty =[obj objectForKey:@"sty"] ;
+            fm.score =[obj objectForKey:@"score"] ;
+            fm.userName  =[obj objectForKey:@"username"];
+            fm.picUrl = [obj objectForKey:@"picurl"];
+            NSLog(@"name%@",fm.foodName);
+            [tempArr addObject:fm];
+        }
+        passvalue(tempArr);
+    }];
+}
 @end

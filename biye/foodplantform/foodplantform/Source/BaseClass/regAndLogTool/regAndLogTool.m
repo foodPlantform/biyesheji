@@ -33,7 +33,7 @@ static regAndLogTool *rlt;
     
     // GET请求  同步
     // 1. 准备URL
-    NSString *urlStr = [NSString stringWithFormat:@"http://zhaohm.com.cn/hm/hmweb/mwh/mwhregister.php?username=%@&pwd=%@",userName,passWord];
+    NSString *urlStr = [NSString stringWithFormat:@"http://127.0.0.1/mwh/mwhregister.php?username=%@&pwd=%@",userName,passWord];
     NSURL *url = [NSURL URLWithString:urlStr];
     // 2. 准备请求
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];

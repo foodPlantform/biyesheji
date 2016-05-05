@@ -12,6 +12,7 @@
 #import "foodModel.h"
 // 工具数据引用
 #import "regAndLogTool.h"
+#import "uploadTool.h"
 
 // 常用controller引用
 #import "loginViewController.h"
@@ -23,5 +24,7 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <BmobSDK/Bmob.h>
+#import "UIImageView+WebCache.h"
+
 
 #endif

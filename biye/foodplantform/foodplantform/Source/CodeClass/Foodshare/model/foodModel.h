@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @interface foodModel : NSObject
+@property(nonatomic,strong)NSString *fid;
 @property(nonatomic,strong)NSString *foodName;
 @property(nonatomic,strong)NSString *userName;
 @property(nonatomic,strong)NSString *foodDes;
@@ -16,5 +17,6 @@
 @property(nonatomic,strong)NSString *picUrl;
 @property(nonatomic,strong)NSString *rec;
 @property(nonatomic,strong)NSString *sty;
+@property(nonatomic,strong)NSString *score;
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key;
 @end
