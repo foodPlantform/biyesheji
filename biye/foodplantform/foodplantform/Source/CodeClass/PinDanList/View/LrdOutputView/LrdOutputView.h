@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class LrdOutputView;
 @protocol LrdOutputViewDelegate <NSObject>
 
 @required
-- (void)didSelectedAtIndexPath:(NSIndexPath *)indexPath;
+- (void)LrdOutputView:(LrdOutputView*)lrdOutputView didSelectedAtIndexPath:(NSIndexPath *)indexPath currentStr:(NSString *)currentStr;
 
 @end
 
@@ -26,6 +26,9 @@ typedef NS_ENUM(NSUInteger, LrdOutputViewDirection) {
 
 @property (nonatomic, weak) id<LrdOutputViewDelegate> delegate;
 @property (nonatomic, strong) dismissWithOperation dismissOperation;
+//获取选中行的信息
+@property (nonatomic,copy)void (^didSecletRowAndStr)(NSInteger index, NSString *string);
+
 
 //初始化方法
 //传入参数：模型数组，弹出原点，宽度，高度（每个cell的高度）

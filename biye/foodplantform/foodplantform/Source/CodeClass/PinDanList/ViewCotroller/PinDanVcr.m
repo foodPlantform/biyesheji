@@ -10,13 +10,21 @@
 #import "LrdOutputView.h"
 #import "BmobOrderModel.h"
 #import "SendPindanVC.h"
+#import "CLAlertView.h"
+#import "MJRefresh.h"
 
 #import "PinDanCell.h"
-@interface PinDanVcr ()<LrdOutputViewDelegate,CLLocationManagerDelegate>
+#define OnceLoadPageRow 5
+
+@interface PinDanVcr ()<LrdOutputViewDelegate,CLLocationManagerDelegate,CLAlertViewDelegate>
 {
     CLLocationManager *locationManager;
     
     NSMutableArray *_orderArr;
+    
+    BmobQuery   *_user_orderQuery;
+    BmobGeoPoint  *_currentBmobLocation;
+    CLLocation  *_currentLocation;
 }
 @end
 
@@ -25,31 +33,32 @@
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(nonnull NSArray<CLLocation *> *)locations
 {
     NSLog(@"定位成功");
-//    CLLocation *location=[locations firstObject];//取出第一个位置
-//    CLLocationCoordinate2D coordinate=location.coordinate;//位置坐标
-//    NSLog(@"经度：%f,纬度：%f,海拔：%f,航向：%f,行走速度：%f",coordinate.longitude,coordinate.latitude,location.altitude,location.course,location.speed);
-//    CLGeocoder *rev = [[CLGeocoder alloc] init];
-//    [rev reverseGeocodeLocation:location completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
-//        if (error||placemarks.count==0)
-//        {
-//            
-//        }else
-//        {
-//            //显示最前面的地标信息
-//            CLPlacemark *firstPlacemark=[placemarks firstObject];
-//            //显示最前面的地标信息
-//            NSLog(@"firstPlacemark.name----------%@",firstPlacemark.name);
-//            //经纬度
-//            CLLocationDegrees latitude=firstPlacemark.location.coordinate.latitude;
-//            CLLocationDegrees longitude=firstPlacemark.location.coordinate.longitude;
-//            
-//            NSLog(@"firstPlacemark.name----------%.2f",latitude);
-//
-//            NSLog(@"firstPlacemark.name----------%.2f",longitude);
-//
-//        }
-// 
-//    }];
+    CLLocation *location=[locations firstObject];//取出第一个位置
+    _currentLocation = location;
+    CLLocationCoordinate2D coordinate=location.coordinate;//位置坐标
+    NSLog(@"经度：%f,纬度：%f,海拔：%f,航向：%f,行走速度：%f",coordinate.longitude,coordinate.latitude,location.altitude,location.course,location.speed);
+    CLGeocoder *rev = [[CLGeocoder alloc] init];
+    [rev reverseGeocodeLocation:location completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        if (error||placemarks.count==0)
+        {
+            
+        }else
+        {
+            //显示最前面的地标信息
+            CLPlacemark *firstPlacemark=[placemarks firstObject];
+            //显示最前面的地标信息
+            NSLog(@"firstPlacemark.name----------%@",firstPlacemark.name);
+            //经纬度
+            CLLocationDegrees latitude=firstPlacemark.location.coordinate.latitude;
+            CLLocationDegrees longitude=firstPlacemark.location.coordinate.longitude;
+            
+            NSLog(@"firstPlacemark.name----------%.2f",latitude);
+
+            NSLog(@"firstPlacemark.name----------%.2f",longitude);
+            _currentBmobLocation= [[BmobGeoPoint alloc] initWithLongitude:longitude WithLatitude:latitude];
+        }
+ 
+    }];
     //如果不需要实时定位，使用完即使关闭定位服务
     [locationManager stopUpdatingLocation];
 }
@@ -65,9 +74,11 @@
     [super viewDidLoad];
     _orderArr = [[NSMutableArray alloc] initWithCapacity:0];
     //查找user_order表
-    BmobQuery   *user_orderQuery = [BmobQuery queryWithClassName:@"user_order"];
+    _user_orderQuery = [BmobQuery queryWithClassName:@"user_order"];
+    _user_orderQuery.limit =OnceLoadPageRow;
+    _user_orderQuery.skip = 0;
     //查找user_order表里面里面的所有数据
-   [user_orderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+   [_user_orderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
        for (BmobObject *obj in array)
        {
            if (obj) {
@@ -88,7 +99,7 @@
     self.navigationItem.leftBarButtonItem = leftItem;
 
     [self.tableView registerClass:[PinDanCell class] forCellReuseIdentifier:@"PinDanCell"];
-    self.tableView.rowHeight = 260+10;
+    self.tableView.rowHeight = 290+10;
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -129,9 +140,88 @@
     locationManager.allowsBackgroundLocationUpdates = YES;//❤️同时必须在info中设置Required
 #pragma mark 5.开始定位
     [locationManager startUpdatingLocation];
+    
+    
+    // 下拉加载 上拉刷新
+    [self setupRefresh];
 }
 
-#pragma mark - 筛选 按钮
+/**
+ *  集成刷新控件
+ */
+- (void)setupRefresh
+{
+    // 1.下拉刷新(进入刷新状态就会调用self的headerRereshing)
+    self.tableView.mj_header=[MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+    //[_mainTableView.mj_header beginRefreshing];
+    self.tableView.mj_footer=[MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+}
+- (void)loadNewData
+{
+    //每页加载多少数据
+    _user_orderQuery.limit =OnceLoadPageRow;
+    //每页跳过多少数据
+    _user_orderQuery.skip = 0;
+    
+    [_user_orderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        NSLog(@"error---------------%@",error);
+        [_orderArr removeAllObjects];
+        for (BmobObject *obj in array)
+        {
+            if (obj) {
+                BmobOrderModel *model = [[BmobOrderModel alloc] initWithBomdModel:obj];
+                [_orderArr addObject:model];
+                
+            }
+        }
+        // 2.2秒后刷新表格UI
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            // 刷新表格
+            [self.tableView reloadData];
+            
+            
+            // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
+            [self.tableView.mj_header endRefreshing];
+        });
+        
+    }];
+
+    
+
+}
+- (void)loadMoreData
+{
+    //每页加载多少数据
+    _user_orderQuery.limit +=OnceLoadPageRow;
+    //每页跳过多少数据
+    _user_orderQuery.skip += OnceLoadPageRow;
+    
+    [_user_orderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        NSLog(@"error---------------%@",error);
+        NSMutableArray *moreDataArr = [[NSMutableArray alloc] initWithCapacity:0];
+        for (BmobObject *obj in array)
+        {
+            if (obj) {
+                BmobOrderModel *model = [[BmobOrderModel alloc] initWithBomdModel:obj];
+                [moreDataArr addObject:model];
+            }
+        }
+        [_orderArr addObjectsFromArray:moreDataArr];
+
+        
+    }];
+
+    // 2.2秒后刷新表格UI
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // 刷新表格
+        [self.tableView reloadData];
+        
+        
+        // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
+        [self.tableView.mj_footer endRefreshing];
+    });
+}
+#pragma mark - 发单 按钮
 - (void)leftItemBtnAction
 {
     SendPindanVC *sendPindanVc = [[SendPindanVC alloc] init];
@@ -151,7 +241,7 @@
 //    }
     CGFloat x = kScreenWidth-30;
     CGFloat y = 44 + 10;
-     LrdOutputView *_outputView = [[LrdOutputView alloc] initWithDataArray:@[@"时间⬆️",@"时间⬇️",@"只约异性",@"人数⬆️",@"人数⬇️",@"附近"] origin:CGPointMake(x, y) width:125 height:44 direction:kLrdOutputViewDirectionRight];
+     LrdOutputView *_outputView = [[LrdOutputView alloc] initWithDataArray:@[@"约会时间",@"约会对象",@"付款方式",@"约会人数",@"附近"] origin:CGPointMake(x, y) width:125 height:44 direction:kLrdOutputViewDirectionRight];
     _outputView.delegate = self;
     _outputView.dismissOperation = ^(){
         //设置成nil，以防内存泄露
@@ -160,18 +250,184 @@
     [_outputView pop];
 
 }
-#pragma mark - LrdOutputViewDelegate
+#pragma mark - LrdOutputViewDelegate 筛选一级类目
 
-- (void)didSelectedAtIndexPath:(NSIndexPath *)indexPath
+- (void)LrdOutputView:(LrdOutputView *)lrdOutputView didSelectedAtIndexPath:(NSIndexPath *)indexPath currentStr:(NSString *)currentStr
 {
-    NSLog(@"选择第%ld行",(long)indexPath.row);
+    
+    CLAlertView *bottomView = [CLAlertView globeBottomView];
+    bottomView.delegate = self;
+    bottomView.hlightButton = 1;
+    switch (indexPath.row) {
+        case 0://时间
+        {
+            bottomView.titleArray = @[@"时间⬆️",@"时间⬇️"];
+        }
+            break;
+        case 1://约会对象
+        {
+            bottomView.titleArray = @[@"不限",@"男",@"女"];
+        }
+            break;
+        case 2://付款方式
+        {
+            bottomView.titleArray = @[@"我付",@"AA"];
+        }
+            break;
+        case 3://约会人数
+        {
+            bottomView.titleArray = @[@"人数⬆️",@"人数⬇️",@"2人",@"3人",@"4人",@"5人",@"6人",@"7人",@"8人",@"9人",@"10人"];
+        }
+            break;
+        case 4://附近
+        {
+            bottomView.titleArray = @[@1,@3,@7,@10,@30,@40,@50,@100,];
+            
+        }
+            break;
+            
+        default:
+            break;
+    }
+    
+    bottomView.lastRow = indexPath.row;
+    bottomView.title = currentStr;
+    [bottomView show];
+    
+    
 }
+#pragma mark - Table view data source
+- (void)globeBottomViewButtonClick:(NSInteger)index currentStr:(NSString *)currentStr lastRow:(NSInteger)lastRow titleArr:(NSArray *)titleArr
+{
+    //_user_orderQuery = [[BmobQuery alloc] initWithClassName:@"user_order"];
+   
+    
+   
+    switch (lastRow) {
+        case 0://时间
+        {
+            switch ((long)index) {
+                case 0://升序
+                {
+                    [_user_orderQuery orderByAscending:@"order_time"];
+                }
+                    break;
+                case 1://降序
+                {
+                    [_user_orderQuery orderByDescending:@"order_time"];
+                }
+                    break;
+                default:
+                    break;
+            }
+            
+        }
+            break;
+        case 1://约会对象
+        {
+            switch ((long)index) {
+                case 0://不限
+                {
+                    [_user_orderQuery whereKey:@"order_target" equalTo:@"0"];
+                }
+                    break;
+                case 1://男
+                {
+                    [_user_orderQuery whereKey:@"order_target" equalTo:@"1"];
+
+                }
+                    break;
+                case 2://女6217994910058945074
+                {
+                    [_user_orderQuery whereKey:@"order_target" equalTo:@"2"];
+                }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+            break;
+        case 2://付款方式
+        {
+            switch ((long)index) {
+                case 0://我付
+                {
+                    [_user_orderQuery whereKey:@"order_payType" equalTo:@"0"];
+                }
+                    break;
+                case 1://AA
+                {
+                    [_user_orderQuery whereKey:@"order_payType" equalTo:@"1"];
+                    
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
+            break;
+        case 3://人数
+        {
+            switch ((long)index) {
+                case 0://升序
+                {
+                        [_user_orderQuery orderByAscending:@"order_maxnum"];
+                }
+                    break;
+                case 1://降序
+                {
+                    [_user_orderQuery orderByDescending:@"order_maxnum"];
+                }
+                    break;
+                    
+                default:// 按人数人数
+                {
+                    NSArray *personArray = [currentStr componentsSeparatedByString:@"人"];
+                    
+                    
+                   [_user_orderQuery whereKey:@"order_maxnum" equalTo:personArray[0]];
+                }
+                    break;
+            }
+            
+        }
+            break;
+        case 4://附近
+        {
+            [_user_orderQuery whereKey:@"order_loaction" nearGeoPoint:_currentBmobLocation withinKilometers:[titleArr[lastRow] doubleValue]];
+        }
+            break;
+        default:
+            break;
+    }
+    //每页加载多少数据
+    _user_orderQuery.limit =OnceLoadPageRow;
+    //每页跳过多少数据
+    _user_orderQuery.skip = 0;
+
+    [_user_orderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        NSLog(@"error---------------%@",error);
+        [_orderArr removeAllObjects];
+        for (BmobObject *obj in array)
+        {
+            if (obj) {
+                BmobOrderModel *model = [[BmobOrderModel alloc] initWithBomdModel:obj];
+                [_orderArr addObject:model];
+                
+            }
+        }
+        [self.tableView reloadData];
+        
+        
+    }];
+}
+
+#pragma mark - LrdOutputViewDelegate 筛选二级类目
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-#pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 #warning Incomplete implementation, return the number of sections
@@ -186,8 +442,16 @@
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    PinDanCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PinDanCell" forIndexPath:indexPath];
+    static NSString *CellIdentifier = @"PinDanCell" ;
+
+    PinDanCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    if (cell==nil) {
+        cell = [[PinDanCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+
+    }
+    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.currentLocation = _currentLocation;
     cell.model = _orderArr[indexPath.row];
     //cell.textLabel.text = @"测试";
     // Configure the cell...

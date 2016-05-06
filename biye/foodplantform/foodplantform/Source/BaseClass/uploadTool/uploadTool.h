@@ -12,6 +12,7 @@
 typedef void(^uploadData)(NSArray *upArr);
 @interface uploadTool : NSObject
 @property(nonatomic,strong)BmobObject *uploadObject;
+@property(nonatomic,strong)NSMutableString *uploadResult;
 
 +(uploadTool *)shareTool;
 

@@ -25,6 +25,7 @@
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <BmobSDK/Bmob.h>
 #import "UIImageView+WebCache.h"
+#import "MBProgressHUD.h"
 
 
 #endif

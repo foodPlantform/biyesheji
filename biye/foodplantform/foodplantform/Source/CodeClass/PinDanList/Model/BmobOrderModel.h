@@ -25,12 +25,23 @@
 
 //拼单食物名字
 @property(nonatomic,strong)NSString *name;
+//拼单食物名字
+@property(nonatomic,strong)NSString *foodPayType;
 //拼单对象
 @property(nonatomic,strong)NSString *target;
 //拼单时间
-@property(nonatomic,strong)NSDate *time;
+@property(nonatomic,strong)NSDate *timeDate;
+//拼单时间str
+@property(nonatomic,strong)NSString *timeDateStr;
+
+//拼单地点经度
+
+@property(nonatomic,assign)double foodLocationLatitude;
+//拼单地点纬度
+@property(nonatomic,assign)double foodLocationLongitude;
 //拼单地点
-@property(nonatomic,strong)NSString *foodLocation;
+@property(nonatomic,strong)NSString * foodLocation;
+
 -(instancetype)initWithBomdModel :(BmobObject *)user_order;
 
 

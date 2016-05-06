@@ -99,8 +99,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     //通知代理处理点击事件
-    if ([self.delegate respondsToSelector:@selector(didSelectedAtIndexPath:)]) {
-        [self.delegate didSelectedAtIndexPath:indexPath];
+    if ([self.delegate respondsToSelector:@selector(LrdOutputView:didSelectedAtIndexPath:currentStr: )]) {
+        [self.delegate LrdOutputView:self didSelectedAtIndexPath:indexPath currentStr:self.dataArray[indexPath.row]];
+    }
+    //block获取点击信息
+    if (_didSecletRowAndStr)
+    {
+        _didSecletRowAndStr(indexPath.row,self.dataArray[indexPath.row]);
     }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self dismiss];

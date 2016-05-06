@@ -14,10 +14,23 @@
 @property(nonatomic,strong)loadupFoodView *lv;
 @property(nonatomic,assign)BOOL isFullScreen;
 @property(nonatomic,assign)BOOL isupload;
+
 @end
 
 @implementation uploadFoodViewController
 
+
+// 第三方小菊花
+- (void)p_setupProgressHud
+{
+    self.hud = [[MBProgressHUD alloc] initWithView:self.view];
+    _hud.frame = self.view.bounds;
+    _hud.minSize = CGSizeMake(100, 100);
+    _hud.mode = MBProgressHUDModeIndeterminate;
+    [self.view addSubview:_hud];
+    
+    [_hud show:YES];
+}
 -(void)loadView
 {
     self.lv = [[loadupFoodView alloc]init];
@@ -31,13 +44,56 @@
     [self.lv.upBtn addTarget:self action:@selector(upBtnAction) forControlEvents:UIControlEventTouchUpInside];
     // Do any additional setup after loading the view.
 }
+-(void)uploadWith:(foodModel *)stuff username:(NSString *)userName image:(UIImage *)img
+{
+    self.uploadObject = [BmobObject objectWithClassName:@"food_message"];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+    NSDate *date = [NSDate  dateWithTimeIntervalSinceNow:3600*2];
+    [formatter setDateFormat:@"yyyyMMddHHmmss"];
+    NSString * strdate = [formatter stringFromDate:date];
+    NSString *fileName = [NSString stringWithFormat:@"%@%@.JPEG",userName,strdate];
+    NSData *imageData = UIImageJPEGRepresentation(img, 0.01);
+    BmobFile *file = [[BmobFile alloc]initWithFileName:fileName withFileData:imageData];
+    [file saveInBackground:^(BOOL isSuccessful, NSError *error) {
+        if (isSuccessful) {
+            [_uploadObject setObject:file forKey:@"file"];
+            [_uploadObject setObject:userName forKey:@"username"];
+            [_uploadObject setObject:stuff.foodName forKey:@"foodname"];
+            [_uploadObject setObject:stuff.foodDes forKey:@"fooddes"];
+            [_uploadObject setObject:stuff.address forKey:@"address"];
+            [_uploadObject setObject:stuff.rec forKey:@"rec"];
+            [_uploadObject setObject:stuff.sty forKey:@"sty"];
+            [_uploadObject setObject:file.url forKey:@"picurl"];
+            
+            [_uploadObject saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+                if (isSuccessful) {
+                    
+                [[regAndLogTool shareTools] messageShowWith:@"上传成功" cancelStr:@"确定"];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        self.hud.hidden = YES;
+                    });
+                    
+                }
+                else
+                {
+                    
+                    [[regAndLogTool shareTools] messageShowWith:@"上传失败" cancelStr:@"确定"];
+                    
+                }
+            }];
+            
+        }
+    }];
+    
+    
+}
 
 #pragma ====上传按钮事件=====
 -(void)upBtnAction
 {
     
     
-    
+    [self p_setupProgressHud];
     if ([self.lv.foodName.text isEqualToString:@""] || [self.lv.foodDes.text isEqualToString:@""] || [self.lv.address.text isEqualToString:@""] || [self.lv.rec.text isEqualToString:@""] || [self.lv.sty.text isEqualToString:@""] || self.lv.picture.image == nil) {
         UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请输入完整内容" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
         [message show];
@@ -45,15 +101,14 @@
     else
     {
         foodModel *fm = [[foodModel alloc]init];
-        fm.foodName = @"mwh";
-        fm.foodDes = @"22";
-        fm.address = @"33";
-        fm.rec = @"1";
-        fm.sty = @"1";
-        NSString *name = @"aw";
+        fm.foodName = self.lv.foodName.text;
+        fm.foodDes = self.lv.foodDes.text;
+        fm.address = self.lv.address.text;
+        fm.rec = self.lv.rec.text;
+        fm.sty = self.lv.sty.text;
+        [self uploadWith:fm username:@"qwer" image:self.lv.picture.image];
         
-        
-        [[uploadTool shareTool] uploadWith:fm username:@"qw" image:self.lv.picture.image];
+       //[[uploadTool shareTool] uploadWith:fm username:@"qw" image:self.lv.picture.image];
         
        
     }

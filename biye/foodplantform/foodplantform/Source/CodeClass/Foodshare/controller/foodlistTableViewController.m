@@ -11,9 +11,21 @@
 #import "loginViewController.h"
 @interface foodlistTableViewController ()
 @property(nonatomic,strong)NSMutableArray *dataArr;
+@property(nonatomic,strong)MBProgressHUD *hud;
 @end
 
 @implementation foodlistTableViewController
+// 第三方小菊花
+- (void)p_setupProgressHud
+{
+    self.hud = [[MBProgressHUD alloc] initWithView:self.view];
+    _hud.frame = self.view.bounds;
+    _hud.minSize = CGSizeMake(100, 100);
+    _hud.mode = MBProgressHUDModeIndeterminate;
+    [self.view addSubview:_hud];
+    
+    [_hud show:YES];
+}
 
 - (void)viewDidLoad {
   
@@ -22,10 +34,12 @@
     [self.tableView registerClass:[foodlistTableViewCell class] forCellReuseIdentifier:@"cell"];
 
     self.dataArr = [NSMutableArray array];
+    [self p_setupProgressHud];
     [[uploadTool shareTool] getuploadDataWithPassValue:^(NSArray *upArr) {
         self.dataArr = upArr;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
+            self.hud.hidden = YES;
         });
     }];
     

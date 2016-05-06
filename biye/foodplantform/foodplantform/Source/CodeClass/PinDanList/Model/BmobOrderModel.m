@@ -40,7 +40,28 @@
         self.currentPersonNum = [user_order objectForKey:@"order_num"];
         self.name = [user_order objectForKey:@"order_name"];
         self.target = [user_order objectForKey:@"order_target"];
-        self.time = [user_order objectForKey:@"createdAt"];
+        self.foodPayType = [user_order objectForKey:@"order_payType"];
+       
+        BmobGeoPoint*bmobGeoPoint = [user_order objectForKey:@"order_loaction"];
+        self.foodLocationLatitude = bmobGeoPoint.latitude;
+        self.foodLocationLongitude = bmobGeoPoint.longitude;
+        self.foodLocation = [user_order objectForKey:@"order_locationStr"];
+        self.timeDate = [user_order objectForKey:@"order_time"];
+        
+        
+        NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
+        
+        [formatter setDateStyle:NSDateFormatterMediumStyle];
+        
+        [formatter setTimeStyle:NSDateFormatterShortStyle];
+        
+        [formatter setDateFormat:@"yyyy年MM-dd-HH:mm"];
+        
+        
+        self.timeDateStr= [formatter stringFromDate:self.timeDate];
+        
+        
+        
 //        self. = [user_order objectForKey:@"objectId"];
 //        self.orderID = [user_order objectForKey:@"objectId"];
 //        self.orderID = [user_order objectForKey:@"objectId"];

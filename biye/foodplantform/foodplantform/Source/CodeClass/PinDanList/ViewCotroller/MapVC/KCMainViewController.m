@@ -92,8 +92,8 @@
                 [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     
                     //确定按钮的点击事件
-                    if ([_delegate respondsToSelector:@selector(KCMainViewControllerLongProessGetLoaction:place:)]) {
-                        [_delegate KCMainViewControllerLongProessGetLoaction:firstPlacemark.name place:firstPlacemark];
+                    if ([_delegate respondsToSelector:@selector(KCMainViewControllerLongProessGetLoaction:WithLongitude:WithLatitude:)]) {
+                        [_delegate KCMainViewControllerLongProessGetLoaction:firstPlacemark.name WithLongitude:touchMapCoordinate.longitude WithLatitude:touchMapCoordinate.latitude];
 //                        stringWithFormat:@"%@%@%@%@",firstPlacemark.locality==NULL?nil:firstPlacemark.locality,firstPlacemark.subLocality==NULL?nil:firstPlacemark.locality,firstPlacemark.thoroughfare==NULL?nil:firstPlacemark.locality,firstPlacemark.subThoroughfare==NULL?nil:firstPlacemark.locality]];
                         [self.navigationController popViewControllerAnimated:YES];
                     }

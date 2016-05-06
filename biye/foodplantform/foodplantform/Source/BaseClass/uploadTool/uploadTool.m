@@ -7,7 +7,7 @@
 //
 
 #import "uploadTool.h"
-
+#import "uploadFoodViewController.h"
 static uploadTool *ut;
 @implementation uploadTool
 +(uploadTool *)shareTool
@@ -101,18 +101,25 @@ static uploadTool *ut;
             [_uploadObject setObject:stuff.rec forKey:@"rec"];
             [_uploadObject setObject:stuff.sty forKey:@"sty"];
             [_uploadObject setObject:file.url forKey:@"picurl"];
+            
             [_uploadObject saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
                 if (isSuccessful) {
-                    [[regAndLogTool shareTools] messageShowWith:@"上传成功" cancelStr:@"确定"];
+
+                    uploadFoodViewController *upVc = [[uploadFoodViewController alloc]init];
+                    [upVc.hud show:NO];
+                [[regAndLogTool shareTools] messageShowWith:@"上传成功" cancelStr:@"确定"];
                 }
                 else
                 {
+
                     [[regAndLogTool shareTools] messageShowWith:@"上传失败" cancelStr:@"确定"];
+                    
                 }
             }];
 
         }
     }];
+    
     
 }
 
@@ -139,4 +146,6 @@ static uploadTool *ut;
         passvalue(tempArr);
     }];
 }
+
+
 @end

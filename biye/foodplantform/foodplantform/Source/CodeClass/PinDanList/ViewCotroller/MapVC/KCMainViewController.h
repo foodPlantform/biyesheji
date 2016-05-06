@@ -12,7 +12,7 @@
 @protocol KCLocationLongPressToDoDelegate <NSObject>
 
 @optional
-- (void)KCMainViewControllerLongProessGetLoaction:(NSString*)longPressPlacemarkStr place:(CLPlacemark*)placeMark;
+- (void)KCMainViewControllerLongProessGetLoaction:(NSString*)longPressPlacemarkStr WithLongitude:(double)mylongitude   WithLatitude:(double)mylatitude;
 
 @end
 
