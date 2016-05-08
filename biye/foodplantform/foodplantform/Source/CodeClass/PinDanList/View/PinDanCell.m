@@ -25,7 +25,7 @@
 {
     _model = model;
     _foodNameLB.text = [NSString stringWithFormat:@"   我要吃 :  %@",_model.name] ;
-    _foodPersonNumLB.text = [NSString stringWithFormat:@"约吃人数:  %@／%@",_model.currentPersonNum,_model.personMaxNum] ;
+    _foodPersonNumLB.text = [NSString stringWithFormat:@"约吃人数:  %ld／%ld",(long)_model.currentPersonNum,(long)_model.personMaxNum] ;
     _foodLocationLB.text = [NSString stringWithFormat:@"约吃地点:  %@",_model.foodLocation] ;
     
     _foodPayTypeLB.text = [NSString stringWithFormat:@"付款方式: %@",_model.foodPayType.intValue==0?@"我付":@"AA制"];
@@ -59,9 +59,15 @@
     //距离
     CLLocation *bmobLocation = [[CLLocation alloc] initWithLatitude:_model.foodLocationLatitude longitude:_model.foodLocationLongitude];
     //CLLocation *currentLocation = [[CLLocation alloc] initWithLatitude:_model.foodLocationLatitude longitude:_model.foodLocationLongitude];
-    CLLocationDistance kilometers=[_currentLocation distanceFromLocation:bmobLocation]/1000;
+    CLLocationDistance kilometers=[_currentLocation distanceFromLocation:bmobLocation];
     NSLog(@"距离:%f",kilometers);
-    _foodKMLB.text = [NSString stringWithFormat:@"地点距离:  %.2f km",kilometers] ;
+    if (kilometers >1000) {
+        _foodKMLB.text = [NSString stringWithFormat:@"地点距离:  %.2f km",kilometers/1000] ;
+    }else
+    {
+        _foodKMLB.text = [NSString stringWithFormat:@"地点距离:  %.2f m",kilometers] ;
+    }
+    
 
 }
 - (void)setPanDanCellView
@@ -102,7 +108,7 @@
     
     [self.contentView addSubview:_foodPersonLB];
         _foodPersonNumLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_userImgV.frame), CGRectGetMaxY(_foodPersonLB.frame)+PinDanCellJianJu*2, kScreenWidth/2.0, 10)];
-    _foodPersonNumLB.text = [NSString stringWithFormat:@"约吃人数:  %@／%@",_model.currentPersonNum,_model.personMaxNum] ;
+    _foodPersonNumLB.text = [NSString stringWithFormat:@"约吃人数:  %ld／%ld",(long)_model.currentPersonNum,(long)_model.personMaxNum] ;
     
     [self.contentView addSubview:_foodPersonNumLB];
 
@@ -136,7 +142,10 @@
 //加入拼单
 - (void)addPindanBtnAction
 {
-    
+    if ([_delegate respondsToSelector:@selector(addOrderPinDanCell:model:)])
+    {
+        [_delegate addOrderPinDanCell:self model:_model];
+    }
 }
 - (void)awakeFromNib {
     // Initialization code

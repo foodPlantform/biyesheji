@@ -14,10 +14,10 @@
 #import "SendPindanVC.h"
 #import "LrdOutputView.h"
 #define PinDanCellJianJu 20
-#define PinDanPayTypeTag 1003
-#define PinDanLocationTag 1000
-#define PinDanTimeTag 1001
-#define PinDanTargetTag 1002
+#define PinDanPayTypeTag 103
+#define PinDanLocationTag 100
+#define PinDanTimeTag 101
+#define PinDanTargetTag 102
 
 @interface SendPindanVC ()<UITextFieldDelegate,KCLocationLongPressToDoDelegate,KMDatePickerDelegate,LrdOutputViewDelegate>
 
@@ -104,7 +104,7 @@
 //    [_foodNameTf setValue:[UIFont boldSystemFontOfSize:3] forKeyPath:@"_placeholderLabel.font"];
 
     _foodNameTf.placeholder = @"请输入您想吃的美食";
-    _foodNameTf.delegate =self;
+    //_foodNameTf.delegate =self;
     [self.view addSubview:_foodNameTf];
     _foodPersonLB = [[UILabel alloc] initWithFrame:CGRectMake(PinDanCellJianJu, CGRectGetMaxY(_foodNameLB.frame)+PinDanCellJianJu*2, CGRectGetWidth(_foodNameLB.frame), 10)];
     
@@ -175,7 +175,15 @@
 {
     if (0!=_foodLocationTf.text.length&&0!=_foodPersonLBTf.text.length&&0!=_foodPersonNumTf.text.length&&0!=_foodTimeTf.text.length&&0!=_foodNameTf.text.length)
     {
-        [self sendOrder];
+        if ([[FileManager shareManager] isUserLogin]) {
+            //注销登陆  [BmobUser logout];
+            // 发单
+            [self sendOrder];
+        }else
+        {
+            [[FileManager shareManager ] LoginWithVc:self];
+        }
+        
 
        // [self.navigationController popViewControllerAnimated:YES];
     }
@@ -193,8 +201,12 @@
 - (void)sendOrder
 {
     //往GameScore表添加一条user_order为小明，分数为78的数据
+    
+    BmobUser *bUser = [BmobUser getCurrentUser];
     BmobObject *user_order = [BmobObject objectWithClassName:@"user_order"];
-    [user_order setObject:[NSNumber numberWithInteger:_foodPersonNumTf.text.integerValue] forKey:@"order_num"];
+    [user_order setObject:bUser.objectId forKey:@"order_senderID"];
+    [user_order setObject:@1 forKey:@"order_currentNum"];
+    [user_order setObject:[NSNumber numberWithInteger:_foodPersonNumTf.text.integerValue] forKey:@"order_currentNum"];
     [user_order setObject:_foodNameTf.text forKey:@"order_name"];
 
     [user_order setObject:[NSString stringWithFormat:@"%ld",(long)_foodTargetRow ]  forKey:@"order_target"];
@@ -222,6 +234,9 @@
     if (textField.tag == PinDanTimeTag)//时间
     {
         [self set_upTimePicker];
+    }else
+    {
+        
     }
 }
 

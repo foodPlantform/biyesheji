@@ -7,10 +7,25 @@
 //
 
 #import <UIKit/UIKit.h>
+@class BmobOrderModel;
+@class PinDanCell;
+@protocol PindanCelllDelegate <NSObject>
+
+/**
+ *  按钮点击加入拼单
+ *
+ *  @param index <#index description#>
+ */
+@optional
+
+- (void)addOrderPinDanCell:(PinDanCell *)cell model:(BmobOrderModel *)model;
+
+@end
 #import <CoreLocation/CoreLocation.h>
 
 #import "BmobOrderModel.h"
 @interface PinDanCell : UITableViewCell
+@property (strong, nonatomic) id<PindanCelllDelegate>delegate;
 
 //用户头像
 @property(nonatomic,strong)UIImageView *userImgV;

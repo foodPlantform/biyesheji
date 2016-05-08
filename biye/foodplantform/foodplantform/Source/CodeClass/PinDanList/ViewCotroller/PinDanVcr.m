@@ -12,11 +12,11 @@
 #import "SendPindanVC.h"
 #import "CLAlertView.h"
 #import "MJRefresh.h"
-
+#import "PindanPesVC.h"
 #import "PinDanCell.h"
 #define OnceLoadPageRow 5
 
-@interface PinDanVcr ()<LrdOutputViewDelegate,CLLocationManagerDelegate,CLAlertViewDelegate>
+@interface PinDanVcr ()<LrdOutputViewDelegate,CLLocationManagerDelegate,CLAlertViewDelegate,PindanCelllDelegate>
 {
     CLLocationManager *locationManager;
     
@@ -372,12 +372,12 @@
             switch ((long)index) {
                 case 0://升序
                 {
-                        [_user_orderQuery orderByAscending:@"order_maxnum"];
+                        [_user_orderQuery orderByAscending:@"order_maxNum"];
                 }
                     break;
                 case 1://降序
                 {
-                    [_user_orderQuery orderByDescending:@"order_maxnum"];
+                    [_user_orderQuery orderByDescending:@"order_maxNum"];
                 }
                     break;
                     
@@ -386,7 +386,7 @@
                     NSArray *personArray = [currentStr componentsSeparatedByString:@"人"];
                     
                     
-                   [_user_orderQuery whereKey:@"order_maxnum" equalTo:personArray[0]];
+                   [_user_orderQuery whereKey:@"order_maxNum" equalTo:[NSNumber numberWithInteger:[personArray[0]integerValue]]];
                 }
                     break;
             }
@@ -429,6 +429,7 @@
     // Dispose of any resources that can be recreated.
 }
 
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
 #warning Incomplete implementation, return the number of sections
     return 1;
@@ -438,7 +439,12 @@
 #warning Incomplete implementation, return the number of rows
     return _orderArr.count;
 }
-
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    PindanPesVC *vc=  [[PindanPesVC alloc] init];
+    vc.model = _orderArr[indexPath.row];
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -449,7 +455,7 @@
         cell = [[PinDanCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 
     }
-    
+    cell.delegate =self;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.currentLocation = _currentLocation;
     cell.model = _orderArr[indexPath.row];
@@ -458,7 +464,43 @@
     
     return cell;
 }
+#pragma mark - PindanCelllDelegate 加入拼单
+-(void)addOrderPinDanCell:(PinDanCell *)cell model:(BmobOrderModel *)model
+{
+    
+    if ([[FileManager shareManager] isUserLogin]) {
+        //注销登陆  [BmobUser logout];
+        //加入拼单
+        BmobUser *bUser = [BmobUser getCurrentUser];
+        BmobObject *addOrder = [BmobObject objectWithoutDatatWithClassName:@"user_order" objectId:model.orderID];
+        if (model.currentPersonNum ==model.personMaxNum) {
+            // 1.跳出弹出框，提示用户打开步骤。
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"该单已满" preferredStyle:UIAlertControllerStyleAlert];
+            [alertController addAction:[UIAlertAction actionWithTitle:@"重新选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            }]];
+            [self presentViewController:alertController animated:YES completion:nil];
 
+            
+        }else if ([model.senderID isEqualToString:bUser.objectId])//发单人不能加入该拼单
+        {
+            // 1.跳出弹出框，提示用户打开步骤。
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"你是发单人，不能加入该单" preferredStyle:UIAlertControllerStyleAlert];
+            [alertController addAction:[UIAlertAction actionWithTitle:@"重新选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            }]];
+            [self presentViewController:alertController animated:YES completion:nil];
+        }else
+        {
+            [addOrder addObjectsFromArray:@[@[@{@"userID":bUser.objectId,@"userOrderType":@"0"}]] forKey:@"apply_userArr"];
+            [addOrder incrementKey:@"order_currentNum"];
+            [addOrder updateInBackground];
+        }
+        
+
+    }else
+    {
+        [[FileManager shareManager ] LoginWithVc:self];
+    }
+}
 
 /*
 // Override to support conditional editing of the table view.

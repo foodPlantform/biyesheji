@@ -11,7 +11,10 @@
 
 //订单id
 @property(nonatomic,strong)NSString *orderID;
-
+//订单id
+@property(nonatomic,strong)NSString *senderID;
+//订单 申请的人数 及状态
+@property(nonatomic,strong)NSArray *applyUserArr;
 //用户头像
 @property(nonatomic,strong)NSString *imgeUrl;
 //昵称
@@ -19,9 +22,9 @@
 @property(nonatomic,strong)NSString *sexAge;
 
 //拼单人数
-@property(nonatomic,strong)NSString *currentPersonNum;
+@property(nonatomic,assign)NSInteger currentPersonNum;
 //拼单人数
-@property(nonatomic,strong)NSString *personMaxNum;
+@property(nonatomic,assign)NSInteger personMaxNum;
 
 //拼单食物名字
 @property(nonatomic,strong)NSString *name;

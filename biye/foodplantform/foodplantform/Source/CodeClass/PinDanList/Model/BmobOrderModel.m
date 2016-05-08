@@ -36,12 +36,13 @@
          @property(nonatomic,strong)NSString *foodLocation;
          */
         self.orderID = [user_order objectForKey:@"objectId"];
-        self.personMaxNum = [user_order objectForKey:@"order_maxnum"];
-        self.currentPersonNum = [user_order objectForKey:@"order_num"];
+        self.personMaxNum = [[user_order objectForKey:@"order_maxNum"] integerValue];
+        self.currentPersonNum = [[user_order objectForKey:@"order_currentNum"] integerValue];
         self.name = [user_order objectForKey:@"order_name"];
         self.target = [user_order objectForKey:@"order_target"];
+        self.applyUserArr = [user_order objectForKey:@"apply_userArr"];
         self.foodPayType = [user_order objectForKey:@"order_payType"];
-       
+       self.senderID = [user_order objectForKey:@"order_senderID"];
         BmobGeoPoint*bmobGeoPoint = [user_order objectForKey:@"order_loaction"];
         self.foodLocationLatitude = bmobGeoPoint.latitude;
         self.foodLocationLongitude = bmobGeoPoint.longitude;
