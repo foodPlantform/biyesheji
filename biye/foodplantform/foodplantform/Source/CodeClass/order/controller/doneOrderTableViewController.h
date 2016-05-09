@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface doneOrderTableViewController : UITableViewController
-
+@property (nonatomic,strong)NSString *orderType;
 @end

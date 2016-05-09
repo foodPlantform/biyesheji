@@ -8,14 +8,20 @@
 
 #import "AppDelegate.h"
 #import "BaseTabBarController.h"
-@interface AppDelegate ()
-
+@interface AppDelegate ()<BmobEventDelegate>
+@property (nonatomic,strong)BmobEvent *bmobEvent;
 @end
 
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    
+    int a = 3,b=2;
+    a = a^b;
+    b = a^b;
+    a = a^b;
+    NSLog(@"%d%d",a,b);
     
     // Override point for customization after application launch.
     [Bmob registerWithAppKey:@"df0abdc30e1283468e6765b47f904ccd"];
@@ -27,10 +33,30 @@
     //2.设置窗口的跟控制器(这个tabbar是我封装的，在BaseClass文件夹里
     BaseTabBarController * tabBarVC = [[BaseTabBarController alloc]init];
     self.window.rootViewController = tabBarVC;
-    
+    [self listen];
     //3.显示窗口
     [self.window makeKeyAndVisible];
     return YES;
+}
+-(void)listen{
+    //创建BmobEvent对象
+    _bmobEvent          = [BmobEvent defaultBmobEvent];
+    //设置代理
+    _bmobEvent.delegate = self;
+    //启动连接
+    [_bmobEvent start];
+}
+//在代理的函数，进行操作
+
+//可以进行监听或者取消监听事件
+-(void)bmobEventCanStartListen:(BmobEvent *)event{
+    //监听Post表更新
+    [_bmobEvent listenTableChange:BmobActionTypeUpdateTable tableName:@"user_apply"];
+}
+//接收到得数据
+-(void)bmobEvent:(BmobEvent *)event didReceiveMessage:(NSString *)message{
+    //打印数据
+    NSLog(@"didReceiveMessage:%@",message);
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

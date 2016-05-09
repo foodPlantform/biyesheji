@@ -468,7 +468,7 @@
 -(void)addOrderPinDanCell:(PinDanCell *)cell model:(BmobOrderModel *)model
 {
     //注销登陆
-    [BmobUser logout];
+  // [BmobUser logout];
     if ([[FileManager shareManager] isUserLogin]) {
         
         //加入拼单
@@ -491,15 +491,38 @@
             [self presentViewController:alertController animated:YES completion:nil];
         }else
         {
-            [addOrder addObjectsFromArray:@[@[@{@"userID":bUser.objectId,@"userOrderType":@"0"}]] forKey:@"apply_userArr"];
-            [addOrder incrementKey:@"order_currentNum"];
-            [addOrder updateInBackground];
-            // 1.跳出弹出框，提示用户打开步骤。
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@" 加入成功" preferredStyle:UIAlertControllerStyleAlert];
-            [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [self loadNewData];
-            }]];
-            [self presentViewController:alertController animated:YES completion:nil];
+            if ([model.applyUserArr containsObject:bUser.objectId])
+            {
+                // 1.跳出弹出框，提示用户打开步骤。
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"你已申请过该拼单" preferredStyle:UIAlertControllerStyleAlert];
+                [alertController addAction:[UIAlertAction actionWithTitle:@"重新选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    
+                }]];
+                [self presentViewController:alertController animated:YES completion:nil];
+            }else{
+                
+                [addOrder incrementKey:@"order_currentNum"];
+                [addOrder addUniqueObjectsFromArray:@[bUser.objectId] forKey:@"apply_userArr"];
+                [addOrder updateInBackground];
+                
+                BmobObject *addUserApplyList =  [BmobObject objectWithClassName:@"_User"];
+                
+                [addUserApplyList addUniqueObjectsFromArray:@[model.orderID] forKey:@"apply_orderListArr"];
+                //[addUserApplyList updateInBackground];
+                [addUserApplyList saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+                    NSString *alertStr = isSuccessful==1?@"加入成功":@"加入失败";
+                    NSLog(@"isSuccessful--------%d",isSuccessful);
+                    // 1.跳出弹出框，提示用户打开步骤。
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:alertStr preferredStyle:UIAlertControllerStyleAlert];
+                    [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        [self loadNewData];
+                    }]];
+                    [self presentViewController:alertController animated:YES completion:nil];
+                }];
+            }
+
+            
+            
         }
         
 

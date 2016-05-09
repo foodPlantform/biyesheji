@@ -41,6 +41,7 @@
         self.name = [user_order objectForKey:@"order_name"];
         self.target = [user_order objectForKey:@"order_target"];
         self.applyUserArr = [user_order objectForKey:@"apply_userArr"];
+        self.orderTyoe = [user_order objectForKey:@"orderType"];
         self.foodPayType = [user_order objectForKey:@"order_payType"];
        self.senderID = [user_order objectForKey:@"order_senderID"];
         BmobGeoPoint*bmobGeoPoint = [user_order objectForKey:@"order_loaction"];

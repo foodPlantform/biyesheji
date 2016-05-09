@@ -17,6 +17,9 @@
 @property(nonatomic,strong)NSArray *applyUserArr;
 //用户头像
 @property(nonatomic,strong)NSString *imgeUrl;
+//订单状态
+@property(nonatomic,strong)NSString *orderTyoe;
+
 //昵称
 @property(nonatomic,strong)NSString *niCheng;
 @property(nonatomic,strong)NSString *sexAge;
