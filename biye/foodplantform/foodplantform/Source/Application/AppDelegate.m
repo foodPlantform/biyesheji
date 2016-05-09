@@ -36,6 +36,28 @@
     [self listen];
     //3.显示窗口
     [self.window makeKeyAndVisible];
+    
+    BmobUser *curr = [BmobUser getCurrentUser];
+    if (curr) {
+        [[regAndLogTool shareTools] loginWithName:curr.username password:curr.password];
+        [regAndLogTool shareTools].usermodel = [[userModel alloc]init];
+        BmobQuery *query = [BmobQuery queryWithClassName:@"_User"];
+        [query whereKey:@"mobilePhoneNumber" equalTo:curr.mobilePhoneNumber];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+            for (BmobObject *obj in array) {
+                [regAndLogTool shareTools].usermodel.userName = [obj valueForKey:@"username"];
+               [regAndLogTool shareTools].usermodel.mobilePhoneNumber = [obj valueForKey:@"mobilePhoneNumber"];
+                
+//                [regAndLogTool shareTools].usermodel.head_img = [obj valueForKey:@"head_img"];
+//                [regAndLogTool shareTools].usermodel.gender = [obj valueForKey:@"gender"];
+            }
+        }];
+        
+        
+        
+    }
+   // [BmobUser logout];
+    
     return YES;
 }
 -(void)listen{

@@ -39,6 +39,7 @@
     pinglunViewController *pinglunVc = [[pinglunViewController alloc]init];
     
     userMessageViewController *userVc = [[userMessageViewController alloc]init];
+    userVc.foodmodel_user = self.foodmodel;
     
     orderFoodViewController *ordVc = [[orderFoodViewController alloc]init];
     ordVc.foodmodel_ord = [[foodModel alloc]init];

@@ -13,10 +13,19 @@
 #import "LrdOutputView.h"
 #import "foodDetailController.h"
 #import "orderFoodViewController.h"
-@interface foodlistTableViewController ()<LrdOutputViewDelegate>
+#import <CoreLocation/CoreLocation.h>
+
+
+@interface foodlistTableViewController ()<LrdOutputViewDelegate,CLLocationManagerDelegate>
 @property(nonatomic,strong)NSMutableArray *dataArr;
 @property(nonatomic,strong)MBProgressHUD *hud;
 @property(nonatomic,strong)BmobQuery *bQuery;
+@property(nonatomic,strong)NSMutableArray *tsArr;// 堂食数组
+@property(nonatomic,strong)CLLocationManager *manager;
+@property(nonatomic,strong)CLGeocoder *geo;
+@property(nonatomic,assign)CLLocationCoordinate2D cood;
+@property(nonatomic,strong)NSMutableString *returnCityStr;
+
 @end
 
 @implementation foodlistTableViewController
@@ -44,35 +53,107 @@
 {
     self.bQuery.limit = 10;
     self.bQuery.skip = 0;
-    [[uploadTool shareTool] getuploadDataWithPassValue:^(NSArray *upArr) {
-        self.dataArr = upArr;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView reloadData];
-            self.hud.hidden = YES;
+    self.dataArr  = [NSMutableArray array];
+    [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        for (BmobObject *obj in array) {
+            foodModel *fm = [[foodModel alloc]init];
+            fm.fid = [obj objectForKey:@"objectid"];
+            fm.foodName =[obj objectForKey:@"foodname"];
+            fm.foodDes =[obj objectForKey:@"fooddes"];
+            fm.address =[obj objectForKey:@"address"];
+            fm.rec =[obj objectForKey: @"rec"];
+            fm.sty =[obj objectForKey:@"sty"] ;
+            fm.score =[obj objectForKey:@"score"] ;
+            fm.userName  =[obj objectForKey:@"username"];
+            fm.picUrl = [obj objectForKey:@"picurl"];
+            fm.cityName = [obj objectForKey:@"city"];
+            [self.dataArr addObject:fm];
+        }
+
+       dispatch_async(dispatch_get_main_queue(), ^{
+           [self.tableView reloadData];
+           self.hud.hidden = YES;
            
-        });
-        [self.tableView.mj_header endRefreshing];
+           [self.tableView.mj_header endRefreshing];
+
+       });
+        
     }];
 }
 -(void)loadMoreData
 {
     self.bQuery.limit = 10;
     self.bQuery.skip += 10;
-    [[uploadTool shareTool] getuploadDataWithPassValue:^(NSArray *upArr) {
-        self.dataArr = upArr;
+//    [[uploadTool shareTool] getuploadDataWithPassValue:^(NSArray *upArr) {
+//        self.dataArr = upArr;
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self.tableView reloadData];
+//            self.hud.hidden = YES;
+//            [self.tableView.mj_footer endRefreshing];
+//        });
+//        
+//    }];
+
+    [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        for (BmobObject *obj in array) {
+            foodModel *fm = [[foodModel alloc]init];
+            fm.fid = [obj objectForKey:@"objectid"];
+            fm.foodName =[obj objectForKey:@"foodname"];
+            fm.foodDes =[obj objectForKey:@"fooddes"];
+            fm.address =[obj objectForKey:@"address"];
+            fm.rec =[obj objectForKey: @"rec"];
+            fm.sty =[obj objectForKey:@"sty"] ;
+            fm.score =[obj objectForKey:@"score"] ;
+            fm.userName  =[obj objectForKey:@"username"];
+            fm.picUrl = [obj objectForKey:@"picurl"];
+            fm.cityName = [obj objectForKey:@"city"];
+            [self.dataArr addObject:fm];
+        }
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
             self.hud.hidden = YES;
+            
             [self.tableView.mj_footer endRefreshing];
+            
         });
         
     }];
-    
 }
+
 
 - (void)viewDidLoad {
   
     [super viewDidLoad];
+   
+    
+    UIBarButtonItem *changeCity = [[UIBarButtonItem alloc]initWithTitle:@"切换城市" style:UIBarButtonItemStyleDone target:self action:@selector(changeCityAction)];
+    UIBarButtonItem *showCity = [[UIBarButtonItem alloc]initWithTitle:nil style:UIBarButtonItemStyleDone target:self action:nil];
+    NSArray *btnArr = [NSArray arrayWithObjects:changeCity,showCity, nil];
+    self.navigationItem.leftBarButtonItems = btnArr;
+    // 新建一个定位管理类
+    self.manager = [[CLLocationManager alloc]init];
+    self.manager.delegate = self;
+    // 向设备请求授权
+    if ([CLLocationManager authorizationStatus]!=kCLAuthorizationStatusAuthorizedWhenInUse) {
+        // 向设备申请"程序使用中的时候,使用定位功能"
+        //[self.manager requestWhenInUseAuthorization];
+               //一直都可以定位
+                [self.manager requestAlwaysAuthorization];
+    }
+    // 多少米定位一次
+    self.manager.distanceFilter = 10;
+    
+    //  定位的精度
+    self.manager.desiredAccuracy = kCLLocationAccuracyBest;
+    [self.manager startUpdatingLocation];
+    // 编码和反编码对象初始化
+    self.geo = [[CLGeocoder alloc]init];
+
+    [showCity setTitle: [self getCityNameWithCoordinate:self.cood]];
+    
+    
+    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"筛选" style:UIBarButtonItemStyleDone target:self action:@selector(rightAction)];
     self.view.backgroundColor = [UIColor whiteColor];
     [self.tableView registerClass:[foodlistTableViewCell class] forCellReuseIdentifier:@"cell"];
@@ -90,13 +171,44 @@
     }];
     [self setupRefresh];
     
+    
 }
+-(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations
+{
+    CLLocation *location = [locations lastObject];
+    self.cood = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude);
+    
+    NSLog(@"经度:%f,纬度:%f,海拔:%f,航向:%f,行走速度:%f",location.coordinate.longitude,location.coordinate.latitude,location.altitude,location.course,location.speed);
+}
+-(NSString *)getCityNameWithCoordinate:(CLLocationCoordinate2D)cood
+{
+    self.returnCityStr = [NSMutableString string];
+    CLLocation *location = [[CLLocation alloc]initWithLatitude:cood.latitude longitude:cood.longitude];
+    [self.geo reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+        if (error) {
+            NSLog(@"反编码失败");
+            return ;
+        }
+        CLPlacemark *placemark = [placemarks lastObject];
+        [placemark.addressDictionary enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            NSLog(@"%@:%@",key,obj);
+            self.returnCityStr  = [obj valueForKey:@"Name"];
+        }];
+    }];
+    return _returnCityStr;
+    
+}
+-(void)changeCityAction
+{
+    NSLog(@"123");
+}
+
 // rightButton
 -(void)rightAction
 {
     CGFloat x = kScreenWidth-30;
     CGFloat y = 44 + 10;
-    LrdOutputView *_outputView = [[LrdOutputView alloc] initWithDataArray:@[@"堂食",@"外卖",@"附近",] origin:CGPointMake(x, y) width:125 height:44 direction:kLrdOutputViewDirectionRight];
+    LrdOutputView *_outputView = [[LrdOutputView alloc] initWithDataArray:@[@"堂食",@"外卖",@"取消筛选",] origin:CGPointMake(x, y) width:125 height:44 direction:kLrdOutputViewDirectionRight];
     _outputView.delegate = self;
     _outputView.dismissOperation = ^(){
         //设置成nil，以防内存泄露
@@ -108,6 +220,71 @@
 -(void)LrdOutputView:(LrdOutputView *)lrdOutputView didSelectedAtIndexPath:(NSIndexPath *)indexPath currentStr:(NSString *)currentStr
 {
     
+    if (indexPath.row == 0) {
+        [self.dataArr removeAllObjects];
+        self.bQuery = [BmobQuery queryWithClassName:@"food_message"];
+        [_bQuery whereKey:@"sty" equalTo:@"堂食"];
+        [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+            for (BmobObject *obj in array) {
+                foodModel *fm = [[foodModel alloc]init];
+                fm.fid = [obj objectForKey:@"objectid"];
+                fm.foodName =[obj objectForKey:@"foodname"];
+                fm.foodDes =[obj objectForKey:@"fooddes"];
+                fm.address =[obj objectForKey:@"address"];
+                fm.rec =[obj objectForKey: @"rec"];
+                fm.sty =[obj objectForKey:@"sty"] ;
+                fm.score =[obj objectForKey:@"score"] ;
+                fm.userName  =[obj objectForKey:@"username"];
+                fm.picUrl = [obj objectForKey:@"picurl"];
+                fm.cityName = [obj objectForKey:@"city"];
+                [self.dataArr addObject:fm];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+            
+        }];
+        
+    }
+    if (indexPath.row == 1) {
+        [self.dataArr removeAllObjects];
+        self.bQuery = [BmobQuery queryWithClassName:@"food_message"];
+        [_bQuery whereKey:@"sty" equalTo:@"外卖"];
+        [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+            for (BmobObject *obj in array) {
+                foodModel *fm = [[foodModel alloc]init];
+                fm.fid = [obj objectForKey:@"objectid"];
+                fm.foodName =[obj objectForKey:@"foodname"];
+                fm.foodDes =[obj objectForKey:@"fooddes"];
+                fm.address =[obj objectForKey:@"address"];
+                fm.rec =[obj objectForKey: @"rec"];
+                fm.sty =[obj objectForKey:@"sty"] ;
+                fm.score =[obj objectForKey:@"score"] ;
+                fm.userName  =[obj objectForKey:@"username"];
+                fm.picUrl = [obj objectForKey:@"picurl"];
+                fm.cityName = [obj objectForKey:@"city"];
+                [self.dataArr addObject:fm];
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+            
+        }];
+
+    }
+    if (indexPath.row == 2) {
+        self.bQuery.limit = 10;
+        self.bQuery.skip = 0;
+        [self.dataArr removeAllObjects];
+        [[uploadTool shareTool] getuploadDataWithPassValue:^(NSArray *upArr) {
+            self.dataArr = upArr;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+                self.hud.hidden = YES;
+            });
+        }];
+
+    }
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

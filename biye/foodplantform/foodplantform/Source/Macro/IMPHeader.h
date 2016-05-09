@@ -10,6 +10,7 @@
 #define Project_IMPHeader_h
 // 常用model类的引用
 #import "foodModel.h"
+#import "userModel.h"
 // 工具数据引用
 #import "regAndLogTool.h"
 #import "uploadTool.h"

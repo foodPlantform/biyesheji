@@ -54,7 +54,8 @@
 - (void)addressPicker:(BAddressPickerController *)addressPicker didSelectedCity:(NSString *)city{
     self.cityStr = [NSMutableString string];
     self.cityStr = (NSMutableString *)city;
-    NSLog(@"%@",city);
+    self.cn(_cityStr);
+    [self.navigationController popViewControllerAnimated:YES];
     
 }
 

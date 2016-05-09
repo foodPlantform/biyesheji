@@ -7,20 +7,29 @@
 //
 
 #import "userMessageViewController.h"
-
+#import "userMessageView.h"
 @interface userMessageViewController ()
-
+@property(nonatomic,strong)userMessageView *uv;
 @end
 
 @implementation userMessageViewController
-
+-(void)loadView
+{
+    self.uv = [[userMessageView alloc]init];
+    self.view = _uv;
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor blackColor];
+    self.view.backgroundColor = [UIColor whiteColor];
+    [self dataBind];
     
     // Do any additional setup after loading the view.
 }
-
+-(void)dataBind
+{
+    self.uv.userName .text = self.foodmodel_user.userName;
+    self.uv.address.text = self.foodmodel_user.address;
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

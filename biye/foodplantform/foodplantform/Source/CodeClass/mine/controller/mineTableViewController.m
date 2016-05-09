@@ -11,7 +11,7 @@
 #import "uploadFoodViewController.h"
 #import "loginViewController.h"
 #import "orderViewController.h"
-
+#import "userViewController.h"
 
 @interface mineTableViewController ()
 @property(nonatomic,strong)UITapGestureRecognizer *tap;
@@ -74,7 +74,7 @@
             cell.textLabel.text = @"我的订单";
         }
         if (indexPath.section == 0 && indexPath.row == 3) {
-            cell.textLabel.text = @"设置";
+            cell.textLabel.text = @"我的信息";
         }
         
         
@@ -85,11 +85,21 @@
 // 点击imageview的事件
 -(void)tapAction
 {
-    loginViewController *loginVc = [[loginViewController alloc]init];
-    UINavigationController *loginNc = [[UINavigationController alloc]initWithRootViewController:loginVc];
-    [self.navigationController presentViewController:loginNc animated:YES completion:^{
+    if ([regAndLogTool shareTools].loginName != nil) {
         
-    }];
+    }
+    else
+    {
+        loginViewController *loginVc = [[loginViewController alloc]init];
+        UINavigationController *loginNc = [[UINavigationController alloc]initWithRootViewController:loginVc];
+        [self.navigationController presentViewController:loginNc animated:YES completion:^{
+            
+        }];
+
+    }
+    
+    
+    
     
 }
 // 点击cell事件
@@ -102,6 +112,10 @@
     if (indexPath.section == 0 && indexPath.row == 2) {
         orderViewController *ordVc = [[orderViewController alloc]init];
         [self.navigationController pushViewController:ordVc animated:YES];
+    }
+    if (indexPath.row == 3 && indexPath.section == 0) {
+        userViewController *userVc = [[userViewController alloc]init];
+        [self.navigationController pushViewController:userVc animated:YES];
     }
 }
 

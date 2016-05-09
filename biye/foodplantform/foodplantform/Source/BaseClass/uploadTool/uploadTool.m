@@ -140,6 +140,7 @@ static uploadTool *ut;
             fm.score =[obj objectForKey:@"score"] ;
             fm.userName  =[obj objectForKey:@"username"];
             fm.picUrl = [obj objectForKey:@"picurl"];
+            fm.cityName = [obj objectForKey:@"city"];
             NSLog(@"name%@",fm.foodName);
             [tempArr addObject:fm];
         }

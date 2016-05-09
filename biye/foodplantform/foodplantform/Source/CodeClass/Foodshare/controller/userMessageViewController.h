@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface userMessageViewController : UIViewController
-
+@property(nonatomic,strong)foodModel *foodmodel_user;
 @end

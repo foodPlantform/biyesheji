@@ -28,10 +28,10 @@
 }
 -(void)leftAction
 {
-//    [self.navigationController dismissViewControllerAnimated:YES completion:^{
-//        
-//    }];
-    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController dismissViewControllerAnimated:YES completion:^{
+        
+    }];
+    //[self.navigationController popViewControllerAnimated:YES];
 }
 
 -(void)regAction
@@ -49,14 +49,7 @@
     }
     else
     {
-        [BmobUser loginInbackgroundWithAccount:_lv.userName.text andPassword:_lv.pwStr.text block:^(BmobUser *user, NSError *error) {
-            if (user) {//登陆成功
-                NSLog(@"%@",user);
-            } else {//失败
-                NSLog(@"%@",error);
-            }
-
-        }];
+        [[regAndLogTool shareTools] loginWithName:self.lv.userName.text password:self.lv.pwStr.text];
          //        if ([[[regAndLogTool shareTools] loginWithName:self.lv.userName.text password:self.lv.pwStr.text] isEqualToString:@"成功"]) {
 //            NSLog(@"登陆成功");
 //            

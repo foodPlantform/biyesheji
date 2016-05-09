@@ -61,9 +61,12 @@
                     [bUser setUsername:_rv.userName.text];
                     [bUser setMobilePhoneNumber:_rv.userName.text];
                     [bUser setPassword:_rv.pwStr.text];
+                    [bUser setObject:nil forKey:@"gender"];
+                    [bUser setObject:nil forKey:@"head_img"];
                     //[bUser setObject:@18 forKey:@"age"];
                     [bUser signUpInBackgroundWithBlock:^ (BOOL isSuccessful, NSError *error){
                         if (isSuccessful){
+                            
                             UIAlertView *mes1 = [[UIAlertView alloc]initWithTitle:@"提示" message:@"注册成功" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
                             [mes1 show];
                             NSLog(@"Sign up successfully");

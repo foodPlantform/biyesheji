@@ -18,5 +18,6 @@
 @property(nonatomic,strong)NSString *rec;
 @property(nonatomic,strong)NSString *sty;
 @property(nonatomic,strong)NSString *score;
+@property(nonatomic,strong)NSString *cityName;
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key;
 @end

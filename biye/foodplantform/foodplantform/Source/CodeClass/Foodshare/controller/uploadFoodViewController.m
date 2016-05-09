@@ -47,6 +47,7 @@
     [self.lv.chooseCity addTarget:self action:@selector(chooseCityAction) forControlEvents:UIControlEventTouchUpInside];
     // Do any additional setup after loading the view.
 }
+#pragma ====chooseCity=====
 -(void)chooseCityAction
 {
     AddressPickerDemo *addressPickerDemo = [[AddressPickerDemo alloc] init];
@@ -57,6 +58,7 @@
     };
     [self.navigationController pushViewController:addressPickerDemo animated:YES];
 }
+#pragma ====uploadMethod====
 -(void)uploadWith:(foodModel *)stuff username:(NSString *)userName image:(UIImage *)img
 {
     self.uploadObject = [BmobObject objectWithClassName:@"food_message"];
@@ -77,6 +79,7 @@
             [_uploadObject setObject:stuff.rec forKey:@"rec"];
             [_uploadObject setObject:stuff.sty forKey:@"sty"];
             [_uploadObject setObject:file.url forKey:@"picurl"];
+            [_uploadObject setObject:stuff.cityName forKey:@"city"];
             
             [_uploadObject saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
                 if (isSuccessful) {
@@ -119,6 +122,7 @@
         fm.address = self.lv.address.text;
         fm.rec = self.lv.rec.text;
         fm.sty = self.lv.sty.text;
+        fm.cityName = self.lv.cityLabel.text;
         [self uploadWith:fm username:@"qwer" image:self.lv.picture.image];
         
        //[[uploadTool shareTool] uploadWith:fm username:@"qw" image:self.lv.picture.image];
