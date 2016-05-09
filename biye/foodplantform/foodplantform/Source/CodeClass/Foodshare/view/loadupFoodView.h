@@ -20,4 +20,6 @@
 @property(nonatomic,strong)UILabel *rec;
 @property(nonatomic,strong)UILabel *sty;
 @property(nonatomic,strong)UIButton *upBtn;
+@property(nonatomic,strong)UIButton *chooseCity;
+@property(nonatomic,strong)UILabel *cityLabel;
 @end

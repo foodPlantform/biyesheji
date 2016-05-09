@@ -23,6 +23,14 @@
     self.scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kScreenWidth , kScreenHeight)];
     [self addSubview:_scrollView];
     self.backgroundColor = [UIColor whiteColor];
+    self.chooseCity = [UIButton buttonWithType:UIButtonTypeSystem];
+    self.chooseCity.frame = CGRectMake(10, 30, 100, 30);
+    [self.chooseCity setTitle:@"选择城市" forState:UIControlStateNormal];
+    
+    [self.scrollView addSubview:_chooseCity];
+    self.cityLabel = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(self.chooseCity.frame), CGRectGetMinY(self.chooseCity.frame), kScreenWidth - CGRectGetWidth(self.chooseCity.frame), CGRectGetHeight(self.chooseCity.frame))];
+    [self.scrollView addSubview:_cityLabel];
+    
     // 美食名称
     self.foodName = [[UITextField alloc]initWithFrame:CGRectMake(0, 80, kScreenWidth, 50)];
     self.foodName.placeholder = @"美食名称";

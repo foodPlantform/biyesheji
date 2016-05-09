@@ -9,6 +9,7 @@
 #import "uploadFoodViewController.h"
 #import "loadupFoodView.h"
 #import "uploadTool.h"
+#import "AddressPickerDemo.h"
 
 @interface uploadFoodViewController ()
 @property(nonatomic,strong)loadupFoodView *lv;
@@ -42,7 +43,19 @@
     [self.lv.chooseRec addTarget:self action:@selector(chooseRecAction) forControlEvents:UIControlEventTouchUpInside];
     [self.lv.chooseSty addTarget:self action:@selector(chooseStyAction) forControlEvents:UIControlEventTouchUpInside];
     [self.lv.upBtn addTarget:self action:@selector(upBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.lv.chooseCity addTarget:self action:@selector(chooseCityAction) forControlEvents:UIControlEventTouchUpInside];
     // Do any additional setup after loading the view.
+}
+-(void)chooseCityAction
+{
+    AddressPickerDemo *addressPickerDemo = [[AddressPickerDemo alloc] init];
+    
+    addressPickerDemo.cn = ^(NSString * s)
+    {
+        self.lv.cityLabel.text = s;
+    };
+    [self.navigationController pushViewController:addressPickerDemo animated:YES];
 }
 -(void)uploadWith:(foodModel *)stuff username:(NSString *)userName image:(UIImage *)img
 {
