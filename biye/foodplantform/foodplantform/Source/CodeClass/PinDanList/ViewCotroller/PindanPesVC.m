@@ -81,7 +81,7 @@
     _userSexAgeLB.text = [NSString stringWithFormat:@"性别／年龄: 测试性别＋年龄"];
     [self.view addSubview:_userSexAgeLB];
     _foodPayTypeLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_userImgV.frame)+PinDanCellJianJu,  CGRectGetMaxY(_userSexAgeLB.frame)+PinDanCellJianJu*2, kScreenWidth/2.0, 10)];
-    _foodPayTypeLB.text = [NSString stringWithFormat:@"付款方式: 测试"];
+    _foodPayTypeLB.text = [NSString stringWithFormat:@"付款方式: %@" ,_model.foodPayType];
     [self.view addSubview:_foodPayTypeLB];
     
     _foodNameLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_userImgV.frame), CGRectGetMaxY(_userImgV.frame)+PinDanCellJianJu*2, kScreenWidth/2.0, 10)];

@@ -467,9 +467,10 @@
 #pragma mark - PindanCelllDelegate 加入拼单
 -(void)addOrderPinDanCell:(PinDanCell *)cell model:(BmobOrderModel *)model
 {
-    
+    //注销登陆
+    [BmobUser logout];
     if ([[FileManager shareManager] isUserLogin]) {
-        //注销登陆  [BmobUser logout];
+        
         //加入拼单
         BmobUser *bUser = [BmobUser getCurrentUser];
         BmobObject *addOrder = [BmobObject objectWithoutDatatWithClassName:@"user_order" objectId:model.orderID];
@@ -493,6 +494,12 @@
             [addOrder addObjectsFromArray:@[@[@{@"userID":bUser.objectId,@"userOrderType":@"0"}]] forKey:@"apply_userArr"];
             [addOrder incrementKey:@"order_currentNum"];
             [addOrder updateInBackground];
+            // 1.跳出弹出框，提示用户打开步骤。
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@" 加入成功" preferredStyle:UIAlertControllerStyleAlert];
+            [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self loadNewData];
+            }]];
+            [self presentViewController:alertController animated:YES completion:nil];
         }
         
 

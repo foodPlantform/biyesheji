@@ -206,7 +206,7 @@
     BmobObject *user_order = [BmobObject objectWithClassName:@"user_order"];
     [user_order setObject:bUser.objectId forKey:@"order_senderID"];
     [user_order setObject:@1 forKey:@"order_currentNum"];
-    [user_order setObject:[NSNumber numberWithInteger:_foodPersonNumTf.text.integerValue] forKey:@"order_currentNum"];
+    [user_order setObject:[NSNumber numberWithInteger:_foodPersonNumTf.text.integerValue] forKey:@"order_maxNum"];
     [user_order setObject:_foodNameTf.text forKey:@"order_name"];
 
     [user_order setObject:[NSString stringWithFormat:@"%ld",(long)_foodTargetRow ]  forKey:@"order_target"];
@@ -238,12 +238,14 @@
     {
         
     }
+     [textField becomeFirstResponder];
 }
 
 #pragma mark - 用户是否可以编辑
 //用户是否可以编辑
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
+    NSLog(@"textField.tag---------%ld",(long)textField.tag);
     if (textField.tag == PinDanLocationTag) {
         
         KCMainViewController *vc =[[KCMainViewController alloc ] init];
@@ -286,6 +288,7 @@
     {
         return YES;
     }
+   
 }
 #pragma mark -  获取拼单付款方式和对象类型
 -(void)LrdOutputView:(LrdOutputView *)lrdOutputView didSelectedAtIndexPath:(NSIndexPath *)indexPath currentStr:(NSString *)currentStr
