@@ -11,7 +11,9 @@
 @interface foodlistTableViewCell : UITableViewCell
 
 @property(nonatomic,strong)UIImageView *foodPic;
+
 @property(nonatomic,strong)UILabel *foodName;
-@property(nonatomic,strong)UILabel *userName;
+@property(nonatomic,strong)UILabel *addressLabel;
 @property(nonatomic,strong)HCSStarRatingView *starScore;
+@property(nonatomic,strong)UILabel *sty;
 @end

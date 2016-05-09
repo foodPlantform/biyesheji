@@ -9,9 +9,14 @@
 #import "foodlistTableViewController.h"
 #import "foodlistTableViewCell.h"
 #import "loginViewController.h"
-@interface foodlistTableViewController ()
+#import "MJRefresh.h"
+#import "LrdOutputView.h"
+#import "foodDetailController.h"
+#import "orderFoodViewController.h"
+@interface foodlistTableViewController ()<LrdOutputViewDelegate>
 @property(nonatomic,strong)NSMutableArray *dataArr;
 @property(nonatomic,strong)MBProgressHUD *hud;
+@property(nonatomic,strong)BmobQuery *bQuery;
 @end
 
 @implementation foodlistTableViewController
@@ -27,14 +32,55 @@
     [_hud show:YES];
 }
 
+// 下拉刷新
+- (void)setupRefresh
+{
+    // 1.下拉刷新(进入刷新状态就会调用self的headerRereshing)
+    self.tableView.mj_header=[MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+    //[_mainTableView.mj_header beginRefreshing];
+    self.tableView.mj_footer=[MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+}
+-(void)loadNewData
+{
+    self.bQuery.limit = 10;
+    self.bQuery.skip = 0;
+    [[uploadTool shareTool] getuploadDataWithPassValue:^(NSArray *upArr) {
+        self.dataArr = upArr;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            self.hud.hidden = YES;
+           
+        });
+        [self.tableView.mj_header endRefreshing];
+    }];
+}
+-(void)loadMoreData
+{
+    self.bQuery.limit = 10;
+    self.bQuery.skip += 10;
+    [[uploadTool shareTool] getuploadDataWithPassValue:^(NSArray *upArr) {
+        self.dataArr = upArr;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            self.hud.hidden = YES;
+            [self.tableView.mj_footer endRefreshing];
+        });
+        
+    }];
+    
+}
+
 - (void)viewDidLoad {
   
     [super viewDidLoad];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"筛选" style:UIBarButtonItemStyleDone target:self action:@selector(rightAction)];
     self.view.backgroundColor = [UIColor whiteColor];
     [self.tableView registerClass:[foodlistTableViewCell class] forCellReuseIdentifier:@"cell"];
 
     self.dataArr = [NSMutableArray array];
     [self p_setupProgressHud];
+    self.bQuery.limit = 10;
+    self.bQuery.skip = 0;
     [[uploadTool shareTool] getuploadDataWithPassValue:^(NSArray *upArr) {
         self.dataArr = upArr;
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -42,9 +88,27 @@
             self.hud.hidden = YES;
         });
     }];
+    [self setupRefresh];
     
 }
+// rightButton
+-(void)rightAction
+{
+    CGFloat x = kScreenWidth-30;
+    CGFloat y = 44 + 10;
+    LrdOutputView *_outputView = [[LrdOutputView alloc] initWithDataArray:@[@"堂食",@"外卖",@"附近",] origin:CGPointMake(x, y) width:125 height:44 direction:kLrdOutputViewDirectionRight];
+    _outputView.delegate = self;
+    _outputView.dismissOperation = ^(){
+        //设置成nil，以防内存泄露
+        //2_outputView = nil;
+    };
+    [_outputView pop];
 
+}
+-(void)LrdOutputView:(LrdOutputView *)lrdOutputView didSelectedAtIndexPath:(NSIndexPath *)indexPath currentStr:(NSString *)currentStr
+{
+    
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -73,13 +137,15 @@
     NSLog(@"%@",fm.foodName);
     
     cell.starScore.value  = 3;
+    cell.addressLabel.text = fm.address;
+    cell.sty.text = fm.sty;
     
     return cell;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 100;
+    return 120;
 }
 
 
@@ -87,11 +153,12 @@
 // cell点击事件
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    loginViewController *logVc = [[loginViewController alloc]init];
-    UINavigationController *logNc =  [[UINavigationController alloc]initWithRootViewController:logVc];
-    [self.navigationController presentViewController:logNc  animated:YES completion:^{
-        
-    }];
+    foodModel *fm = [[foodModel alloc]init];
+    fm = self.dataArr[indexPath.row];
+
+    foodDetailController *foodVc = [[foodDetailController alloc]init];
+    foodVc.foodmodel = fm;
+    [self.navigationController pushViewController:foodVc  animated:YES];
 }
 /*
 // Override to support conditional editing of the table view.
