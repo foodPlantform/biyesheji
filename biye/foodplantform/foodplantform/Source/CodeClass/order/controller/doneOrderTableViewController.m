@@ -10,8 +10,11 @@
 #import "OrderCell.h"
 #import "BmobOrderModel.h"
 #import "PindanPesVC.h"
-@interface doneOrderTableViewController ()
+#import "ApplyOrderModel.h"
+@interface doneOrderTableViewController ()<OrderCelllDelegate>
 @property (nonatomic,strong)NSMutableArray *orderDataArr;
+@property (nonatomic,strong)NSMutableArray *noHandelOrderArr;
+
 @property (nonatomic,strong)BmobQuery   *userOrderQuery;
 
 @end
@@ -38,13 +41,14 @@
     NSArray *queryArr;
     //查找user_order表里面里面的所有数据
     BmobUser *bUser = [BmobUser getCurrentUser];
+    //订单 申请的人数 及状态 4 通过 5待审核  拼单人的状态
+    //订单状态 1已完成   2待处理的 3 已处理 发单人的订单状态
     if (_orderType.integerValue == 0) {
         queryArr =[[NSArray alloc] initWithObjects:@{@"order_senderID":bUser.objectId}, nil];
 
-    }else if(_orderType.integerValue == 2 ||_orderType.integerValue ==3||_orderType.integerValue == 1)
+    }else if(_orderType.integerValue == 2 ||_orderType.integerValue ==3)
     {
-        queryArr =[[NSArray alloc] initWithObjects:@{@"order_senderID":bUser.objectId},@{@"orderType":_orderType},nil];
-        
+        queryArr =[[NSArray alloc] initWithObjects:@{@"order_senderID":bUser.objectId},@{@"user_orderType":_orderType},nil];
     }
     [_userOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
 
@@ -77,7 +81,35 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 #warning Incomplete implementation, return the number of rows
+//    if (_orderType.integerValue == 0) {
+//        return _orderDataArr.count;
+//        
+//    }else if(_orderType.integerValue == 2 ||_orderType.integerValue ==3)
+//    {
+//        NSMutableArray *noHandelArr = [[NSMutableArray alloc] initWithCapacity:0];//待处理
+//        NSMutableArray *HandeledArr = [[NSMutableArray alloc] initWithCapacity:0];//已处理
+//        for(BmobOrderModel *model  in _orderDataArr)
+//        {
+//            if (model.userOrderTyoe.intValue == 2)
+//            {
+//                for (ApplyOrderModel *applyModel in model.applyUserAndTypeArr)
+//                {
+//                    if (applyModel.orderType.intValue == 5) {
+//                        [noHandelArr addObject:applyModel];
+//                    }else if (applyModel.orderType.intValue == 4 )
+//                    {
+//                        [noHandelArr addObject:applyModel];
+//                    }
+//                }
+//            }
+//        }
+//
+//    }else
+//    {
+//        return _orderDataArr.count;
+//    }
     return _orderDataArr.count;
+
 }
 
 
@@ -88,6 +120,7 @@
         
     }
     cell.vcOrderType = _orderType;
+    cell.delegate =self;
     cell.model = _orderDataArr[indexPath.row];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     // Configure the cell...
@@ -100,7 +133,11 @@
     vc.model = _orderDataArr[indexPath.row];
     [self.navigationController pushViewController:vc animated:YES];
 }
-
+//处理拼单时间
+-(void)handleOrderCell:(OrderCell *)cell model:(BmobOrderModel *)model
+{
+    
+}
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

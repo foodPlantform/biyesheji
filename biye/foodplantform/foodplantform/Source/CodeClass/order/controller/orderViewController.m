@@ -75,7 +75,7 @@
     //订单
     _orderMenuView = [[SUNSlideSwitchView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight-44-20)];
     _orderMenuView.tag = 0;
-    self.orderMenuView.dataArr = @[@"已发布拼单",@"已完成拼单",@"已处理拼单",@"待处理拼单",@"待审核拼单",@"已审核拼单"];
+    self.orderMenuView.dataArr = @[@"已发布拼单",@"已完成拼单",@" 待处理拼单",@"已处理拼单",@"待审核拼单",@"已审核拼单"];
     self.orderMenuView.slideSwitchViewDelegate =self;
     [self.menuScrollView addSubview:self.orderMenuView];
     [self.orderMenuView buildUI];

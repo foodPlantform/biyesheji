@@ -7,7 +7,7 @@
 //
 
 #import "BmobOrderModel.h"
-
+#import "ApplyOrderModel.h"
 @implementation BmobOrderModel
 -(instancetype)initWithBomdModel :(BmobObject *)user_order
 {
@@ -35,21 +35,32 @@
          //拼单地点
          @property(nonatomic,strong)NSString *foodLocation;
          */
+        self.userImgeUrl = [user_order objectForKey:@"user_headUrl"];
         self.orderID = [user_order objectForKey:@"objectId"];
         self.personMaxNum = [[user_order objectForKey:@"order_maxNum"] integerValue];
         self.currentPersonNum = [[user_order objectForKey:@"order_currentNum"] integerValue];
         self.name = [user_order objectForKey:@"order_name"];
+        self.niCheng = [user_order objectForKey:@"order_userName"];
+
         self.target = [user_order objectForKey:@"order_target"];
-        self.applyUserArr = [user_order objectForKey:@"apply_userArr"];
-        self.orderTyoe = [user_order objectForKey:@"orderType"];
-        self.foodPayType = [user_order objectForKey:@"order_payType"];
+        self.applyUserAndTypeArr = [[NSMutableArray alloc] initWithCapacity:0];
+        NSArray *applyArr = [user_order objectForKey:@"apply_userArr"];
+        for (NSDictionary *dic in  applyArr )
+        {
+            ApplyOrderModel *applyModel =  [[ApplyOrderModel alloc] initWithBomdModel:dic];
+            
+            [self.applyUserAndTypeArr addObject:applyModel];
+        }
+        self.userOrderTyoe = [user_order objectForKey:@"user_orderType"];
+        self.applyUserIDArr = [user_order objectForKey:@"apply_userIDArr"];
+       self.foodPayType = [user_order objectForKey:@"order_payType"];
        self.senderID = [user_order objectForKey:@"order_senderID"];
         BmobGeoPoint*bmobGeoPoint = [user_order objectForKey:@"order_loaction"];
         self.foodLocationLatitude = bmobGeoPoint.latitude;
         self.foodLocationLongitude = bmobGeoPoint.longitude;
         self.foodLocation = [user_order objectForKey:@"order_locationStr"];
         self.timeDate = [user_order objectForKey:@"order_time"];
-        
+        self.applyOrderType = [user_order objectForKey:@"apply_orderType"];
         
         NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
         
