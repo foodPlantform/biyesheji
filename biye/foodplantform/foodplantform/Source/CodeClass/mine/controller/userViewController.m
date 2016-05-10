@@ -242,6 +242,7 @@ NSData * UIImageJPEGRepresentation ( UIImage *image, CGFloat compressionQuality)
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [[regAndLogTool shareTools] messageShowWith:@"更新成功" cancelStr:@"确定"];
+                        
                         [self.uv.headimg sd_setImageWithURL:[NSURL URLWithString:[user objectForKey:@"head_img"]]];
                         self.uv.userName.text = user.username;
                         self.uv.phone.text = user.mobilePhoneNumber;
