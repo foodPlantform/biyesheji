@@ -41,15 +41,16 @@
     if (curr) {
         [[regAndLogTool shareTools] loginWithName:curr.username password:curr.password];
         [regAndLogTool shareTools].usermodel = [[userModel alloc]init];
-        BmobQuery *query = [BmobQuery queryWithClassName:@"_User"];
+        BmobQuery *query = [BmobUser query];
         [query whereKey:@"mobilePhoneNumber" equalTo:curr.mobilePhoneNumber];
         [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
-            for (BmobObject *obj in array) {
-                [regAndLogTool shareTools].usermodel.userName = [obj valueForKey:@"username"];
-               [regAndLogTool shareTools].usermodel.mobilePhoneNumber = [obj valueForKey:@"mobilePhoneNumber"];
+            for (BmobUser *user  in array) {
+                [regAndLogTool shareTools].usermodel.userName = user.username;
+                [regAndLogTool shareTools].usermodel.mobilePhoneNumber = user.mobilePhoneNumber;
+                [regAndLogTool shareTools].usermodel.gender = [user objectForKey:@"gender"];
+                [regAndLogTool shareTools].usermodel.head_img = [user objectForKey:@"head_img"];
                 
-//                [regAndLogTool shareTools].usermodel.head_img = [obj valueForKey:@"head_img"];
-//                [regAndLogTool shareTools].usermodel.gender = [obj valueForKey:@"gender"];
+              
             }
         }];
         

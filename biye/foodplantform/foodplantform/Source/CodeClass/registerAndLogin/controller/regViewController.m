@@ -61,8 +61,8 @@
                     [bUser setUsername:_rv.userName.text];
                     [bUser setMobilePhoneNumber:_rv.userName.text];
                     [bUser setPassword:_rv.pwStr.text];
-                    [bUser setObject:nil forKey:@"gender"];
-                    [bUser setObject:nil forKey:@"head_img"];
+                    [bUser setObject:@" " forKey:@"gender"];
+                    [bUser setObject:@" " forKey:@"head_img"];
                     //[bUser setObject:@18 forKey:@"age"];
                     [bUser signUpInBackgroundWithBlock:^ (BOOL isSuccessful, NSError *error){
                         if (isSuccessful){

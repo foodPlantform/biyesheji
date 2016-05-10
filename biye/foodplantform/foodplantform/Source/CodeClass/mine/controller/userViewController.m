@@ -37,7 +37,14 @@
         self.um = [[userModel alloc]init];
         self.um = [regAndLogTool shareTools].usermodel;
         NSLog(@"name%@",_um.userName);
+        NSLog(@"gender%@",_um.gender);
+        [self.uv.headimg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",self.um.head_img]]];
         self.uv.userName.text = _um.userName;
+        self.uv.phone.text = _um.mobilePhoneNumber;
+        self.uv.gender.text = _um.gender;
+    }
+    if ([regAndLogTool shareTools].loginName == nil) {
+        self.uv.headimg.image = [UIImage imageNamed:@"我的1"];
     }
     self.tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction)];
     [self.uv.headimg addGestureRecognizer:_tap];
@@ -208,7 +215,7 @@ NSData * UIImageJPEGRepresentation ( UIImage *image, CGFloat compressionQuality)
     if (self.isChange == NO) {
         [self.navigationItem.rightBarButtonItem setTitle:@"保存修改"];
         self.uv.userName.enabled = YES;
-        self.uv.phone.enabled = YES;
+        //self.uv.phone.enabled = YES;
         self.uv.gender.enabled = YES;
     }
     if (self.isChange == YES) {
@@ -224,13 +231,35 @@ NSData * UIImageJPEGRepresentation ( UIImage *image, CGFloat compressionQuality)
         NSString *fileName = [NSString stringWithFormat:@"%@.JPEG",strdate];
         NSData *imageData = UIImageJPEGRepresentation(self.uv.headimg.image, 0.01);
         BmobFile *file = [[BmobFile alloc]initWithFileName:fileName withFileData:imageData];
+        [file saveInBackground:^(BOOL isSuccessful, NSError *error) {
+            if (isSuccessful) {
+                [_upLoadObject setObject:file forKey:@"head_imgFile"];
+                BmobUser *user = [BmobUser getCurrentUser];
+                [user setObject:self.uv.userName.text forKey:@"username"];
+                [user setObject:self.uv.gender.text forKey:@"gender"];
+                [user setObject:file.url forKey:@"head_img"];
+                [user updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [[regAndLogTool shareTools] messageShowWith:@"更新成功" cancelStr:@"确定"];
+                        [self.uv.headimg sd_setImageWithURL:[NSURL URLWithString:[user objectForKey:@"head_img"]]];
+                        self.uv.userName.text = user.username;
+                        self.uv.phone.text = user.mobilePhoneNumber;
+                        self.uv.gender.text = [user objectForKey:@"gender"];
+                    });
+                   
+                }];
+                
+                
+            }
+        }];
         
         [self.navigationItem.rightBarButtonItem setTitle:@"修改信息"];
     }
 }
 -(void)p_loadData
 {
-    self.uv.headimg.image = [UIImage imageNamed:@"美食"];
+    //self.uv.headimg.image = [UIImage imageNamed:@"我的1"];
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
