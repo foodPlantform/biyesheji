@@ -34,21 +34,27 @@
     [self p_loadData];
     
     if ([regAndLogTool shareTools].loginName != nil) {
-        self.um = [[userModel alloc]init];
-        self.um = [regAndLogTool shareTools].usermodel;
-        NSLog(@"name%@",_um.userName);
-        NSLog(@"gender%@",_um.gender);
-        [self.uv.headimg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",self.um.head_img]]];
-        self.uv.userName.text = _um.userName;
-        self.uv.phone.text = _um.mobilePhoneNumber;
-        self.uv.gender.text = _um.gender;
+//        self.um = [[userModel alloc]init];
+//        self.um = [regAndLogTool shareTools].usermodel;
+//        NSLog(@"name%@",_um.userName);
+//        NSLog(@"gender%@",_um.gender);
+//        [self.uv.headimg sd_setImageWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@",self.um.head_img]]];
+//        self.uv.userName.text = _um.userName;
+//        self.uv.phone.text = _um.mobilePhoneNumber;
+//        self.uv.gender.text = _um.gender;
+        
+        BmobUser *upUser = [BmobUser getCurrentUser];
+        [self.uv.headimg sd_setImageWithURL:[NSURL URLWithString:[upUser objectForKey:@"head_img"]]];
+        self.uv.userName.text = upUser.username;
+        self.uv.phone.text = upUser.mobilePhoneNumber;
+        self.uv.gender.text = [upUser objectForKey:@"gender"];
     }
     if ([regAndLogTool shareTools].loginName == nil) {
         self.uv.headimg.image = [UIImage imageNamed:@"我的1"];
     }
     self.tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction)];
     [self.uv.headimg addGestureRecognizer:_tap];
-    self.uv.headimg.userInteractionEnabled = YES;
+    self.uv.headimg.userInteractionEnabled = NO;
     // Do any additional setup after loading the view.
 }
 
@@ -217,12 +223,14 @@ NSData * UIImageJPEGRepresentation ( UIImage *image, CGFloat compressionQuality)
         self.uv.userName.enabled = YES;
         //self.uv.phone.enabled = YES;
         self.uv.gender.enabled = YES;
+        self.uv.headimg.userInteractionEnabled = YES;
     }
     if (self.isChange == YES) {
     
         self.uv.userName.enabled = NO;
         self.uv.phone.enabled = NO;
         self.uv.gender.enabled = NO;
+        self.uv.headimg.userInteractionEnabled = NO;
         self.upLoadObject = [BmobObject objectWithClassName:@"_User"];
         NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
         NSDate *date = [NSDate  dateWithTimeIntervalSinceNow:3600*2];
@@ -242,11 +250,11 @@ NSData * UIImageJPEGRepresentation ( UIImage *image, CGFloat compressionQuality)
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [[regAndLogTool shareTools] messageShowWith:@"更新成功" cancelStr:@"确定"];
-                        
-                        [self.uv.headimg sd_setImageWithURL:[NSURL URLWithString:[user objectForKey:@"head_img"]]];
-                        self.uv.userName.text = user.username;
-                        self.uv.phone.text = user.mobilePhoneNumber;
-                        self.uv.gender.text = [user objectForKey:@"gender"];
+                        BmobUser *upUser = [BmobUser getCurrentUser];
+                        [self.uv.headimg sd_setImageWithURL:[NSURL URLWithString:[upUser objectForKey:@"head_img"]]];
+                        self.uv.userName.text = upUser.username;
+                        self.uv.phone.text = upUser.mobilePhoneNumber;
+                        self.uv.gender.text = [upUser objectForKey:@"gender"];
                     });
                    
                 }];
