@@ -14,6 +14,7 @@
 #import "foodDetailController.h"
 #import "orderFoodViewController.h"
 #import <CoreLocation/CoreLocation.h>
+#import "AddressPickerDemo.h"
 
 
 @interface foodlistTableViewController ()<LrdOutputViewDelegate,CLLocationManagerDelegate>
@@ -25,6 +26,7 @@
 @property(nonatomic,strong)CLGeocoder *geo;
 @property(nonatomic,assign)CLLocationCoordinate2D cood;
 @property(nonatomic,strong)NSMutableString *returnCityStr;
+@property(nonatomic,strong)UIBarButtonItem *showCity;
 
 @end
 
@@ -128,8 +130,9 @@
    
     
     UIBarButtonItem *changeCity = [[UIBarButtonItem alloc]initWithTitle:@"切换城市" style:UIBarButtonItemStyleDone target:self action:@selector(changeCityAction)];
-    UIBarButtonItem *showCity = [[UIBarButtonItem alloc]initWithTitle:nil style:UIBarButtonItemStyleDone target:self action:nil];
-    NSArray *btnArr = [NSArray arrayWithObjects:changeCity,showCity, nil];
+    self.showCity = [[UIBarButtonItem alloc]initWithTitle:nil style:UIBarButtonItemStyleDone target:self action:nil];
+    
+    NSArray *btnArr = [NSArray arrayWithObjects:changeCity,_showCity, nil];
     self.navigationItem.leftBarButtonItems = btnArr;
     // 新建一个定位管理类
     self.manager = [[CLLocationManager alloc]init];
@@ -150,7 +153,7 @@
     // 编码和反编码对象初始化
     self.geo = [[CLGeocoder alloc]init];
 
-    [showCity setTitle: [self getCityNameWithCoordinate:self.cood]];
+    [_showCity setTitle: [self getCityNameWithCoordinate:self.cood]];
     
     
     
@@ -200,7 +203,16 @@
 }
 -(void)changeCityAction
 {
-    NSLog(@"123");
+    
+    AddressPickerDemo *addressPickerDemo = [[AddressPickerDemo alloc] init];
+    
+    addressPickerDemo.cn = ^(NSString * s)
+    {
+        self.returnCityStr = s;
+        [self.showCity setTitle:s];
+        
+    };
+    [self.navigationController pushViewController:addressPickerDemo animated:YES];
 }
 
 // rightButton
