@@ -8,7 +8,7 @@
 
 #import "regViewController.h"
 #import "regView.h"
-
+#import "EMSDK.h"
 
 @interface regViewController ()
 @property(nonatomic,strong)regView *rv;
@@ -64,6 +64,13 @@
                     [bUser setObject:@" " forKey:@"gender"];
                     [bUser setObject:@" " forKey:@"head_img"];
                     //[bUser setObject:@18 forKey:@"age"];
+                    
+                    //聊天注册
+                    EMError *error = [[EMClient sharedClient] registerWithUsername:_rv.userName.text password:_rv.pwStr.text];
+                    if (error==nil) {
+                        NSLog(@"聊天注册成功");
+                    }
+                    
                     [bUser signUpInBackgroundWithBlock:^ (BOOL isSuccessful, NSError *error){
                         if (isSuccessful){
                             

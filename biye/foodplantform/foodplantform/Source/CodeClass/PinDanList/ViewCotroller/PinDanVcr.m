@@ -500,10 +500,10 @@
                 }]];
                 [self presentViewController:alertController animated:YES completion:nil];
             }else{
-                //订单 申请的人数 及状态 4 通过 5待审核  拼单人的状态
+                //订单 申请的人数 及状态 5 通过 4待审核  拼单人的状态
                 //订单状态 1已完成   2待处理的 3 已处理 发单人的订单状态
                 [addOrder incrementKey:@"order_currentNum"];
-                [addOrder setObject:@"5" forKey:@"apply_orderType"];
+                [addOrder setObject:@"4" forKey:@"apply_orderType"];
                 [addOrder setObject:@"2" forKey:@"user_orderType"];
                 [addOrder addUniqueObjectsFromArray:@[bUser.objectId] forKey:@"apply_userIDArr"];
                 [addOrder addUniqueObjectsFromArray:@[@{@"userOrderType":@"5",@"userID":bUser.objectId}] forKey:@"apply_userArr"];
@@ -515,6 +515,21 @@
                 
                 [addUserApplyList addUniqueObjectsFromArray:@[model.orderID] forKey:@"apply_orderListArr" ];
                [addUserApplyList updateInBackground];
+                
+                 //加到applyOrder表中 便于管理
+                BmobObject  *user_applyList = [BmobObject objectWithClassName:@"user_apply"];
+                //订单 申请的人数 及状态 5 通过 4待审核  拼单人的状态
+                //订单状态 1已完成   2待处理的 3 已处理 发单人的订单状态
+
+                [user_applyList setObject:@"4" forKey:@"apply_orderType"];
+                [user_applyList setObject:@"2" forKey:@"sender_OrderType"];
+                [user_applyList setObject:bUser.objectId forKey:@"apply_userID"];
+                [user_applyList setObject:bUser.username forKey:@"apply_userName"];
+                [user_applyList setObject:model.senderID forKey:@"sender_userID"];
+                [user_applyList setObject:model.niCheng forKey:@"sender_userName"];
+
+                [user_applyList setObject:model.orderID forKey:@"order_ID"];
+                [user_applyList saveInBackground];
                 // 1.跳出弹出框，提示用户打开步骤。
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"加入成功" preferredStyle:UIAlertControllerStyleAlert];
                 [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

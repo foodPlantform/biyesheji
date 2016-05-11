@@ -10,12 +10,14 @@
 #import "OrderCell.h"
 #import "BmobOrderModel.h"
 #import "PindanPesVC.h"
-#import "ApplyOrderModel.h"
+#import "UserApplyListModel.h"
 @interface doneOrderTableViewController ()<OrderCelllDelegate>
 @property (nonatomic,strong)NSMutableArray *orderDataArr;
 @property (nonatomic,strong)NSMutableArray *noHandelOrderArr;
 
 @property (nonatomic,strong)BmobQuery   *userOrderQuery;
+
+@property (nonatomic,strong)BmobQuery   *applyOrderQuery;
 
 @end
 
@@ -25,6 +27,7 @@
     [super viewDidLoad];
     _orderDataArr = [[NSMutableArray alloc] initWithCapacity:0];
     _userOrderQuery = [BmobQuery queryWithClassName:@"user_order"];
+    _applyOrderQuery = [BmobQuery queryWithClassName:@"user_apply"];
     self.view.backgroundColor = [UIColor whiteColor];
     self.tableView.rowHeight = 150+10;
      [self.tableView registerClass:[OrderCell class] forCellReuseIdentifier:@"OrderCell"];
@@ -41,30 +44,65 @@
     NSArray *queryArr;
     //查找user_order表里面里面的所有数据
     BmobUser *bUser = [BmobUser getCurrentUser];
-    //订单 申请的人数 及状态 4 通过 5待审核  拼单人的状态
-    //订单状态 1已完成   2待处理的 3 已处理 发单人的订单状态
+    //订单 申请的人数 及状态  4待审核 5已审核  拼单人的状态
+    //订单状态 1已完成   2待处理的  3已处理 发单人的订单状态
     if (_orderType.integerValue == 0) {
         queryArr =[[NSArray alloc] initWithObjects:@{@"order_senderID":bUser.objectId}, nil];
+        [_userOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
 
+        [_userOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+            [_orderDataArr removeAllObjects];
+            for (BmobObject *obj in array)
+            {
+                if (obj) {
+                    BmobOrderModel *model = [[BmobOrderModel alloc] initWithBomdModel:obj];
+                    [ _orderDataArr addObject:model];
+                    
+                }
+            }
+            [self.tableView reloadData];
+        }];
     }else if(_orderType.integerValue == 2 ||_orderType.integerValue ==3)
     {
-        queryArr =[[NSArray alloc] initWithObjects:@{@"order_senderID":bUser.objectId},@{@"user_orderType":_orderType},nil];
-    }
-    [_userOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
+        
+        queryArr =[[NSArray alloc] initWithObjects:@{@"sender_userID":bUser.objectId},@{@"sender_OrderType":_orderType},nil];
+        [_applyOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
 
-    
-    [_userOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
-        [_orderDataArr removeAllObjects];
-        for (BmobObject *obj in array)
-        {
-            if (obj) {
-                BmobOrderModel *model = [[BmobOrderModel alloc] initWithBomdModel:obj];
-                [ _orderDataArr addObject:model];
-                
+        [_applyOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+            [_orderDataArr removeAllObjects];
+            for (BmobObject *obj in array)
+            {
+                if (obj) {
+                    UserApplyListModel *model = [[UserApplyListModel alloc] initWithBomdModel:obj];
+                    [ _orderDataArr addObject:model];
+                    
+                }
             }
-        }
-        [self.tableView reloadData];
-    }];
+            [self.tableView reloadData];
+        }];
+        
+    }else if(_orderType.integerValue == 5 ||_orderType.integerValue ==4)
+    {
+        queryArr =[[NSArray alloc] initWithObjects:@{@"apply_userID":bUser.objectId},@{@"apply_orderType":_orderType},nil];
+        [_applyOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
+
+        [_applyOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+            [_orderDataArr removeAllObjects];
+            for (BmobObject *obj in array)
+            {
+                if (obj) {
+                    UserApplyListModel *model = [[UserApplyListModel alloc] initWithBomdModel:obj];
+                    [ _orderDataArr addObject:model];
+                }
+            }
+            NSLog(@"_orderDataArr----------%lu",(unsigned long)_orderDataArr.count);
+
+            [self.tableView reloadData];
+        }];
+    }
+
+   
+   
 
 }
 - (void)didReceiveMemoryWarning {
@@ -108,6 +146,7 @@
 //    {
 //        return _orderDataArr.count;
 //    }
+    
     return _orderDataArr.count;
 
 }
@@ -134,9 +173,13 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 //处理拼单时间
--(void)handleOrderCell:(OrderCell *)cell model:(BmobOrderModel *)model
-{
-    
+- (void)handleOrderCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(BmobOrderModel *)handeledModel
+{   //修改状态 之后重新加载数据
+    BmobObject  *user_apply = [BmobObject objectWithoutDatatWithClassName:@"user_apply" objectId:model.applyListobjectId];
+    [user_apply setObject:@"3" forKey:@"sender_OrderType"];
+    [user_apply setObject:@"5" forKey:@"apply_orderType"];
+    [user_apply updateInBackground];
+    [self loadDataArr];
 }
 /*
 // Override to support conditional editing of the table view.

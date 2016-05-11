@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 @class OrderCell;
 @class BmobOrderModel;
+@class UserApplyListModel;
 @protocol OrderCelllDelegate <NSObject>
 
 /**
@@ -18,10 +19,11 @@
  */
 @optional
 
-- (void)handleOrderCell:(OrderCell *)cell model:(BmobOrderModel *)model;
+- (void)handleOrderCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(BmobOrderModel *)handeledModel;
 
 @end
 #import "BmobOrderModel.h"
+#import "UserApplyListModel.h"
 @interface OrderCell : UITableViewCell
 @property (strong, nonatomic) id<OrderCelllDelegate>delegate;
 
@@ -38,7 +40,7 @@
 @property(nonatomic,strong)UILabel *foodLocationLB;
 //拼单人数
 @property(nonatomic,strong)UILabel *foodNumLB;
-@property(nonatomic,strong)BmobOrderModel *model;
+@property(nonatomic,strong)UserApplyListModel *model;
 @property(nonatomic,strong)NSString *vcOrderType;
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;

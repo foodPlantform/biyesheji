@@ -8,7 +8,9 @@
 
 #import "OrderCell.h"
 #define PinDanCellJianJu 10
-
+@interface OrderCell ()
+@property (nonatomic,strong)BmobOrderModel *handelModel;
+@end
 @implementation OrderCell
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -20,17 +22,57 @@
     }
     return self;
 }
--(void)setModel:(BmobOrderModel *)model
+-(void)setModel:(UserApplyListModel *)model
 {
     _model = model;
-    _foodNameLB.text = [NSString stringWithFormat:@"   我要吃 :  %@",_model.name] ;
-    _foodNumLB.text = [NSString stringWithFormat:@"拼单人数:  %ld／%ld",(long)_model.currentPersonNum,(long)_model.personMaxNum] ;
-    _foodLocationLB.text = [NSString stringWithFormat:@"拼单地点:  %@",_model.foodLocation] ;
     
-    //时间
-    _foodTimeLB.text = [NSString stringWithFormat:@"拼单时间:  %@",_model.timeDateStr] ;
+   
+    if (_vcOrderType.integerValue == 0)
+    {
+        _foodNameLB.text = [NSString stringWithFormat:@"   我要吃 :  %@",_model.name] ;
+        _foodNumLB.text = [NSString stringWithFormat:@"拼单人数:  %ld／%ld",(long)_model.currentPersonNum,(long)_model.personMaxNum] ;
+        _foodLocationLB.text = [NSString stringWithFormat:@"拼单地点:  %@",_model.foodLocation] ;
+        
+        //时间
+        _foodTimeLB.text = [NSString stringWithFormat:@"拼单时间:  %@",_model.timeDateStr] ;
+    }else if(_vcOrderType.integerValue == 2||_vcOrderType.integerValue == 3)
+        //当ordeType 为2  3  4 5 需要处理 重新查找order表
+    {
+        BmobQuery   *handelOrderQuery = [BmobQuery queryWithClassName:@"user_order" ];
+        [handelOrderQuery whereKey:@"objectId" equalTo:_model.orderListID];
+        [handelOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+            _handelModel  = [[BmobOrderModel alloc] initWithBomdModel:array[0]];
+            _foodNameLB.text = [NSString stringWithFormat:@"   我要吃 :  %@",_handelModel.name] ;
+            _foodNumLB.text = [NSString stringWithFormat:@"拼单人数:  %ld／%ld",(long)_handelModel.currentPersonNum,(long)_handelModel.personMaxNum] ;
+            _foodLocationLB.text = [NSString stringWithFormat:@"拼单地点:  %@",_handelModel.foodLocation] ;
+            
+            //时间
+            _foodTimeLB.text = [NSString stringWithFormat:@"拼单时间:  %@",_handelModel.timeDateStr] ;
+            //申请人
+            _foodUserNameLB.text = [NSString stringWithFormat:@"申请人:   %@" ,_model.applyUserListName] ;
+            _foodUserNameLB.hidden = NO;
+        }];
+
     
-    ///订单 申请的人数 及状态 4 通过 5待审核  拼单人的状态
+    }else if (_vcOrderType.integerValue == 4||_vcOrderType.integerValue == 5) {
+        BmobQuery   *handelOrderQuery = [BmobQuery queryWithClassName:@"user_order" ];
+        [handelOrderQuery whereKey:@"objectId" equalTo:_model.orderListID];
+        [handelOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+            _handelModel  = [[BmobOrderModel alloc] initWithBomdModel:array[0]];
+            _foodNameLB.text = [NSString stringWithFormat:@"   我要吃 :  %@",_handelModel.name] ;
+            _foodNumLB.text = [NSString stringWithFormat:@"拼单人数:  %ld／%ld",(long)_handelModel.currentPersonNum,(long)_handelModel.personMaxNum] ;
+            _foodLocationLB.text = [NSString stringWithFormat:@"拼单地点:  %@",_handelModel.foodLocation] ;
+            
+            //时间
+            _foodTimeLB.text = [NSString stringWithFormat:@"拼单时间:  %@",_handelModel.timeDateStr] ;
+            //申请人
+            _foodUserNameLB.text = [NSString stringWithFormat:@"审核人:   %@" ,_model.senderUserListName] ;
+            _foodUserNameLB.hidden = NO;
+        }];
+    }
+    
+    
+    ///订单 申请的人数 及状态 5 通过 4待审核  拼单人的状态
     //订单状态 1已完成   2待处理的 3 已处理 发单人的订单状态
     if (_vcOrderType.integerValue == 1)//已完成订单
     {
@@ -45,6 +87,8 @@
     }else if (_vcOrderType.integerValue == 4)//待审核订单
     {
         [_orderBtn setTitle:@"取消拼单" forState:0];
+        _orderBtn.hidden = YES;
+
     }else if (_vcOrderType.integerValue == 5)//已审核订单
     {
          //[_orderBtn setTitle:@"删除" forState:0];
@@ -94,8 +138,8 @@
 }
  - (void)handleOrder
 {
-    if ([_delegate respondsToSelector:@selector(handleOrderCell:model:)]) {
-        [_delegate handleOrderCell:self model:_model];
+    if ([_delegate respondsToSelector:@selector(handleOrderCell:model:handeledModel:)]) {
+        [_delegate handleOrderCell:self model:_model handeledModel:_handelModel];
     }
 }
 - (void)awakeFromNib {

@@ -107,7 +107,7 @@
 }
 - (UIViewController *)slideSwitchView:(SUNSlideSwitchView *)view viewOfTab:(NSUInteger)number
 {
-    NSLog(@"tag----------%d",view.tag);
+
     if (view.tag == 0) {
         _doneVc =[[doneOrderTableViewController alloc]init];
         _doneVc.orderType = [NSString stringWithFormat:@"%lu",(unsigned long)number];
