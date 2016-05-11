@@ -59,22 +59,22 @@
         
         // 去掉点击时候的灰色
         pCell.selectionStyle = UITableViewCellSelectionStyleNone;
-        pCell.picture.image = [UIImage imageNamed:@"我的1"];
+        //pCell.picture.image = [UIImage imageNamed:@"我的1"];
         // 给imageview添加点击手势
         self.tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction)];
         [pCell.picture addGestureRecognizer:_tap];
         pCell.picture.userInteractionEnabled = YES;
         
-//        if ([regAndLogTool shareTools].loginName != nil) {
-//            [self.tableView reloadData];
-//            
-//            BmobUser *upUser = [BmobUser getCurrentUser];
-//            [pCell.picture sd_setImageWithURL:[NSURL URLWithString:[upUser objectForKey:@"head_img"]]];
-//            
-//        }
-//        if ([regAndLogTool shareTools].loginName == nil) {
-//            pCell.picture.image = [UIImage imageNamed:@"我的1"];
-//        }
+        if ([regAndLogTool shareTools].loginName != nil) {
+
+            
+            BmobUser *upUser = [BmobUser getCurrentUser];
+            [pCell.picture sd_setImageWithURL:[NSURL URLWithString:[upUser objectForKey:@"head_img"]]];
+            
+        }
+        if ([regAndLogTool shareTools].loginName == nil) {
+            pCell.picture.image = [UIImage imageNamed:@"我的1"];
+        }
         return pCell;
     }
     else
