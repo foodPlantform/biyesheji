@@ -68,20 +68,22 @@ static regAndLogTool *rlt;
 //    return logStr;
 
     self.loginName = [NSString string];
+    [self.loginName addObserver:self forKeyPath:@"login" options:NSKeyValueObservingOptionOld| NSKeyValueObservingOptionNew context:nil];
     self.usermodel = [[userModel alloc]init];
     [BmobUser loginInbackgroundWithAccount:userName andPassword:passWord block:^(BmobUser *user, NSError *error) {
         if (user) {
             NSLog(@"phoneSuccess");
             NSLog(@"%@",user);
-            self.loginName = userName;
+           
+            [self setValue:userName forKey:@"loginName"];
             BmobQuery *q = [BmobQuery queryWithClassName:@"_User"];
             [q whereKey:@"mobilePhoneNumber" equalTo:userName];
             [q findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
                 for (BmobObject *obj in array) {
                     _usermodel.userName = [obj valueForKey:@"username"];
                     _usermodel.mobilePhoneNumber = [obj valueForKey:@"mobilePhoneNumber"];
-                    _usermodel.gender = [obj valueForKey:@"gender"];
-                    _usermodel.head_img = [obj valueForKey:@"head_img"];
+//                    _usermodel.gender = [obj valueForKey:@"gender"];
+//                    _usermodel.head_img = [obj valueForKey:@"head_img"];
                 }
             }];
         }
@@ -98,7 +100,7 @@ static regAndLogTool *rlt;
             NSString *phone = [obj objectForKey:@"mobilePhoneNumber"];
             [BmobUser loginInbackgroundWithAccount:phone andPassword:passWord block:^(BmobUser *user, NSError *error) {
                 if (user) {
-                    self.loginName = userName;
+                    [self setValue:userName forKey:@"loginName"];
                     NSLog(@"success");
                     NSLog(@"%@",user);
                     BmobQuery *q = [BmobQuery queryWithClassName:@"_User"];
@@ -107,8 +109,8 @@ static regAndLogTool *rlt;
                         for (BmobObject *obj in array) {
                             _usermodel.userName = [obj valueForKey:@"username"];
                             _usermodel.mobilePhoneNumber = [obj valueForKey:@"mobilePhoneNumber"];
-                            _usermodel.gender = [obj valueForKey:@"gender"];
-                            _usermodel.head_img = [obj valueForKey:@"head_img"];
+//                            _usermodel.gender = [obj valueForKey:@"gender"];
+//                            _usermodel.head_img = [obj valueForKey:@"head_img"];
                         }
                     }];
                 }

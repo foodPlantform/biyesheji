@@ -108,7 +108,6 @@
 -(void)upBtnAction
 {
     
-    
     [self p_setupProgressHud];
     if ([self.lv.foodName.text isEqualToString:@""] || [self.lv.foodDes.text isEqualToString:@""] || [self.lv.address.text isEqualToString:@""] || [self.lv.rec.text isEqualToString:@""] || [self.lv.sty.text isEqualToString:@""] || self.lv.picture.image == nil) {
         UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请输入完整内容" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
@@ -123,7 +122,11 @@
         fm.rec = self.lv.rec.text;
         fm.sty = self.lv.sty.text;
         fm.cityName = self.lv.cityLabel.text;
-        [self uploadWith:fm username:@"qwer" image:self.lv.picture.image];
+        if ([regAndLogTool shareTools].loginName != nil ) {
+            BmobUser *user = [BmobUser getCurrentUser];
+            [self uploadWith:fm username:user.username image:self.lv.picture.image];
+        }
+        
         
        //[[uploadTool shareTool] uploadWith:fm username:@"qw" image:self.lv.picture.image];
         

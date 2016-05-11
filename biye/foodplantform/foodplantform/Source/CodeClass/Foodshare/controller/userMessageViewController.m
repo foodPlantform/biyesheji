@@ -10,6 +10,8 @@
 #import "userMessageView.h"
 @interface userMessageViewController ()
 @property(nonatomic,strong)userMessageView *uv;
+
+@property(nonatomic,strong)NSString *phoneStr;
 @end
 
 @implementation userMessageViewController
@@ -28,6 +30,15 @@
 -(void)dataBind
 {
     self.uv.userName .text = self.foodmodel_user.userName;
+    BmobQuery *query = [BmobQuery queryWithClassName:@"_User"];
+    [query whereKey:@"username" equalTo:self.foodmodel_user.userName];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+       
+        for (BmobObject *obj in array) {
+            self.phoneStr = [obj valueForKey:@"mobilePhoneNumber"];
+        }
+        self.uv.phone.text = _phoneStr;
+    }];
     self.uv.address.text = self.foodmodel_user.address;
 }
 - (void)didReceiveMemoryWarning {

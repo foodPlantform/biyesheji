@@ -8,8 +8,12 @@
 
 #import "AppDelegate.h"
 #import "BaseTabBarController.h"
+#import "getCity.h"
+
+
 @interface AppDelegate ()<BmobEventDelegate>
 @property (nonatomic,strong)BmobEvent *bmobEvent;
+
 @end
 
 @implementation AppDelegate
@@ -39,6 +43,7 @@
     
     BmobUser *curr = [BmobUser getCurrentUser];
     if (curr) {
+        [regAndLogTool shareTools].loginName = curr.username;
         [[regAndLogTool shareTools] loginWithName:curr.username password:curr.password];
         [regAndLogTool shareTools].usermodel = [[userModel alloc]init];
         BmobQuery *query = [BmobUser query];
@@ -58,6 +63,11 @@
         
     }
    // [BmobUser logout];
+    
+    
+    // 获取城市名
+    [[getCity shareCity] startGetCityName];
+    NSLog(@"==%@==",[getCity shareCity].cityName);
     
     return YES;
 }

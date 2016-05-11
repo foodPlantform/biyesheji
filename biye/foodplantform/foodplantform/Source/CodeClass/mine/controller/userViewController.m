@@ -249,8 +249,10 @@ NSData * UIImageJPEGRepresentation ( UIImage *image, CGFloat compressionQuality)
                 [user updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
                     
                     dispatch_async(dispatch_get_main_queue(), ^{
+                        
                         [[regAndLogTool shareTools] messageShowWith:@"更新成功" cancelStr:@"确定"];
                         BmobUser *upUser = [BmobUser getCurrentUser];
+                        [[regAndLogTool shareTools] setValue:upUser.username forKey:@"loginName"];
                         [self.uv.headimg sd_setImageWithURL:[NSURL URLWithString:[upUser objectForKey:@"head_img"]]];
                         self.uv.userName.text = upUser.username;
                         self.uv.phone.text = upUser.mobilePhoneNumber;

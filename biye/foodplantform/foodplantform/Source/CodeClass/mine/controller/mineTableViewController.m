@@ -30,7 +30,11 @@
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
-
+-(void)viewWillAppear:(BOOL)animated
+{
+    
+    
+}
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -45,7 +49,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 #warning Incomplete implementation, return the number of rows
-    return 4;
+    return 5;
 }
 
 
@@ -60,6 +64,17 @@
         self.tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction)];
         [pCell.picture addGestureRecognizer:_tap];
         pCell.picture.userInteractionEnabled = YES;
+        
+//        if ([regAndLogTool shareTools].loginName != nil) {
+//            [self.tableView reloadData];
+//            
+//            BmobUser *upUser = [BmobUser getCurrentUser];
+//            [pCell.picture sd_setImageWithURL:[NSURL URLWithString:[upUser objectForKey:@"head_img"]]];
+//            
+//        }
+//        if ([regAndLogTool shareTools].loginName == nil) {
+//            pCell.picture.image = [UIImage imageNamed:@"我的1"];
+//        }
         return pCell;
     }
     else
@@ -76,6 +91,9 @@
         if (indexPath.section == 0 && indexPath.row == 3) {
             cell.textLabel.text = @"我的信息";
         }
+        if (indexPath.section == 0 && indexPath.row == 4) {
+            cell.textLabel.text = @"注销登录";
+        }
         
         
         return cell;
@@ -86,7 +104,9 @@
 -(void)tapAction
 {
     if ([regAndLogTool shareTools].loginName != nil) {
-        
+        BmobUser *user = [BmobUser getCurrentUser];
+        NSLog(@"%@",user.username);
+        NSLog(@"##%@",[regAndLogTool shareTools].loginName);
     }
     else
     {
@@ -116,6 +136,11 @@
     if (indexPath.row == 3 && indexPath.section == 0) {
         userViewController *userVc = [[userViewController alloc]init];
         [self.navigationController pushViewController:userVc animated:YES];
+    }
+    if (indexPath.section == 0 && indexPath.row ==4) {
+        [BmobUser logout];
+        [[regAndLogTool shareTools] setValue:nil forKey:@"loginName"];
+        [[regAndLogTool shareTools] messageShowWith:@"注销成功" cancelStr:@"确定"];
     }
 }
 
