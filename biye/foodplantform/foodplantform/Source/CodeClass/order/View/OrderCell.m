@@ -29,15 +29,19 @@
     
     //时间
     _foodTimeLB.text = [NSString stringWithFormat:@"拼单时间:  %@",_model.timeDateStr] ;
+    
+    ///订单 申请的人数 及状态 4 通过 5待审核  拼单人的状态
+    //订单状态 1已完成   2待处理的 3 已处理 发单人的订单状态
     if (_vcOrderType.integerValue == 1)//已完成订单
     {
         [_orderBtn setTitle:@"评论" forState:0];
-    }else if (_vcOrderType.integerValue == 2)//已处理订单
+    }else if (_vcOrderType.integerValue == 2)
+    {
+        [_orderBtn setTitle:@"同意拼单" forState:0];
+        _foodUserNameLB.hidden = NO;
+    }else if (_vcOrderType.integerValue == 3)
     {
         [_orderBtn setTitle:@"组队就餐" forState:0];
-    }else if (_vcOrderType.integerValue == 3)//待处理订单
-    {
-        [_orderBtn setTitle:@"通过" forState:0];
     }else if (_vcOrderType.integerValue == 4)//待审核订单
     {
         [_orderBtn setTitle:@"取消拼单" forState:0];
@@ -53,17 +57,22 @@
 - (void)setOrderCellView
 {
     _foodNameLB = [[UILabel alloc] initWithFrame:CGRectMake(PinDanCellJianJu, PinDanCellJianJu*2, kScreenWidth/2.0, 10)];
-    //_foodNameLB.text = [NSString stringWithFormat:@"   我要吃 :  %@",_model.name] ;
     
     [self.contentView addSubview:_foodNameLB];
+    _foodUserNameLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_foodNameLB.frame), CGRectGetMinY(_foodNameLB.frame), kScreenWidth/2.0, 10)];
+    _foodUserNameLB.text = [NSString stringWithFormat:@"申请人:  测试数据"] ;
+    _foodUserNameLB.hidden =YES;
+
+    [self.contentView addSubview:_foodUserNameLB];
     
         _foodNumLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_foodNameLB.frame), CGRectGetMaxY(_foodNameLB.frame)+PinDanCellJianJu*2, kScreenWidth/2.0, 10)];
     
-    _foodNumLB.text = [NSString stringWithFormat:@"约吃对象:  测试数据"] ;
+    _foodNumLB.text = [NSString stringWithFormat:@"拼单对象:  测试数据"] ;
     
     [self.contentView addSubview:_foodNumLB];
     _orderBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    _orderBtn.frame = CGRectMake(CGRectGetMaxX(_foodNumLB.frame)+PinDanCellJianJu*2, CGRectGetMinX(_foodNameLB.frame)+PinDanCellJianJu*2, kScreenWidth/4.0, 40);
+    _orderBtn.frame = CGRectMake(CGRectGetMaxX(_foodNumLB.frame)+PinDanCellJianJu*2, CGRectGetMinY(_foodNumLB.frame), kScreenWidth/4.0, 25);
+    [_orderBtn addTarget:self action:@selector(handleOrder) forControlEvents:UIControlEventTouchUpInside];
     _orderBtn.backgroundColor = [UIColor redColor];
     [_orderBtn setTitleColor:[UIColor whiteColor] forState:0];
     [_orderBtn setTitle:@"aaaaaaa" forState:0];
@@ -82,7 +91,12 @@
     [self.contentView addSubview:_foodLocationLB];
     
     NSLog(@"%.f",CGRectGetMaxY(_foodLocationLB.frame));
-
+}
+ - (void)handleOrder
+{
+    if ([_delegate respondsToSelector:@selector(handleOrderCell:model:)]) {
+        [_delegate handleOrderCell:self model:_model];
+    }
 }
 - (void)awakeFromNib {
     [super awakeFromNib];

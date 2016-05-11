@@ -13,12 +13,16 @@
 @property(nonatomic,strong)NSString *orderID;
 //订单id
 @property(nonatomic,strong)NSString *senderID;
-//订单 申请的人数 及状态
-@property(nonatomic,strong)NSArray *applyUserArr;
+//订单 申请的ID 及状态
+@property(nonatomic,strong)NSMutableArray *applyUserAndTypeArr;
+//订单 申请的人ID
+@property(nonatomic,strong)NSArray *applyUserIDArr;
+//订单 申请的人数 及状态 4 通过 5待审核  拼单人的状态 
+@property(nonatomic,strong)NSString *applyOrderType;
 //用户头像
-@property(nonatomic,strong)NSString *imgeUrl;
-//订单状态
-@property(nonatomic,strong)NSString *orderTyoe;
+@property(nonatomic,strong)NSString *userImgeUrl;
+//订单状态 1已完成   2待处理的 3 已处理 发单人的订单状态
+@property(nonatomic,strong)NSString *userOrderTyoe;
 
 //昵称
 @property(nonatomic,strong)NSString *niCheng;

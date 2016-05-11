@@ -14,6 +14,6 @@
 //订单状态
 @property(nonatomic,strong)NSString *orderType;
 
--(instancetype)initWithBomdModel :(id )order_apply;
+-(instancetype)initWithBomdModel :(NSDictionary * )order_apply;
 
 @end

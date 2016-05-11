@@ -7,7 +7,7 @@
 //
 
 #import "KCMainViewController.h"
-
+#import "KMDatePickerView.h"
 #import "DateHelper.h"
 #import "NSDate+CalculateDay.h"
 #import "KMDatePicker.h"
@@ -51,6 +51,9 @@
 @property(nonatomic,strong)BmobGeoPoint*bmobGeoPoint;
 
 @property(nonatomic,strong)NSString*loactionStr;
+@property(nonatomic,strong)NSString*headUrlStr;
+@property(nonatomic,strong)NSString*userNameStr;
+
 @property(nonatomic,strong)NSDate*bmobOrderDate;
 //拼单付款方式
 @property(nonatomic,assign)NSInteger foodPayTypeRow;
@@ -121,7 +124,7 @@
     
     _foodPersonNumLB = [[UILabel alloc] initWithFrame:CGRectMake(PinDanCellJianJu, CGRectGetMaxY(_foodPersonLB.frame)+PinDanCellJianJu*2, CGRectGetWidth(_foodNameLB.frame), 10)];
     
-    _foodPersonNumLB.text = [NSString stringWithFormat:@"约吃人数: "] ;
+    _foodPersonNumLB.text = [NSString stringWithFormat:@"拼单人数: "] ;
     
     [self.view addSubview:_foodPersonNumLB];
     _foodPersonNumTf = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(_foodNameTf.frame), CGRectGetMinY(_foodPersonNumLB.frame)-10, kScreenWidth/3.0+20, 30)];
@@ -131,7 +134,7 @@
     [self.view addSubview:_foodPersonNumTf];
 
     _foodPayTypeLB = [[UILabel alloc] initWithFrame:CGRectMake(PinDanCellJianJu, CGRectGetMaxY(_foodPersonNumLB.frame)+PinDanCellJianJu*2, CGRectGetWidth(_foodNameLB.frame),10)];
-    _foodPayTypeLB.text = [NSString stringWithFormat:@"约吃方式: "] ;
+    _foodPayTypeLB.text = [NSString stringWithFormat:@"拼单方式: "] ;
     
     [self.view addSubview:_foodPayTypeLB];
     
@@ -143,7 +146,7 @@
     _foodPayTypeTf.placeholder = @"点击选择拼单付款方式";
     [self.view addSubview:_foodPayTypeTf];
     _foodTimeLB = [[UILabel alloc] initWithFrame:CGRectMake(PinDanCellJianJu, CGRectGetMaxY(_foodPayTypeLB.frame)+PinDanCellJianJu*2, CGRectGetWidth(_foodNameLB.frame),10)];
-    _foodTimeLB.text = [NSString stringWithFormat:@"约吃时间: "] ;
+    _foodTimeLB.text = [NSString stringWithFormat:@"拼单时间: "] ;
     
     [self.view addSubview:_foodTimeLB];
     
@@ -157,7 +160,7 @@
 
     
     _foodLocationLB = [[UILabel alloc] initWithFrame:CGRectMake(PinDanCellJianJu, CGRectGetMaxY(_foodTimeLB.frame)+PinDanCellJianJu*2, CGRectGetWidth(_foodNameLB.frame), 10)];
-    _foodLocationLB.text = [NSString stringWithFormat:@"约吃地点: "] ;
+    _foodLocationLB.text = [NSString stringWithFormat:@"拼单地点: "] ;
     
     [self.view addSubview:_foodLocationLB];
 
@@ -177,8 +180,19 @@
     {
         if ([[FileManager shareManager] isUserLogin]) {
             //注销登陆  [BmobUser logout];
-            // 发单
-            [self sendOrder];
+            BmobUser *bUser = [BmobUser getCurrentUser];
+            BmobQuery *query = [BmobUser query];
+            [query whereKey:@"objectId" equalTo:bUser.objectId];
+            [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+                _headUrlStr = [array[0] objectForKey:@"head_img"];
+                
+                _userNameStr = [array[0] objectForKey:@"username"];
+
+                // 发单
+                [self sendOrder];
+
+            }];
+            
         }else
         {
             [[FileManager shareManager ] LoginWithVc:self];
@@ -203,7 +217,11 @@
     //往GameScore表添加一条user_order为小明，分数为78的数据
     
     BmobUser *bUser = [BmobUser getCurrentUser];
+    
     BmobObject *user_order = [BmobObject objectWithClassName:@"user_order"];
+    [user_order setObject:_headUrlStr forKey:@"user_headUrl"];
+    [user_order setObject:_userNameStr forKey:@"order_userName"];
+
     [user_order setObject:bUser.objectId forKey:@"order_senderID"];
     [user_order setObject:@1 forKey:@"order_currentNum"];
     [user_order setObject:[NSNumber numberWithInteger:_foodPersonNumTf.text.integerValue] forKey:@"order_maxNum"];
@@ -233,29 +251,29 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     if (textField.tag == PinDanTimeTag)//时间
     {
-        [self set_upTimePicker];
-    }else
-    {
-        
-    }
-     [textField becomeFirstResponder];
-}
+        //[self set_upTimePicker];
+        [KMDatePickerView show];
+        [KMDatePickerView shareView].SelectDateBlock = ^(NSString*date){
+            
+            NSLog(@"%@",date);
+            NSDateFormatter *inputFormatter = [[NSDateFormatter alloc] init] ;
+            [inputFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] ];
+            [inputFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+            _bmobOrderDate = [inputFormatter dateFromString:date];
+            _foodTimeTf.text = date;
 
-#pragma mark - 用户是否可以编辑
-//用户是否可以编辑
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
-{
-    NSLog(@"textField.tag---------%ld",(long)textField.tag);
-    if (textField.tag == PinDanLocationTag) {
+            
+        };
+    }else if (textField.tag == PinDanLocationTag) {
         
         KCMainViewController *vc =[[KCMainViewController alloc ] init];
         vc.delegate = self;
         vc.navigationItem.title = @"长按选择地址";
-         vc.tabBarController.tabBar.hidden=YES;
+        vc.tabBarController.tabBar.hidden=YES;
         [self.navigationController pushViewController:vc animated:YES];
         _foodLocationTf.font = [UIFont systemFontOfSize:12];
-
-        return NO;
+        
+        
     }
     else  if (textField.tag ==PinDanPayTypeTag)
     {
@@ -268,7 +286,7 @@
         };
         
         [_outputView pop];
-        return NO;
+        
         
     }
     else  if (textField.tag ==PinDanTargetTag)
@@ -282,13 +300,63 @@
         };
         
         [_outputView pop];
-        return NO;
         
-    }else
-    {
-        return YES;
+        
     }
-   
+    [textField resignFirstResponder];
+}
+
+#pragma mark - 用户是否可以编辑
+//用户是否可以编辑
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+  NSLog(@"textField.tag---------%ld",(long)textField.tag);
+//    if (textField.tag == PinDanLocationTag) {
+//        
+////        KCMainViewController *vc =[[KCMainViewController alloc ] init];
+////        vc.delegate = self;
+////        vc.navigationItem.title = @"长按选择地址";
+////         vc.tabBarController.tabBar.hidden=YES;
+////        [self.navigationController pushViewController:vc animated:YES];
+////        _foodLocationTf.font = [UIFont systemFontOfSize:12];
+//
+//        return NO;
+//    }
+//    else  if (textField.tag ==PinDanPayTypeTag)
+//    {
+////        LrdOutputView *_outputView = [[LrdOutputView alloc] initWithDataArray:@[@"我付",@"AA制"] origin:CGPointMake(CGRectGetMinX(_foodPayTypeTf.frame), CGRectGetMaxY(_foodPayTypeTf.frame)-10) width:125 height:44 direction:kLrdOutputViewDirectionRight];
+////        _outputView.tag = PinDanPayTypeTag;
+////        _outputView.delegate = self;
+////        _outputView.dismissOperation = ^(){
+////            //设置成nil，以防内存泄露
+////            //2_outputView = nil;
+////        };
+////        
+////        [_outputView pop];
+//        return NO;
+//        
+//    }
+//    else  if (textField.tag ==PinDanTargetTag)
+//    {
+////        LrdOutputView *_outputView = [[LrdOutputView alloc] initWithDataArray:@[@"男女不限",@"只约男性",@"只约女性"] origin:CGPointMake(CGRectGetMinX(_foodPersonLBTf.frame), CGRectGetMaxY(_foodPersonLBTf.frame)) width:125 height:44 direction:kLrdOutputViewDirectionRight];
+////        _outputView.delegate = self;
+////        _outputView.tag = PinDanTargetTag;
+////        _outputView.dismissOperation = ^(){
+////            //设置成nil，以防内存泄露
+////            //2_outputView = nil;
+////        };
+////        
+////        [_outputView pop];
+//        return NO;
+//        
+//    }else
+//    {
+//        return YES;
+//    }
+    [textField resignFirstResponder];
+
+    return YES;
+
 }
 #pragma mark -  获取拼单付款方式和对象类型
 -(void)LrdOutputView:(LrdOutputView *)lrdOutputView didSelectedAtIndexPath:(NSIndexPath *)indexPath currentStr:(NSString *)currentStr
@@ -316,13 +384,14 @@
 - (void)set_upTimePicker
 {
     CGRect rect = [[UIScreen mainScreen] bounds];
-    rect = CGRectMake(0.0, 0.0, rect.size.width, 216.0);
+    rect = CGRectMake(0.0, 100, rect.size.width, 216.0);
     // 年月日时分
     KMDatePicker *datePicker = [[KMDatePicker alloc]
                                 initWithFrame:rect
                                 delegate:self
                                 datePickerStyle:KMDatePickerStyleYearMonthDayHourMinute];
     _foodTimeTf.inputView = datePicker;
+     //[self.view addSubview:datePicker];
     
 }
 - (void)datePicker:(KMDatePicker *)datePicker didSelectDate:(KMDatePickerDateModel *)datePickerDate

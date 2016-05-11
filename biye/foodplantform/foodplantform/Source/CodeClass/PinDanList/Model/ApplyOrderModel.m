@@ -9,7 +9,7 @@
 #import "ApplyOrderModel.h"
 
 @implementation ApplyOrderModel
--(instancetype)initWithBomdModel :(id )order_apply
+-(instancetype)initWithBomdModel :(NSDictionary *)order_apply
 {
     self =  [super init];
     if (self)

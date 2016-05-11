@@ -7,10 +7,29 @@
 //
 
 #import <UIKit/UIKit.h>
+@class OrderCell;
+@class BmobOrderModel;
+@protocol OrderCelllDelegate <NSObject>
+
+/**
+ *  按钮点击加入拼单
+ *
+ *  @param index <#index description#>
+ */
+@optional
+
+- (void)handleOrderCell:(OrderCell *)cell model:(BmobOrderModel *)model;
+
+@end
 #import "BmobOrderModel.h"
 @interface OrderCell : UITableViewCell
+@property (strong, nonatomic) id<OrderCelllDelegate>delegate;
+
 //拼单名称
 @property(nonatomic,strong)UILabel *foodNameLB;
+//拼单加入人 或者是发单人
+@property(nonatomic,strong)UILabel *foodUserNameLB;
+
 //拼单处理事件
 @property(nonatomic,strong)UIButton *orderBtn;
 //拼单时间
