@@ -69,9 +69,20 @@
     NSLog(@"定位失败:%@",error);
 
 }
-
+// 第三方小菊花
+- (void)p_setupProgressHud
+{
+    self.pindanHud = [[MBProgressHUD alloc] initWithView:self.view];
+    _pindanHud.frame = self.view.bounds;
+    _pindanHud.minSize = CGSizeMake(100, 100);
+    _pindanHud.mode = MBProgressHUDModeIndeterminate;
+    [self.view addSubview:_pindanHud];
+    
+    [_pindanHud show:YES];
+}
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self p_setupProgressHud];
     _orderArr = [[NSMutableArray alloc] initWithCapacity:0];
     //查找user_order表
     _user_orderQuery = [BmobQuery queryWithClassName:@"user_order"];
@@ -88,6 +99,7 @@
            }
         }
        [self.tableView reloadData];
+       _pindanHud.hidden =YES;
    }];
    // [[UIApplication sharedApplication]openURL:[NSURL URLWithString:@"sms://13888888888"]];
     
@@ -158,6 +170,7 @@
 }
 - (void)loadNewData
 {
+    _pindanHud.hidden =NO;
     //每页加载多少数据
     _user_orderQuery.limit =OnceLoadPageRow;
     //每页跳过多少数据
@@ -178,7 +191,7 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             // 刷新表格
             [self.tableView reloadData];
-            
+            _pindanHud.hidden =YES;
             
             // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
             [self.tableView.mj_header endRefreshing];
@@ -191,6 +204,8 @@
 }
 - (void)loadMoreData
 {
+    _pindanHud.hidden =NO;
+
     //每页加载多少数据
     _user_orderQuery.limit +=OnceLoadPageRow;
     //每页跳过多少数据
@@ -216,7 +231,7 @@
         // 刷新表格
         [self.tableView reloadData];
         
-        
+         _pindanHud.hidden =NO;
         // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
         [self.tableView.mj_footer endRefreshing];
     });
@@ -299,7 +314,7 @@
 #pragma mark - Table view data source
 - (void)globeBottomViewButtonClick:(NSInteger)index currentStr:(NSString *)currentStr lastRow:(NSInteger)lastRow titleArr:(NSArray *)titleArr
 {
-    //_user_orderQuery = [[BmobQuery alloc] initWithClassName:@"user_order"];
+    _user_orderQuery = [[BmobQuery alloc] initWithClassName:@"user_order"];
    
     
    
@@ -401,6 +416,7 @@
         default:
             break;
     }
+    _pindanHud.hidden =NO;
     //每页加载多少数据
     _user_orderQuery.limit =OnceLoadPageRow;
     //每页跳过多少数据
@@ -418,7 +434,7 @@
             }
         }
         [self.tableView reloadData];
-        
+        _pindanHud.hidden =YES;
         
     }];
 }
@@ -523,6 +539,8 @@
 
                 [user_applyList setObject:@"4" forKey:@"apply_orderType"];
                 [user_applyList setObject:@"2" forKey:@"sender_OrderType"];
+                //0 表示order表 1 food表
+                [user_applyList setObject:@"0" forKey:@"apply_type"];
                 [user_applyList setObject:bUser.objectId forKey:@"apply_userID"];
                 [user_applyList setObject:bUser.username forKey:@"apply_userName"];
                 [user_applyList setObject:model.senderID forKey:@"sender_userID"];
@@ -534,6 +552,7 @@
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"加入成功" preferredStyle:UIAlertControllerStyleAlert];
                 [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                     [self loadNewData];
+                    
                 }]];
                 [self presentViewController:alertController animated:YES completion:nil];
             }

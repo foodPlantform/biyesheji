@@ -42,6 +42,8 @@
 //拼单地点
 @property(nonatomic,strong)UILabel *foodLocationLB;
 @property(nonatomic,strong)UITextField *foodLocationTf;
+@property(nonatomic,strong) UIButton *foodLocationBtn;
+
 //拼单付款方式
 @property(nonatomic,strong)UILabel *foodPayTypeLB;
 @property(nonatomic,strong)UITextField *foodPayTypeTf;
@@ -86,8 +88,19 @@
     
     
     [self set_UpSendPindanView];
+    [self sendPindanProgressHud];
+    _sendPindanHud.hidden =YES;
+}
+// 第三方小菊花
+- (void)sendPindanProgressHud
+{
+    self.sendPindanHud = [[MBProgressHUD alloc] initWithView:self.view];
+    _sendPindanHud.frame = self.view.bounds;
+    _sendPindanHud.minSize = CGSizeMake(100, 100);
+    _sendPindanHud.mode = MBProgressHUDModeIndeterminate;
+    [self.view addSubview:_sendPindanHud];
     
-
+   [_sendPindanHud show:YES];
 }
 
 - (void)set_UpSendPindanView
@@ -101,6 +114,7 @@
     
     
     _foodNameTf = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_foodNameLB.frame), CGRectGetMinY(_foodNameLB.frame)-10, kScreenWidth/3.0+20, 30)];
+    _foodNameTf.delegate = self;
     
 //    _foodNameTf.center = CGPointMake(CGRectGetMaxX(_foodNameTf.frame)+CGRectGetWidth(_foodNameTf.frame)/2.0, (CGRectGetMinY(_foodNameTf.frame)+CGRectGetMaxY(_foodNameTf.frame))/2.0);
     _foodNameTf.font = [UIFont boldSystemFontOfSize:16] ;
@@ -118,18 +132,16 @@
     _foodPersonLBTf = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(_foodNameTf.frame), CGRectGetMinY(_foodPersonLB.frame)-10, kScreenWidth/3.0+20, 30)];
     _foodPersonLBTf.delegate = self;
     _foodPersonLBTf.tag = PinDanTargetTag;
-    
     _foodPersonLBTf.placeholder = @"点击选择您想约的对象";
     [self.view addSubview:_foodPersonLBTf];
     
     _foodPersonNumLB = [[UILabel alloc] initWithFrame:CGRectMake(PinDanCellJianJu, CGRectGetMaxY(_foodPersonLB.frame)+PinDanCellJianJu*2, CGRectGetWidth(_foodNameLB.frame), 10)];
     
     _foodPersonNumLB.text = [NSString stringWithFormat:@"拼单人数: "] ;
-    
     [self.view addSubview:_foodPersonNumLB];
     _foodPersonNumTf = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(_foodNameTf.frame), CGRectGetMinY(_foodPersonNumLB.frame)-10, kScreenWidth/3.0+20, 30)];
-    
-    
+    _foodPersonNumTf.keyboardType=UIKeyboardTypeNumberPad;
+    _foodPersonNumTf.delegate =self;
     _foodPersonNumTf.placeholder = @"请输入您想约的人数";
     [self.view addSubview:_foodPersonNumTf];
 
@@ -165,21 +177,39 @@
     [self.view addSubview:_foodLocationLB];
 
     
-    _foodLocationTf = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(_foodNameTf.frame), CGRectGetMinY(_foodLocationLB.frame)-10, kScreenWidth/2.0+20, 30)];
-    _foodLocationTf.font = [UIFont systemFontOfSize:17];
-    _foodLocationTf.delegate = self;
-    _foodLocationTf.tag = PinDanLocationTag;
-    _foodLocationTf.placeholder = @"点击获取地址";
-    [self.view addSubview:_foodLocationTf];
+//    _foodLocationTf = [[UITextField alloc] initWithFrame:CGRectMake(CGRectGetMinX(_foodNameTf.frame), CGRectGetMinY(_foodLocationLB.frame)-10, kScreenWidth/2.0+20, 30)];
+//    _foodLocationTf.font = [UIFont systemFontOfSize:17];
+//    _foodLocationTf.delegate = self;
+//    _foodLocationTf.tag = PinDanLocationTag;
+//    _foodLocationTf.placeholder = @"点击获取地址";
+//    [self.view addSubview:_foodLocationTf];
+    _foodLocationBtn = [[UIButton alloc] initWithFrame:CGRectMake(CGRectGetMinX(_foodNameTf.frame), CGRectGetMinY(_foodLocationLB.frame)-10, kScreenWidth/2.0+20, 30)];
+    [_foodLocationBtn addTarget:self action:@selector(getLocationStr) forControlEvents:UIControlEventTouchUpInside];
+    [_foodLocationBtn setTitleColor:[UIColor blackColor] forState:0];
+    [_foodLocationBtn setTitle:@"点击获取地址" forState:0];
+    _foodLocationBtn.titleLabel.font = [UIFont systemFontOfSize: 14.0];
+
+    [self.view addSubview:_foodLocationBtn];
+
+}
+#pragma mark - 获取地理位置
+-(void)getLocationStr
+{
+    KCMainViewController *vc =[[KCMainViewController alloc ] init];
+    vc.delegate = self;
+    vc.navigationItem.title = @"长按选择地址";
+    vc.tabBarController.tabBar.hidden=YES;
+    [self.navigationController pushViewController:vc animated:YES];
 
 }
 #pragma mark - 发布 按钮
 - (void)sendItemBtnAction
 {
-    if (0!=_foodLocationTf.text.length&&0!=_foodPersonLBTf.text.length&&0!=_foodPersonNumTf.text.length&&0!=_foodTimeTf.text.length&&0!=_foodNameTf.text.length)
-    {
-        if ([[FileManager shareManager] isUserLogin]) {
-            //注销登陆  [BmobUser logout];
+    if ([[FileManager shareManager] isUserLogin]) {
+        //注销登陆  [BmobUser logout];
+        if (0!=_foodNameTf.text.length&&0!=_foodPersonLBTf.text.length&&0!=_foodPersonNumTf.text.length&&0!=_foodTimeTf.text.length&&0!=[_foodLocationBtn currentTitle].length)
+        {
+            // [self.navigationController popViewControllerAnimated:YES];
             BmobUser *bUser = [BmobUser getCurrentUser];
             BmobQuery *query = [BmobUser query];
             [query whereKey:@"objectId" equalTo:bUser.objectId];
@@ -187,26 +217,25 @@
                 _headUrlStr = [array[0] objectForKey:@"head_img"];
                 
                 _userNameStr = [array[0] objectForKey:@"username"];
-
+                
                 // 发单
                 [self sendOrder];
-
+                
             }];
-            
-        }else
-        {
-            [[FileManager shareManager ] LoginWithVc:self];
-        }
-        
 
-       // [self.navigationController popViewControllerAnimated:YES];
-    }
-    else
+        }
+        else
+        {
+            // 1.跳出弹出框，提示用户打开步骤。
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@" 选项不能为空" preferredStyle:UIAlertControllerStyleAlert];
+            [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {}]];
+            [self presentViewController:alertController animated:YES completion:nil];
+        }
+
+        
+    }else
     {
-        // 1.跳出弹出框，提示用户打开步骤。
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@" 选项不能为空" preferredStyle:UIAlertControllerStyleAlert];
-        [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {}]];
-        [self presentViewController:alertController animated:YES completion:nil];
+        [[FileManager shareManager ] LoginWithVc:self];
     }
     
     
@@ -214,6 +243,7 @@
 #pragma mark - 发布订单
 - (void)sendOrder
 {
+    _sendPindanHud.hidden = NO;
     //往GameScore表添加一条user_order为小明，分数为78的数据
     
     BmobUser *bUser = [BmobUser getCurrentUser];
@@ -238,11 +268,19 @@
    // [user_order setObject:@78 forKey:@"score"];
     [user_order saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
         //进行操作
-        NSLog(@"error----------%@",error);
-        NSLog(@"isSuccessful--------%d",isSuccessful);
+//        NSLog(@"error----------%@",error);
+//        NSLog(@"isSuccessful--------%d",isSuccessful);
+        _sendPindanHud.hidden = YES;
         // 1.跳出弹出框，提示用户打开步骤。
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"你发送拼单情况" message:isSuccessful==1?@"发步成功":@"发布失败请重新发布"  preferredStyle:UIAlertControllerStyleAlert];
-        [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {}]];
+        [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            _foodNameTf.text = nil;
+            [_foodLocationBtn setTitle:@" 点击获取地址" forState:0] ;
+            _foodTimeTf.text = nil;
+            _foodPayTypeTf.text = nil;
+            _foodPersonLBTf.text = nil;
+            _foodPersonNumTf.text = nil;
+        }]];
         [self presentViewController:alertController animated:YES completion:nil];
     }];
     
@@ -251,19 +289,8 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     if (textField.tag == PinDanTimeTag)//时间
     {
-        //[self set_upTimePicker];
-        [KMDatePickerView show];
-        [KMDatePickerView shareView].SelectDateBlock = ^(NSString*date){
-            
-            NSLog(@"%@",date);
-            NSDateFormatter *inputFormatter = [[NSDateFormatter alloc] init] ;
-            [inputFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US"] ];
-            [inputFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
-            _bmobOrderDate = [inputFormatter dateFromString:date];
-            _foodTimeTf.text = date;
+        [self set_upTimePicker];
 
-            
-        };
     }else if (textField.tag == PinDanLocationTag) {
         
         KCMainViewController *vc =[[KCMainViewController alloc ] init];
@@ -301,11 +328,16 @@
         
         [_outputView pop];
         
+    }else
+    {
         
     }
+    
+}
+- (void)textFieldDidEndEditing:(UITextField *)textField
+{
     [textField resignFirstResponder];
 }
-
 #pragma mark - 用户是否可以编辑
 //用户是否可以编辑
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
@@ -324,15 +356,15 @@
 //    }
 //    else  if (textField.tag ==PinDanPayTypeTag)
 //    {
-////        LrdOutputView *_outputView = [[LrdOutputView alloc] initWithDataArray:@[@"我付",@"AA制"] origin:CGPointMake(CGRectGetMinX(_foodPayTypeTf.frame), CGRectGetMaxY(_foodPayTypeTf.frame)-10) width:125 height:44 direction:kLrdOutputViewDirectionRight];
-////        _outputView.tag = PinDanPayTypeTag;
-////        _outputView.delegate = self;
-////        _outputView.dismissOperation = ^(){
-////            //设置成nil，以防内存泄露
-////            //2_outputView = nil;
-////        };
-////        
-////        [_outputView pop];
+//        LrdOutputView *_outputView = [[LrdOutputView alloc] initWithDataArray:@[@"我付",@"AA制"] origin:CGPointMake(CGRectGetMinX(_foodPayTypeTf.frame), CGRectGetMaxY(_foodPayTypeTf.frame)-10) width:125 height:44 direction:kLrdOutputViewDirectionRight];
+//        _outputView.tag = PinDanPayTypeTag;
+//        _outputView.delegate = self;
+//        _outputView.dismissOperation = ^(){
+//            //设置成nil，以防内存泄露
+//            //2_outputView = nil;
+//        };
+//        
+//        [_outputView pop];
 //        return NO;
 //        
 //    }
@@ -352,12 +384,19 @@
 //    }else
 //    {
 //        return YES;
-//    }
-    [textField resignFirstResponder];
+////    }
+//    [textField resignFirstResponder];
+ if (textField.tag == PinDanLocationTag)
+ {
+     return NO;
+ }else
+ {
+     return YES;
 
-    return YES;
+ }
 
 }
+
 #pragma mark -  获取拼单付款方式和对象类型
 -(void)LrdOutputView:(LrdOutputView *)lrdOutputView didSelectedAtIndexPath:(NSIndexPath *)indexPath currentStr:(NSString *)currentStr
 {
@@ -374,6 +413,9 @@
 #pragma mark - KCMainViewControllerdelegate 获取地理位置
 -(void)KCMainViewControllerLongProessGetLoaction:(NSString *)longPressPlacemarkStr WithLongitude:(double)mylongitude WithLatitude:(double)mylatitude
 {
+    [_foodLocationBtn setTitle:longPressPlacemarkStr forState:0];
+    NSLog(@"----------%@",[_foodLocationBtn currentTitle]);
+    
     _foodLocationTf.text = longPressPlacemarkStr;
     _loactionStr = longPressPlacemarkStr;
    _bmobGeoPoint= [[BmobGeoPoint alloc] initWithLongitude:mylongitude WithLatitude:mylatitude];

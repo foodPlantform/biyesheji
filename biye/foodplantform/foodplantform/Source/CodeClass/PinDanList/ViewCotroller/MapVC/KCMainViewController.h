@@ -17,7 +17,8 @@
 @end
 
 @interface KCMainViewController : UIViewController
-
+//搜索地理位置
+@property(nonatomic,strong)UISearchBar *searchBar;
 
 
 @property (assign, nonatomic) id <KCLocationLongPressToDoDelegate> delegate;

@@ -10,6 +10,7 @@
 #define PinDanCellJianJu 10
 @interface OrderCell ()
 @property (nonatomic,strong)BmobOrderModel *handelModel;
+
 @end
 @implementation OrderCell
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -27,7 +28,7 @@
     _model = model;
     
    
-    if (_vcOrderType.integerValue == 0)
+    if (_vcOrderType.integerValue == 0 )
     {
         _foodNameLB.text = [NSString stringWithFormat:@"   我要吃 :  %@",_model.name] ;
         _foodNumLB.text = [NSString stringWithFormat:@"拼单人数:  %ld／%ld",(long)_model.currentPersonNum,(long)_model.personMaxNum] ;
@@ -41,6 +42,7 @@
         BmobQuery   *handelOrderQuery = [BmobQuery queryWithClassName:@"user_order" ];
         [handelOrderQuery whereKey:@"objectId" equalTo:_model.orderListID];
         [handelOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+            if (array.count == 0)return ;
             _handelModel  = [[BmobOrderModel alloc] initWithBomdModel:array[0]];
             _foodNameLB.text = [NSString stringWithFormat:@"   我要吃 :  %@",_handelModel.name] ;
             _foodNumLB.text = [NSString stringWithFormat:@"拼单人数:  %ld／%ld",(long)_handelModel.currentPersonNum,(long)_handelModel.personMaxNum] ;
@@ -58,6 +60,7 @@
         BmobQuery   *handelOrderQuery = [BmobQuery queryWithClassName:@"user_order" ];
         [handelOrderQuery whereKey:@"objectId" equalTo:_model.orderListID];
         [handelOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+            if (array.count == 0)return ;
             _handelModel  = [[BmobOrderModel alloc] initWithBomdModel:array[0]];
             _foodNameLB.text = [NSString stringWithFormat:@"   我要吃 :  %@",_handelModel.name] ;
             _foodNumLB.text = [NSString stringWithFormat:@"拼单人数:  %ld／%ld",(long)_handelModel.currentPersonNum,(long)_handelModel.personMaxNum] ;
@@ -68,6 +71,20 @@
             //申请人
             _foodUserNameLB.text = [NSString stringWithFormat:@"审核人:   %@" ,_model.senderUserListName] ;
             _foodUserNameLB.hidden = NO;
+        }];
+    }else if (_vcOrderType.integerValue == 1) {
+        BmobQuery   *handelOrderQuery = [BmobQuery queryWithClassName:@"user_order" ];
+        [handelOrderQuery whereKey:@"objectId" equalTo:_model.orderListID];
+        [handelOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+            if (array.count == 0)return ;
+            _handelModel  = [[BmobOrderModel alloc] initWithBomdModel:array[0]];
+            _foodNameLB.text = [NSString stringWithFormat:@"   我要吃 :  %@",_handelModel.name] ;
+            _foodNumLB.text = [NSString stringWithFormat:@"拼单人数:  %ld／%ld",(long)_handelModel.currentPersonNum,(long)_handelModel.personMaxNum] ;
+            _foodLocationLB.text = [NSString stringWithFormat:@"拼单地点:  %@",_handelModel.foodLocation] ;
+            
+            //时间
+            _foodTimeLB.text = [NSString stringWithFormat:@"拼单时间:  %@",_handelModel.timeDateStr] ;
+            _foodUserNameLB.hidden = YES;
         }];
     }
     
@@ -122,7 +139,7 @@
     [_orderBtn setTitle:@"aaaaaaa" forState:0];
     
     [self.contentView addSubview:_orderBtn];
-    _foodTimeLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_foodNameLB.frame), CGRectGetMaxY(_foodNumLB.frame)+PinDanCellJianJu*2, kScreenWidth/1.5, 10)];
+    _foodTimeLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_foodNameLB.frame), CGRectGetMaxY(_foodNumLB.frame)+PinDanCellJianJu*2, kScreenWidth/1.2, 10)];
    
     NSLog(@"%.f",CGRectGetMinX(_orderBtn.frame));
 

@@ -35,6 +35,7 @@
          //拼单地点
          @property(nonatomic,strong)NSString *foodLocation;
          */
+        
         self.userImgeUrl = [user_order objectForKey:@"user_headUrl"];
         self.orderID = [user_order objectForKey:@"objectId"];
         self.personMaxNum = [[user_order objectForKey:@"order_maxNum"] integerValue];
@@ -55,6 +56,7 @@
         self.applyUserIDArr = [user_order objectForKey:@"apply_userIDArr"];
        self.foodPayType = [user_order objectForKey:@"order_payType"];
        self.senderID = [user_order objectForKey:@"order_senderID"];
+        
         BmobGeoPoint*bmobGeoPoint = [user_order objectForKey:@"order_loaction"];
         self.foodLocationLatitude = bmobGeoPoint.latitude;
         self.foodLocationLongitude = bmobGeoPoint.longitude;
@@ -68,8 +70,8 @@
         
         [formatter setTimeStyle:NSDateFormatterShortStyle];
         
-        [formatter setDateFormat:@"yyyy年MM-dd-HH:mm"];
-        
+        [formatter setDateFormat:@"yyyy年MM月dd日HH:mm"];
+        //593322
         
         self.timeDateStr= [formatter stringFromDate:self.timeDate];
         

@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface PinDanVcr : UITableViewController
+@property(nonatomic,strong)MBProgressHUD *pindanHud;
 
 @end

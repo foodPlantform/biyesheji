@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface SendPindanVC : UIViewController
+@property(nonatomic,strong)MBProgressHUD *sendPindanHud;
 
 @end

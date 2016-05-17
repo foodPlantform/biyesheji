@@ -89,7 +89,7 @@
 //接收到得数据
 -(void)bmobEvent:(BmobEvent *)event didReceiveMessage:(NSString *)message{
     //打印数据
-    NSLog(@"didReceiveMessage:%@",message);
+    //NSLog(@"didReceiveMessage:%@",message);
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {

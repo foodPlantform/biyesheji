@@ -33,6 +33,8 @@
         self.senderUserListName = [UserApply objectForKey:@"sender_userName"] ;
         self.senderUserIListD = [UserApply objectForKey:@"sender_userID"];
         self.orderListID = [UserApply objectForKey:@"order_ID"];
+        self. applyList_type = [UserApply objectForKey:@"apply_type"];
+        
     }
     return self;
 }

@@ -39,7 +39,11 @@ static FileManager *_manager;
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"你还没有登陆，请登录" preferredStyle:UIAlertControllerStyleAlert];
     [alertController addAction:[UIAlertAction actionWithTitle:@"登陆" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         loginViewController *loginVc = [[loginViewController alloc] init];
-        [vc.navigationController pushViewController:loginVc animated:YES];
+        UINavigationController *loginNc = [[UINavigationController alloc]initWithRootViewController:loginVc];
+        [vc.navigationController presentViewController:loginNc animated:YES completion:^{
+            
+        }];
+       // [vc.navigationController pushViewController:loginVc animated:YES];
     }]];
     [vc presentViewController:alertController animated:YES completion:nil];
     

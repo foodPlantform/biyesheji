@@ -41,6 +41,9 @@
 //拼单人数
 @property(nonatomic,strong)UILabel *foodNumLB;
 @property(nonatomic,strong)UserApplyListModel *model;
+
+//已完成的订单  apply表里面的订单
+@property(nonatomic,strong)UserApplyListModel *applyedModel;
 @property(nonatomic,strong)NSString *vcOrderType;
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;

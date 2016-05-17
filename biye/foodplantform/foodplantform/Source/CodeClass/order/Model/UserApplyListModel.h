@@ -10,7 +10,10 @@
 
 @interface UserApplyListModel : BmobOrderModel
 @property(nonatomic,strong)NSString *applyListobjectId;
-//订单 申请的人ID
+//0 表示是order表 1表示是food表
+@property(nonatomic,strong)NSString *applyList_type;
+
+//订单 申请的人ID apply_type
 @property(nonatomic,strong)NSString *applyUserListID;
 @property(nonatomic,strong)NSString *applyUserListName;
 //订单 申请的人数 及状态 5 通过 4待审核  拼单人的状态

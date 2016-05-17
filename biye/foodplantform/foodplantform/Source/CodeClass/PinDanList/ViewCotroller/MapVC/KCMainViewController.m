@@ -14,7 +14,9 @@
 #import "KCCalloutAnnotation.h"
 #import "KCCalloutAnnotationView.h"
 
-@interface KCMainViewController ()<MKMapViewDelegate>{
+@interface KCMainViewController ()<MKMapViewDelegate,UISearchBarDelegate>
+
+{
     CLLocationManager *_locationManager;
     MKMapView *_mapView;
 }
@@ -27,6 +29,11 @@
     [super viewDidLoad];
     
     [self initGUI];
+    [self initSearchBar];
+//    CLLocationCoordinate2D coords = CLLocationCoordinate2DMake(newLocation.coordinate.latitude,newLocation.coordinate.longitude);
+//    float zoomLevel = 0.02;
+//    MKCoordinateRegion region = MKCoordinateRegionMake(coords,MKCoordinateSpanMake(zoomLevel, zoomLevel));
+//    [map setRegion:[map regionThatFits:region] animated:YES];
 }
 -(void)viewWillAppear:(BOOL)animated
 {
@@ -63,7 +70,7 @@
     _mapView.mapType=MKMapTypeStandard;
     
     //添加大头针
-    //[self addAnnotation];
+    [self addAnnotation];
 }
 - (void)longPressToDo:(UIGestureRecognizer*)gestureRecognizer {
     
@@ -204,4 +211,125 @@
         }
     }];
 }
+#pragma mark 创建一个搜索对象
+-(void)initSearchBar{
+    self.searchBar = [[UISearchBar alloc]initWithFrame:CGRectMake(0, 64, self.view.bounds.size.width, 44)];
+    _searchBar.keyboardType = UIKeyboardAppearanceDefault;
+    _searchBar.placeholder = @"请输入地理位置";
+    _searchBar.delegate = self;
+    _searchBar.barTintColor = [UIColor cyanColor];
+    _searchBar.searchBarStyle = UISearchBarStyleDefault;
+    _searchBar.barStyle = UIBarStyleDefault;
+    [self.view addSubview:_searchBar];
+}
+-(void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar
+{
+    searchBar.showsCancelButton = YES;//取消的字体颜色，
+    [searchBar setShowsCancelButton:YES animated:YES];
+//    NSLog(@"searchBar开始输入");
+    
+    //改变取消的文本
+    for(UIView *view in  [[[searchBar subviews] objectAtIndex:0] subviews]) {
+        if ([view isKindOfClass:[UIButton class]]) {
+            UIButton *cancel =(UIButton *)view;
+            [cancel setTitle:@"取消" forState:UIControlStateNormal];
+            [cancel setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        }
+    }
+}
+-(void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
+{
+//    NSLog(@"我的");
+}
+
+/**
+ *  搜框中输入关键字的事件响应
+ *
+ *  @param searchBar  UISearchBar
+ *  @param searchText 输入的关键字
+ */
+-(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
+{
+    
+    NSLog(@"输入的关键字是---%@---%lu",searchText,(unsigned long)searchText.length);
+}
+
+/**
+ *  取消的响应事件
+ *
+ *  @param searchBar UISearchBar
+ */
+-(void)searchBarCancelButtonClicked:(UISearchBar *)searchBar
+{
+//    NSLog(@"取消吗");
+    [searchBar setShowsCancelButton:NO animated:YES];
+    [searchBar resignFirstResponder];
+}
+
+/**
+ *  键盘上搜索事件的响应
+ *
+ *  @param searchBar UISearchBar
+ */
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar
+{
+//    NSLog(@"取");
+    [self reverseGeocodeWithStr:searchBar.text];
+    [searchBar setShowsCancelButton:NO animated:YES];
+    [searchBar resignFirstResponder];
+    
+}
+- (void)reverseGeocodeWithStr:(NSString *)locationStr
+{
+    //1.获得输入的地址
+    if (locationStr.length==0) return;
+    
+    //2.开始地理编码
+    //说明：调用下面的方法开始编码，不管编码是成功还是失败都会调用block中的方法
+    CLGeocoder *_geocoder=[[CLGeocoder alloc]init];
+    [_geocoder geocodeAddressString:locationStr completionHandler:^(NSArray *placemarks, NSError *error) {
+        //如果有错误信息，或者是数组中获取的地名元素数量为0，那么说明没有找到
+        if (error || placemarks.count==0) {
+            // 1.跳出弹出框，提示用户打开步骤。
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"你输入的地址有误，请重新输入" preferredStyle:UIAlertControllerStyleAlert];
+            [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action)
+                                        {}]];
+            [self presentViewController:alertController animated:YES completion:nil];
+//            NSLog(@"你输入的地址没找到，可能在月球上") ;
+        }else   //  编码成功，找到了具体的位置信息
+        {
+            //打印查看找到的所有的位置信息
+            /*
+             name:名称
+             locality:城市
+             country:国家
+             postalCode:邮政编码
+             */
+            for (CLPlacemark *placemark in placemarks) {
+                NSLog(@"name=%@ locality=%@ country=%@ postalCode=%@",placemark.name,placemark.locality,placemark.country,placemark.postalCode);
+            }
+            
+            //取出获取的地理信息数组中的第一个显示在界面上
+            CLPlacemark *firstPlacemark=[placemarks firstObject];
+            //详细地址名称
+//            NSLog(@"你输入的地址没找到可能在月球上-----%@",firstPlacemark.name) ;
+            
+//            self.detailAddressLabel.text=firstPlacemark.name;
+            //纬度
+            CLLocationDegrees latitude=firstPlacemark.location.coordinate.latitude;
+            //经度
+            CLLocationDegrees longitude=firstPlacemark.location.coordinate.longitude;
+            CLLocationCoordinate2D coords = CLLocationCoordinate2DMake(latitude,longitude);
+            float zoomLevel = 0.005;
+            MKCoordinateRegion region = MKCoordinateRegionMake(coords,MKCoordinateSpanMake(zoomLevel, zoomLevel));
+            [_mapView setRegion:[_mapView regionThatFits:region] animated:YES];
+//             NSLog(@"你经纬度-----%f,%f",latitude,longitude) ;
+        }
+    }];
+}
+- (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
+}
+
+
 @end

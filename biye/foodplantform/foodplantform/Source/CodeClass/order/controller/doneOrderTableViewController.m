@@ -18,6 +18,8 @@
 @property (nonatomic,strong)BmobQuery   *userOrderQuery;
 
 @property (nonatomic,strong)BmobQuery   *applyOrderQuery;
+//已完成的订单  apply表里面的订单 的订单数
+@property (nonatomic,assign)NSInteger senderOrderArrNum;
 
 @end
 
@@ -32,14 +34,27 @@
     self.tableView.rowHeight = 150+10;
      [self.tableView registerClass:[OrderCell class] forCellReuseIdentifier:@"OrderCell"];
     [self loadDataArr];
+    [self setupAllOrderProgressHud];
+    _allOrderHud.hidden =YES;
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
+// 第三方小菊花
+- (void)setupAllOrderProgressHud
+{
+    self.allOrderHud = [[MBProgressHUD alloc] initWithView:self.view];
+    _allOrderHud.frame = self.view.bounds;
+    _allOrderHud.minSize = CGSizeMake(100, 100);
+    _allOrderHud.mode = MBProgressHUDModeIndeterminate;
+    [self.view addSubview:_allOrderHud];
+    [_allOrderHud show:YES];
+}
 - (void)loadDataArr
 {
+    _allOrderHud.hidden = NO;
     //条件语句
     NSArray *queryArr;
     //查找user_order表里面里面的所有数据
@@ -61,11 +76,12 @@
                 }
             }
             [self.tableView reloadData];
+            _allOrderHud.hidden = YES;
         }];
     }else if(_orderType.integerValue == 2 ||_orderType.integerValue ==3)
     {
         
-        queryArr =[[NSArray alloc] initWithObjects:@{@"sender_userID":bUser.objectId},@{@"sender_OrderType":_orderType},nil];
+        queryArr =[[NSArray alloc] initWithObjects:@{@"sender_userID":bUser.objectId},@{@"sender_OrderType":_orderType},@{@"apply_type":@"0"},nil];
         [_applyOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
 
         [_applyOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
@@ -79,11 +95,12 @@
                 }
             }
             [self.tableView reloadData];
+            _allOrderHud.hidden = YES;
         }];
         
     }else if(_orderType.integerValue == 5 ||_orderType.integerValue ==4)
     {
-        queryArr =[[NSArray alloc] initWithObjects:@{@"apply_userID":bUser.objectId},@{@"apply_orderType":_orderType},nil];
+        queryArr =[[NSArray alloc] initWithObjects:@{@"apply_userID":bUser.objectId},@{@"apply_orderType":_orderType},@{@"apply_type":@"0"},nil];
         [_applyOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
 
         [_applyOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
@@ -98,7 +115,41 @@
             NSLog(@"_orderDataArr----------%lu",(unsigned long)_orderDataArr.count);
 
             [self.tableView reloadData];
+            _allOrderHud.hidden = YES;
         }];
+    }else if(_orderType.integerValue == 1) //已完成订单  去评价
+    {
+        queryArr =[[NSArray alloc] initWithObjects:@{@"sender_userID":bUser.objectId},@{@"sender_OrderType":_orderType},@{@"apply_type":@"0"},nil];
+        BmobQuery * _senderOrderQuery = [BmobQuery queryWithClassName:@"user_apply"];
+        [_senderOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
+        [_senderOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+            [_orderDataArr removeAllObjects];
+            for (BmobObject *obj in array)
+            {
+                if (obj) {
+                    UserApplyListModel *model = [[UserApplyListModel alloc] initWithBomdModel:obj];
+                    [ _orderDataArr addObject:model];
+                    
+                }
+            }
+        }];
+        BmobQuery * _applyedOrderQuery = [BmobQuery queryWithClassName:@"user_apply"];
+        queryArr =[[NSArray alloc] initWithObjects:@{@"apply_userID":bUser.objectId},@{@"apply_orderType":_orderType},@{@"apply_type":@"0"},nil];
+        [_applyedOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
+        
+        [_applyedOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+            for (BmobObject *obj in array)
+            {
+                if (obj) {
+                    UserApplyListModel *model = [[UserApplyListModel alloc] initWithBomdModel:obj];
+                    [ _orderDataArr addObject:model];
+                    
+                }
+            }
+            [self.tableView reloadData];
+            _allOrderHud.hidden = YES;
+        }];
+
     }
 
    
@@ -159,8 +210,9 @@
         
     }
     cell.vcOrderType = _orderType;
-    cell.delegate =self;
+    
     cell.model = _orderDataArr[indexPath.row];
+   cell.delegate =self;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     // Configure the cell...
     
@@ -174,12 +226,46 @@
 }
 //处理拼单时间
 - (void)handleOrderCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(BmobOrderModel *)handeledModel
-{   //修改状态 之后重新加载数据
-    BmobObject  *user_apply = [BmobObject objectWithoutDatatWithClassName:@"user_apply" objectId:model.applyListobjectId];
-    [user_apply setObject:@"3" forKey:@"sender_OrderType"];
-    [user_apply setObject:@"5" forKey:@"apply_orderType"];
-    [user_apply updateInBackground];
-    [self loadDataArr];
+{
+    
+    //修改状态 之后重新加载数据
+    if (_orderType.integerValue == 2)//处理的订单
+    {
+        BmobObject  *user_apply = [BmobObject objectWithoutDatatWithClassName:@"user_apply" objectId:model.applyListobjectId];
+        [user_apply setObject:@"3" forKey:@"sender_OrderType"];
+        [user_apply setObject:@"5" forKey:@"apply_orderType"];
+        [user_apply updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+            [[regAndLogTool shareTools]  messageShowWith:@"已审核" cancelStr:@"确定"];
+            [self loadDataArr];
+        }];
+       
+    }else if(_orderType.integerValue == 3)// 组队就餐
+      {
+         BmobQuery  *    _handelOrderQuery = [BmobQuery queryWithClassName:@"user_apply"];
+          //添加user_order是gauge订单的信息
+         [_handelOrderQuery whereKey:@"order_ID" equalTo:handeledModel.orderID];
+         [_handelOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+               
+               for (BmobObject *obj in array)
+               {
+                   if (obj) {
+                       BmobObjectsBatch    *batch = [[BmobObjectsBatch alloc] init] ;
+                       //在GameScore表中创建一条数据
+                       //在GameScore表中更新objectId为27eabbcfec的数据 @{@"apply_orderType":_orderType}
+                       [batch updateBmobObjectWithClassName:@"user_apply" objectId:obj.objectId parameters:@{@"apply_orderType": @"1",@"sender_OrderType": @"1"}];
+                       //在GameScore表中删除objectId为30752bb92f的数据
+                       //[batch deleteBmobObjectWithClassName:@"GameScore" objectId:@"30752bb92f"];
+                       [batch batchObjectsInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+                          NSLog(@"batch error %@",[error description]);
+                       }];
+                   }
+                  
+               }
+           }];
+          
+          
+      }
+    
 }
 /*
 // Override to support conditional editing of the table view.
