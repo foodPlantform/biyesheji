@@ -61,7 +61,7 @@
         [self.dataArr removeAllObjects];
         for (BmobObject *obj in array) {
             foodModel *fm = [[foodModel alloc]init];
-            fm.fid = [obj objectForKey:@"objectid"];
+            fm.fid = [obj objectForKey:@"objectId"];
             fm.foodName =[obj objectForKey:@"foodname"];
             fm.foodDes =[obj objectForKey:@"fooddes"];
             fm.address =[obj objectForKey:@"address"];
@@ -71,6 +71,7 @@
             fm.userName  =[obj objectForKey:@"username"];
             fm.picUrl = [obj objectForKey:@"picurl"];
             fm.cityName = [obj objectForKey:@"city"];
+            fm.phone = [obj objectForKey:@"phone"];
             [self.dataArr addObject:fm];
         }
 
@@ -101,7 +102,7 @@
     [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
         for (BmobObject *obj in array) {
             foodModel *fm = [[foodModel alloc]init];
-            fm.fid = [obj objectForKey:@"objectid"];
+            fm.fid = [obj objectForKey:@"objectId"];
             fm.foodName =[obj objectForKey:@"foodname"];
             fm.foodDes =[obj objectForKey:@"fooddes"];
             fm.address =[obj objectForKey:@"address"];
@@ -111,6 +112,7 @@
             fm.userName  =[obj objectForKey:@"username"];
             fm.picUrl = [obj objectForKey:@"picurl"];
             fm.cityName = [obj objectForKey:@"city"];
+            fm.phone = [obj objectForKey:@"phone"];
             [self.dataArr addObject:fm];
         }
         
@@ -177,7 +179,7 @@
     [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
         for (BmobObject *obj in array) {
             foodModel *fm = [[foodModel alloc]init];
-            fm.fid = [obj objectForKey:@"objectid"];
+            fm.fid = [obj objectForKey:@"objectId"];
             fm.foodName =[obj objectForKey:@"foodname"];
             fm.foodDes =[obj objectForKey:@"fooddes"];
             fm.address =[obj objectForKey:@"address"];
@@ -187,6 +189,7 @@
             fm.userName  =[obj objectForKey:@"username"];
             fm.picUrl = [obj objectForKey:@"picurl"];
             fm.cityName = [obj objectForKey:@"city"];
+            fm.phone = [obj objectForKey:@"phone"];
             [self.dataArr addObject:fm];
         }
         
@@ -292,7 +295,7 @@
         [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
             for (BmobObject *obj in array) {
                 foodModel *fm = [[foodModel alloc]init];
-                fm.fid = [obj objectForKey:@"objectid"];
+                fm.fid = [obj objectForKey:@"objectId"];
                 fm.foodName =[obj objectForKey:@"foodname"];
                 fm.foodDes =[obj objectForKey:@"fooddes"];
                 fm.address =[obj objectForKey:@"address"];
@@ -302,6 +305,7 @@
                 fm.userName  =[obj objectForKey:@"username"];
                 fm.picUrl = [obj objectForKey:@"picurl"];
                 fm.cityName = [obj objectForKey:@"city"];
+                fm.phone = [obj objectForKey:@"phone"];
                 [self.dataArr addObject:fm];
             }
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -346,7 +350,7 @@
             [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
                 for (BmobObject *obj in array) {
                     foodModel *fm = [[foodModel alloc]init];
-                    fm.fid = [obj objectForKey:@"objectid"];
+                    fm.fid = [obj objectForKey:@"objectId"];
                     fm.foodName =[obj objectForKey:@"foodname"];
                     fm.foodDes =[obj objectForKey:@"fooddes"];
                     fm.address =[obj objectForKey:@"address"];
@@ -356,6 +360,7 @@
                     fm.userName  =[obj objectForKey:@"username"];
                     fm.picUrl = [obj objectForKey:@"picurl"];
                     fm.cityName = [obj objectForKey:@"city"];
+                    fm.phone = [obj objectForKey:@"phone"];
                     [self.dataArr addObject:fm];
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -372,7 +377,7 @@
             [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
                 for (BmobObject *obj in array) {
                     foodModel *fm = [[foodModel alloc]init];
-                    fm.fid = [obj objectForKey:@"objectid"];
+                    fm.fid = [obj objectForKey:@"objectId"];
                     fm.foodName =[obj objectForKey:@"foodname"];
                     fm.foodDes =[obj objectForKey:@"fooddes"];
                     fm.address =[obj objectForKey:@"address"];
@@ -382,6 +387,7 @@
                     fm.userName  =[obj objectForKey:@"username"];
                     fm.picUrl = [obj objectForKey:@"picurl"];
                     fm.cityName = [obj objectForKey:@"city"];
+                    fm.phone = [obj objectForKey:@"phone"];
                     [self.dataArr addObject:fm];
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -407,7 +413,7 @@
             [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
                 for (BmobObject *obj in array) {
                     foodModel *fm = [[foodModel alloc]init];
-                    fm.fid = [obj objectForKey:@"objectid"];
+                    fm.fid = [obj objectForKey:@"objectId"];
                     fm.foodName =[obj objectForKey:@"foodname"];
                     fm.foodDes =[obj objectForKey:@"fooddes"];
                     fm.address =[obj objectForKey:@"address"];
@@ -417,6 +423,7 @@
                     fm.userName  =[obj objectForKey:@"username"];
                     fm.picUrl = [obj objectForKey:@"picurl"];
                     fm.cityName = [obj objectForKey:@"city"];
+                    fm.phone = [obj objectForKey:@"phone"];
                     [self.dataArr addObject:fm];
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -434,7 +441,7 @@
             [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
                 for (BmobObject *obj in array) {
                     foodModel *fm = [[foodModel alloc]init];
-                    fm.fid = [obj objectForKey:@"objectid"];
+                    fm.fid = [obj objectForKey:@"objectId"];
                     fm.foodName =[obj objectForKey:@"foodname"];
                     fm.foodDes =[obj objectForKey:@"fooddes"];
                     fm.address =[obj objectForKey:@"address"];
@@ -444,6 +451,7 @@
                     fm.userName  =[obj objectForKey:@"username"];
                     fm.picUrl = [obj objectForKey:@"picurl"];
                     fm.cityName = [obj objectForKey:@"city"];
+                    fm.phone = [obj objectForKey:@"phone"];
                     [self.dataArr addObject:fm];
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -465,7 +473,7 @@
             [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
                 for (BmobObject *obj in array) {
                     foodModel *fm = [[foodModel alloc]init];
-                    fm.fid = [obj objectForKey:@"objectid"];
+                    fm.fid = [obj objectForKey:@"objectId"];
                     fm.foodName =[obj objectForKey:@"foodname"];
                     fm.foodDes =[obj objectForKey:@"fooddes"];
                     fm.address =[obj objectForKey:@"address"];
@@ -475,6 +483,7 @@
                     fm.userName  =[obj objectForKey:@"username"];
                     fm.picUrl = [obj objectForKey:@"picurl"];
                     fm.cityName = [obj objectForKey:@"city"];
+                    fm.phone = [obj objectForKey:@"phone"];
                     [self.dataArr addObject:fm];
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -527,7 +536,7 @@
     cell.foodName.text = fm.foodName;
 
     
-    cell.starScore.value  = 3;
+    cell.starScore.value  = [fm.score floatValue];
     cell.addressLabel.text = fm.address;
     cell.sty.text = fm.sty;
     

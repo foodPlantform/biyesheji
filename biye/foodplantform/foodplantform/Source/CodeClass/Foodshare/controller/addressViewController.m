@@ -17,7 +17,7 @@
 @property(nonatomic,strong)NSMutableArray *dataArr;
 @property(nonatomic,strong)NSString *nickname;
 @property(nonatomic,strong)NSString *username;
-@property(nonatomic,strong)NSString *phone;
+
 @property(nonatomic,strong)NSString *phonenow;
 @property(nonatomic,strong)NSString *address;
 @end
@@ -138,7 +138,38 @@
 }
 -(void)btnAction
 {
-    NSLog(@"%@",self.username);
+    BmobUser *user =[BmobUser getCurrentUser];
+    BmobObject *user_applyList = [BmobObject objectWithClassName:@"user_apply"];
+    //订单 申请的人数 及状态 5 通过 4待审核  拼单人的状态
+    //订单状态 1已完成   2待处理的 3 已处理 发单人的订单状态
+    
+    [user_applyList setObject:@"4" forKey:@"apply_orderType"];
+    [user_applyList setObject:@"2" forKey:@"sender_OrderType"];
+    //0 表示order表 1 food表
+    [user_applyList setObject:@"1" forKey:@"apply_type"];
+    [user_applyList setObject:user.objectId forKey:@"apply_userID"];
+    [user_applyList setObject:user.username forKey:@"apply_userName"];
+    BmobQuery *query = [BmobQuery queryWithClassName:@"_User"];
+     [user_applyList setObject:self.foodID forKey:@"order_ID"];
+    [query whereKey:@"mobilePhone" equalTo:self.phone];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        for (BmobObject *obj in array) {
+            NSString *userID = [obj objectForKey:@"objectId"];
+            [user_applyList setObject:userID forKey:@"sender_userID"];
+            NSString *userName = [obj objectForKey:@"username"];
+            [user_applyList setObject:userName forKey:@"sender_userName"];
+            
+        }
+        [user_applyList saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+            if (isSuccessful) {
+                [[regAndLogTool shareTools] messageShowWith:@"预订成功" cancelStr:@"确定"];
+            }
+        }];
+    }];
+   
+   
+  
+    NSLog(@"%@%@",self.foodID, self.username);
 }
 /*
 #pragma mark - Navigation

@@ -38,6 +38,7 @@
     self.menuView.slideSwitchViewDelegate =self;
     [self.scrollView addSubview:self.menuView];
     pinglunViewController *pinglunVc = [[pinglunViewController alloc]init];
+    pinglunVc.foodmodel_pinglun = self.foodmodel;
     
     userMessageViewController *userVc = [[userMessageViewController alloc]init];
     userVc.foodmodel_user = self.foodmodel;

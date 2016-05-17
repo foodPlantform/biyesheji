@@ -11,6 +11,7 @@
 #import "uploadFoodViewController.h"
 #import "loginViewController.h"
 #import "myFoodTableViewCell.h"
+#import "foodDetailController.h"
 
 
 @interface myFoodTableViewController ()
@@ -142,6 +143,15 @@
     }];
     [self.dataArr removeObjectAtIndex:indexPath.row];
     [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    foodModel *fm = [[foodModel alloc]init];
+    fm = self.dataArr[indexPath.row];
+    foodDetailController *foodVc = [[foodDetailController alloc]init];
+    foodVc.foodmodel = fm;
+    [self.navigationController pushViewController:foodVc animated:YES];
 }
 /*
 // Override to support conditional editing of the table view.

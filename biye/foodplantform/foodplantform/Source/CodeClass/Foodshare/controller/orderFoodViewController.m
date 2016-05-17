@@ -12,10 +12,12 @@
 #import "foodDetailController.h"
 #import "AppDelegate.h"
 #import "loginViewController.h"
+#import "chooseTimeViewController.h"
 
 @interface orderFoodViewController ()
 @property(nonatomic,strong)orderView *ov;
 @property(nonatomic,assign)NSInteger num;
+@property(nonatomic,strong)NSString *ID;
 @end
 
 @implementation orderFoodViewController
@@ -35,6 +37,8 @@
     self.ov.resultName.text = self.foodmodel_ord.foodName;
     self.ov.resultNum.text = @"0份";
     self.num = 0;
+    NSLog(@"%@===",_foodmodel_ord.phone);
+   
     // Do any additional setup after loading the view.
 }
 -(void)addNumAction
@@ -70,6 +74,7 @@
 }
 -(void)sureAction
 {
+    
     if ([regAndLogTool shareTools].loginName == nil) {
         loginViewController *loginVc = [[loginViewController alloc]init];
         UINavigationController *na = [[UINavigationController alloc]initWithRootViewController:loginVc];
@@ -80,13 +85,34 @@
     }
     else
     {
-        if ([self.ov.resultNum.text  isEqualToString:@""] || [self.ov.resultNum.text isEqualToString:@"0份"]) {
+        BmobUser *user = [BmobUser getCurrentUser];
+        if ([user.mobilePhoneNumber isEqualToString:self.foodmodel_ord.phone]) {
+            
+            [[regAndLogTool shareTools] messageShowWith:@"自己的上传,不能预订" cancelStr:@"确定"];
+            return;
+        }
+       
+       else if ([self.ov.resultNum.text  isEqualToString:@""] || [self.ov.resultNum.text isEqualToString:@"0份"])
+       {
             [[regAndLogTool shareTools] messageShowWith:@"请选择份数" cancelStr:@"确定"];
             return;
+        }
+        else if ([self.foodmodel_ord.rec isEqualToString:@"不接受预订"])
+        {
+            [[regAndLogTool shareTools] messageShowWith:@"不接受预订" cancelStr:@"确定"];
+            return;
+        }
+        else if ([self.foodmodel_ord.sty isEqualToString:@"堂食"])
+        {
+            //[[regAndLogTool shareTools] messageShowWith:@"预订成功" cancelStr:@"确定"];
+            chooseTimeViewController *chVc =  [[chooseTimeViewController alloc]init];
+            [self.parentVc.navigationController pushViewController:chVc animated:YES];
         }
         else
         {
             addressViewController *addVc = [[addressViewController alloc]init];
+            addVc.foodID  = self.foodmodel_ord.fid;
+            addVc.phone = self.foodmodel_ord.phone;
             [_parentVc.navigationController pushViewController:addVc animated:YES];
             [_parentVc setHidesBottomBarWhenPushed:YES];
 

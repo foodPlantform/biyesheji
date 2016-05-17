@@ -12,5 +12,6 @@
 @property(nonatomic,strong) NSString * ordID;
 @property(nonatomic,strong) NSString * name;
 @property(nonatomic,strong) NSString * content;
+@property(nonatomic,strong) NSString *star;
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key;
 @end

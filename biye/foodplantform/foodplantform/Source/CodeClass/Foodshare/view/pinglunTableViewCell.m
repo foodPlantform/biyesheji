@@ -26,6 +26,7 @@
     self.star = [[HCSStarRatingView alloc]initWithFrame:CGRectMake(CGRectGetMinX(self.name.frame), CGRectGetMaxY(self.name.frame)+5, 100, 20)];
     self.star.maximumValue = 5;
     self.star.minimumValue = 0;
+    self.star.allowsHalfStars = YES;
     self.star.tintColor = [UIColor redColor];
     self.star.enabled = NO;
 

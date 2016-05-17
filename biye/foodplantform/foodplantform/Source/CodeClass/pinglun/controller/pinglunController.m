@@ -11,8 +11,11 @@
 
 @interface pinglunController ()
 @property(nonatomic,strong)pinglunView *pv;
-@property(nonatomic,strong)NSMutableString *starStr;
+@property(nonatomic,assign)CGFloat starStr;
 @property(nonatomic,strong) MBProgressHUD *hud;
+
+@property(nonatomic,assign)CGFloat score;
+@property(nonatomic,assign)NSInteger num;
 @end
 
 @implementation pinglunController
@@ -36,11 +39,14 @@
     [self.pv.sure addTarget:self action:@selector(sureAction) forControlEvents:UIControlEventTouchUpInside];
     // 添加星星点击事件
     [self.pv.star addTarget:self action:@selector(starAction:) forControlEvents:UIControlEventTouchUpInside];
+    _score = 0;
+    _num = 0;
     // Do any additional setup after loading the view.
 }
 -(void)starAction:(HCSStarRatingView *)sender
 {
-    self.starStr = [NSMutableString stringWithFormat:@"%f",sender.value];
+    //self.starStr = [NSMutableString stringWithFormat:@"%0.1f",sender.value];
+    self.starStr = sender.value;
     NSLog(@"%.1f",sender.value);
 }
 -(void)sureAction
@@ -48,11 +54,42 @@
     [self p_setupProgressHud];
     BmobUser *user = [BmobUser getCurrentUser];
     
+//    BmobQuery *query = [BmobQuery queryWithClassName:@"pinglun"];
+//    [query whereKey:@"ordid" equalTo:];
+//    [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+//        for (BmobObject *obj in array) {
+//            _score += [[obj objectForKey:@"star"] floatValue];
+//            _num+=1;
+//            
+//        }
+//        _score = _score/_num;
+//        NSString *foodscore = [NSString stringWithFormat:@"%f0.1",_score];
+//        
+//        BmobQuery *foodquery = [BmobQuery queryWithClassName:@"food_message"];
+//        [foodquery whereKey:@"objectId" equalTo:];
+//        [foodquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+//           
+//            for (BmobObject *foodObj in array) {
+//                [foodObj setObject:foodscore forKey:@"score"];
+//                [foodObj updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+//                    
+//                }];
+//                
+//            }
+//        }];
+//        
+//      
+//        
+//        
+//    }];
+    
     BmobObject *obj = [BmobObject objectWithClassName:@"pinglun"];
     [obj setObject:user.username forKey:@"username"];
     [obj setObject:user.mobilePhoneNumber forKey:@"userphone"];
     [obj setObject:self.pv.pinglun.text forKey:@"content"];
-    [obj setObject:self.starStr forKey:@"star"];
+    [obj setObject:[NSNumber numberWithFloat:_starStr] forKey:@"star"];
+    
+    
     
     
     [obj saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {

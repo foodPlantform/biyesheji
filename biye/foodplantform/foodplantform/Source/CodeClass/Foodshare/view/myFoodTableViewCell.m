@@ -7,6 +7,7 @@
 //
 
 #import "myFoodTableViewCell.h"
+#import "foodlistTableViewCell.h"
 
 @implementation myFoodTableViewCell
 

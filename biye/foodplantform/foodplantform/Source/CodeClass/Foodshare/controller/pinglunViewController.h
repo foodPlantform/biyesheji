@@ -10,4 +10,5 @@
 
 @interface pinglunViewController : UIViewController
 @property(nonatomic,strong)UITableView *tableView;
+@property(nonatomic,strong)foodModel *foodmodel_pinglun;
 @end

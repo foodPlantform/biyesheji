@@ -8,8 +8,10 @@
 
 #import "pinglunViewController.h"
 #import "pinglunTableViewCell.h"
-@interface pinglunViewController ()<UITableViewDataSource,UITableViewDelegate>
+#import "pinglunModel.h"
 
+@interface pinglunViewController ()<UITableViewDataSource,UITableViewDelegate>
+@property(nonatomic,strong)NSMutableArray *dataArr;
 @end
 
 @implementation pinglunViewController
@@ -23,6 +25,23 @@
     self.tableView.dataSource = self;
     self.tableView.delegate = self;
     [self.tableView registerClass:[pinglunTableViewCell class] forCellReuseIdentifier:@"cell"];
+    
+    self.dataArr = [NSMutableArray array];
+    BmobQuery *query = [BmobQuery queryWithClassName:@"pinglun"];
+    [query whereKey:@"ordid" equalTo:self.foodmodel_pinglun.fid];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        for (BmobObject *obj in array) {
+            pinglunModel *pm = [[pinglunModel alloc]init];
+            pm.ordID = [obj objectForKey:@"ordid"];
+            pm.content = [obj objectForKey:@"content"];
+            pm.name = [obj objectForKey:@"username"];
+            pm.star = [obj objectForKey:@"star"];
+            [self.dataArr addObject:pm];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+        });
+    }];
     // Do any additional setup after loading the view.
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -31,7 +50,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 20;
+    return self.dataArr.count;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -44,7 +63,10 @@
         cell = [[pinglunTableViewCell alloc]initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cell_id];
     }
 
-   
+    pinglunModel *pm = self.dataArr[indexPath.row];
+    cell.name.text = pm.name;
+    cell.star.value = [pm.star floatValue];
+    cell.content.text = pm.content;
     
     //cell.userName.text = @"qwer";
     return cell;

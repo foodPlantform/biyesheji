@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface addressViewController : UIViewController
-
+@property(nonatomic,strong)NSString * foodID;
+@property(nonatomic,strong)NSString *phone;
 @end
