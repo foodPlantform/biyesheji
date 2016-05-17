@@ -15,7 +15,7 @@
 @property(nonatomic,strong)loadupFoodView *lv;
 @property(nonatomic,assign)BOOL isFullScreen;
 @property(nonatomic,assign)BOOL isupload;
-
+@property(nonatomic,strong)NSString *phone;
 @end
 
 @implementation uploadFoodViewController
@@ -39,6 +39,10 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    BmobUser *user = [BmobUser getCurrentUser];
+    self.phone = user.mobilePhoneNumber;
+    
     [self.lv.imgBtn addTarget:self action:@selector(imgBtnAction) forControlEvents:UIControlEventTouchUpInside];
     [self.lv.chooseRec addTarget:self action:@selector(chooseRecAction) forControlEvents:UIControlEventTouchUpInside];
     [self.lv.chooseSty addTarget:self action:@selector(chooseStyAction) forControlEvents:UIControlEventTouchUpInside];
@@ -80,7 +84,7 @@
             [_uploadObject setObject:stuff.sty forKey:@"sty"];
             [_uploadObject setObject:file.url forKey:@"picurl"];
             [_uploadObject setObject:stuff.cityName forKey:@"city"];
-            
+            [_uploadObject setObject:_phone forKey:@"phone"];
             [_uploadObject saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
                 if (isSuccessful) {
                     
@@ -122,6 +126,7 @@
         fm.rec = self.lv.rec.text;
         fm.sty = self.lv.sty.text;
         fm.cityName = self.lv.cityLabel.text;
+        fm.phone = _phone;
         if ([regAndLogTool shareTools].loginName != nil ) {
             BmobUser *user = [BmobUser getCurrentUser];
             [self uploadWith:fm username:user.username image:self.lv.picture.image];

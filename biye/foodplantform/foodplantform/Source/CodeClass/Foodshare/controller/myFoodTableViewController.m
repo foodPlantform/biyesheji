@@ -1,25 +1,27 @@
 //
-//  upListTableViewController.m
+//  myFoodTableViewController.m
 //  foodplantform
 //
-//  Created by 马文豪 on 16/5/11.
+//  Created by 马文豪 on 16/5/15.
 //  Copyright © 2016年 马文豪. All rights reserved.
 //
 
-#import "upListTableViewController.h"
+#import "myFoodTableViewController.h"
 #import "loginViewController.h"
 #import "uploadFoodViewController.h"
 #import "loginViewController.h"
 #import "myFoodTableViewCell.h"
 
-@interface upListTableViewController ()
+
+@interface myFoodTableViewController ()
 @property(nonatomic,strong)NSMutableArray *dataArr;
 @end
 
-@implementation upListTableViewController
+@implementation myFoodTableViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.dataArr = [NSMutableArray array];
     [self.tableView registerClass:[myFoodTableViewCell class] forCellReuseIdentifier:@"cell"];
     if ([regAndLogTool shareTools].loginName == nil) {
         loginViewController *logVc = [[loginViewController alloc]init];
@@ -38,7 +40,7 @@
         [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
             for (BmobObject *obj in array) {
                 foodModel *fm = [[foodModel alloc]init];
-                fm.fid = [obj objectForKey:@"objectid"];
+                fm.fid = [obj objectForKey:@"objectId"];
                 fm.foodName =[obj objectForKey:@"foodname"];
                 fm.foodDes =[obj objectForKey:@"fooddes"];
                 fm.address =[obj objectForKey:@"address"];
@@ -51,7 +53,7 @@
                 [self.dataArr addObject:fm];
                 
             }
-           
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
             });
@@ -102,23 +104,45 @@
 }
 
 
-
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     myFoodTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
     foodModel *myFood = [[foodModel alloc]init];
     myFood = self.dataArr[indexPath.row];
     
     [cell.pic sd_setImageWithURL:[NSURL URLWithString:myFood.picUrl]];
     cell.foodName.text = myFood.foodName;
-    
+    NSLog(@"%@",myFood.fid);
     return cell;
 }
+
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 100;
 }
 
+-(UITableViewCellEditingStyle )tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleDelete;
+}
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    foodModel *fm = self.dataArr[indexPath.row];
+    BmobObject *obj = [BmobObject objectWithoutDatatWithClassName:@"food_message" objectId:fm.fid];
+    [obj deleteInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
+        if (isSuccessful) {
+            [[regAndLogTool shareTools] messageShowWith:@"删除成功" cancelStr:@"确定"];
+        }
+        else
+        {
+            NSLog(@"%@",error);
+        }
+        
+        
+    }];
+    [self.dataArr removeObjectAtIndex:indexPath.row];
+    [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationLeft];
+}
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

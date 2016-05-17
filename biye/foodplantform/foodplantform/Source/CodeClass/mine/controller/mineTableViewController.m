@@ -12,6 +12,9 @@
 #import "loginViewController.h"
 #import "orderViewController.h"
 #import "userViewController.h"
+#import "upListTableViewController.h"
+#import "myFoodTableViewController.h"
+#import "pinglunController.h"
 
 @interface mineTableViewController ()
 @property(nonatomic,strong)UITapGestureRecognizer *tap;
@@ -49,7 +52,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 #warning Incomplete implementation, return the number of rows
-    return 5;
+    return 6;
 }
 
 
@@ -94,6 +97,9 @@
         if (indexPath.section == 0 && indexPath.row == 4) {
             cell.textLabel.text = @"注销登录";
         }
+        if (indexPath.section == 0 && indexPath.row == 5) {
+            cell.textLabel.text  = @"评论";
+        }
         
         
         return cell;
@@ -126,8 +132,10 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0 && indexPath.row == 1) {
-        uploadFoodViewController *upVc = [[uploadFoodViewController alloc]init];
-        [self.navigationController pushViewController:upVc animated:YES];
+        
+        myFoodTableViewController *myVC = [[myFoodTableViewController alloc]init];
+        [self.navigationController pushViewController:myVC animated:YES];
+        
     }
     if (indexPath.section == 0 && indexPath.row == 2) {
         orderViewController *ordVc = [[orderViewController alloc]init];
@@ -141,6 +149,10 @@
         [BmobUser logout];
         [[regAndLogTool shareTools] setValue:nil forKey:@"loginName"];
         [[regAndLogTool shareTools] messageShowWith:@"注销成功" cancelStr:@"确定"];
+    }
+    if (indexPath.section == 0 && indexPath.row == 5) {
+        pinglunController *pinglunVc = [[pinglunController alloc]init];
+        [self.navigationController pushViewController:pinglunVc animated:YES];
     }
 }
 

@@ -24,6 +24,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleDone target:self action:@selector(leftAction)];
     self.view.backgroundColor = [UIColor whiteColor];
     self.edgesForExtendedLayout = UIRectEdgeNone;
     self.scrollView = [[UIScrollView alloc]initWithFrame:self.view.frame];
@@ -42,6 +43,7 @@
     userVc.foodmodel_user = self.foodmodel;
     
     orderFoodViewController *ordVc = [[orderFoodViewController alloc]init];
+    ordVc.parentVc = self;
     ordVc.foodmodel_ord = [[foodModel alloc]init];
     ordVc.foodmodel_ord = self.foodmodel;
     self.arr = [NSArray arrayWithObjects:ordVc,pinglunVc,userVc, nil];
@@ -54,6 +56,11 @@
     
     
     // Do any additional setup after loading the view.
+}
+-(void)leftAction
+{
+    [self.navigationController popViewControllerAnimated:YES];
+    //self.hidesBottomBarWhenPushed = YES;
 }
 - (NSUInteger)numberOfTab:(SUNSlideSwitchView *)view
 {

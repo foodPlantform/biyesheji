@@ -10,4 +10,6 @@
 
 @interface orderFoodViewController : UIViewController
 @property(nonatomic,strong)foodModel *foodmodel_ord;
+@property(nonatomic,strong)UIViewController *parentVc;
+
 @end

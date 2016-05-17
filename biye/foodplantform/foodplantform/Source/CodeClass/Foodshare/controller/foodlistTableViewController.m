@@ -167,13 +167,39 @@
     self.bQuery = [BmobQuery queryWithClassName:@"food_message"];
     self.bQuery.limit = 10;
     self.bQuery.skip = 0;
-    [[uploadTool shareTool] getuploadDataWithPassValue:^(NSArray *upArr) {
-        self.dataArr = upArr;
+//    [[uploadTool shareTool] getuploadDataWithPassValue:^(NSArray *upArr) {
+//        self.dataArr = upArr;
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self.tableView reloadData];
+//            self.hud.hidden = YES;
+//        });
+//    }];
+    [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        for (BmobObject *obj in array) {
+            foodModel *fm = [[foodModel alloc]init];
+            fm.fid = [obj objectForKey:@"objectid"];
+            fm.foodName =[obj objectForKey:@"foodname"];
+            fm.foodDes =[obj objectForKey:@"fooddes"];
+            fm.address =[obj objectForKey:@"address"];
+            fm.rec =[obj objectForKey: @"rec"];
+            fm.sty =[obj objectForKey:@"sty"] ;
+            fm.score =[obj objectForKey:@"score"] ;
+            fm.userName  =[obj objectForKey:@"username"];
+            fm.picUrl = [obj objectForKey:@"picurl"];
+            fm.cityName = [obj objectForKey:@"city"];
+            [self.dataArr addObject:fm];
+        }
+        
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.tableView reloadData];
             self.hud.hidden = YES;
+            
+            [self.tableView.mj_footer endRefreshing];
+            
         });
+        
     }];
+
     [self setupRefresh];
     
     
@@ -497,9 +523,9 @@
     foodModel *fm = [[foodModel alloc]init];
     fm = self.dataArr[indexPath.row];
     [cell.foodPic sd_setImageWithURL:[NSURL URLWithString:fm.picUrl]];
-    NSLog(@"%@",fm.picUrl);
+   
     cell.foodName.text = fm.foodName;
-    NSLog(@"%@",fm.foodName);
+
     
     cell.starScore.value  = 3;
     cell.addressLabel.text = fm.address;
@@ -524,6 +550,7 @@
     foodDetailController *foodVc = [[foodDetailController alloc]init];
     foodVc.foodmodel = fm;
     [self.navigationController pushViewController:foodVc  animated:YES];
+    [self setHidesBottomBarWhenPushed:NO];
 }
 /*
 // Override to support conditional editing of the table view.

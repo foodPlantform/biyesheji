@@ -8,6 +8,11 @@
 
 #import "orderFoodViewController.h"
 #import "orderView.h"
+#import "addressViewController.h"
+#import "foodDetailController.h"
+#import "AppDelegate.h"
+#import "loginViewController.h"
+
 @interface orderFoodViewController ()
 @property(nonatomic,strong)orderView *ov;
 @property(nonatomic,assign)NSInteger num;
@@ -26,7 +31,9 @@
     self.view.backgroundColor = [UIColor whiteColor];
     [self.ov.add addTarget:self action:@selector(addNumAction) forControlEvents:UIControlEventTouchUpInside];
     [self.ov.sub addTarget:self action:@selector(subAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.ov.sure addTarget:self action:@selector(sureAction) forControlEvents:UIControlEventTouchUpInside];
     self.ov.resultName.text = self.foodmodel_ord.foodName;
+    self.ov.resultNum.text = @"0份";
     self.num = 0;
     // Do any additional setup after loading the view.
 }
@@ -61,6 +68,43 @@
     self.ov.rec.text = self.foodmodel_ord.rec;
     self.ov.sty.text = self.foodmodel_ord.sty;
 }
+-(void)sureAction
+{
+    if ([regAndLogTool shareTools].loginName == nil) {
+        loginViewController *loginVc = [[loginViewController alloc]init];
+        UINavigationController *na = [[UINavigationController alloc]initWithRootViewController:loginVc];
+        [self.navigationController presentViewController:na animated:YES completion:^{
+            
+        }];
+        
+    }
+    else
+    {
+        if ([self.ov.resultNum.text  isEqualToString:@""] || [self.ov.resultNum.text isEqualToString:@"0份"]) {
+            [[regAndLogTool shareTools] messageShowWith:@"请选择份数" cancelStr:@"确定"];
+            return;
+        }
+        else
+        {
+            addressViewController *addVc = [[addressViewController alloc]init];
+            [_parentVc.navigationController pushViewController:addVc animated:YES];
+            [_parentVc setHidesBottomBarWhenPushed:YES];
+
+        }
+        
+    }
+    
+    
+   //    UITabBarController *tabViewController = (UITabBarController *) app.window.rootViewController;
+//    [tabViewController.navigationController pushViewController:addVc animated:YES];
+//    foodDetailController *foodVc = [[foodDetailController alloc]init];
+//    [foodVc.navigationController pushViewController:addVc animated:YES];
+//    UINavigationController *addNc = [[UINavigationController alloc]initWithRootViewController:addVc];
+//    [self.navigationController presentViewController:addNc animated:YES completion:^{
+//        
+//    }];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.

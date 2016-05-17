@@ -55,16 +55,17 @@
     self.cityStr = [NSMutableString string];
     self.cityStr = (NSMutableString *)city;
     self.cn(_cityStr);
+    //[self.navigationController popToRootViewControllerAnimated:YES];
     [self.navigationController popViewControllerAnimated:YES];
     
 }
 
 - (void)beginSearch:(UISearchBar *)searchBar{
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    //[self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
 - (void)endSearch:(UISearchBar *)searchBar{
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    //[self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 /*
