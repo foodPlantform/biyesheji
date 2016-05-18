@@ -20,6 +20,7 @@
 
 @property(nonatomic,strong)NSString *phonenow;
 @property(nonatomic,strong)NSString *address;
+@property(nonatomic,strong)NSString *senderID;
 @end
 
 @implementation addressViewController
@@ -149,23 +150,46 @@
     [user_applyList setObject:@"1" forKey:@"apply_type"];
     [user_applyList setObject:user.objectId forKey:@"apply_userID"];
     [user_applyList setObject:user.username forKey:@"apply_userName"];
+    [user_applyList setObject:self.foodID forKey:@"order_ID"];
+    NSLog(@"phone%@",_fm.phone);
     BmobQuery *query = [BmobQuery queryWithClassName:@"_User"];
-     [user_applyList setObject:self.foodID forKey:@"order_ID"];
-    [query whereKey:@"mobilePhone" equalTo:self.phone];
+    [query whereKey:@"mobilePhoneNumber" equalTo:_fm.phone];
     [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
-        for (BmobObject *obj in array) {
-            NSString *userID = [obj objectForKey:@"objectId"];
-            [user_applyList setObject:userID forKey:@"sender_userID"];
-            NSString *userName = [obj objectForKey:@"username"];
-            [user_applyList setObject:userName forKey:@"sender_userName"];
-            
-        }
+       
+        BmobObject *obj = array[0];
+        [user_applyList setObject:[obj objectForKey:@"objectId"] forKey:@"sender_userID"];
+        
+        [user_applyList setObject:[obj objectForKey:@"username"] forKey:@"sender_userName"];
+        self.senderID = [obj objectForKey:@"objectId"];
+        
         [user_applyList saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
             if (isSuccessful) {
                 [[regAndLogTool shareTools] messageShowWith:@"预订成功" cancelStr:@"确定"];
+                BmobQuery *userquery = [BmobQuery queryForUser];
+                [userquery whereKey:@"objectId" equalTo:_senderID];
+                
+                [userquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+                    
+                    BmobObject *obj = array[0];
+                    BmobPush *push = [BmobPush push];
+                    BmobQuery *query = [BmobInstallation query];
+                    [query whereKey:@"deviceToken" equalTo:[obj objectForKey:@"deviceToken"]];
+                    [push setQuery:query];
+                    [push setMessage:@"有人申请你的订单了，去看看吧"];
+                    [push sendPushInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
+                        NSLog(@"error %@",[error description]);
+                    }];
+                }];
+                
             }
         }];
+
+        
     }];
+    
+    
+
+    
    
    
   

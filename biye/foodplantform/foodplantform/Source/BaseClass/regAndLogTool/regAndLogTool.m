@@ -92,6 +92,7 @@ static regAndLogTool *rlt;
             [user updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
                 
             }];
+            
 
         }
         else

@@ -50,6 +50,9 @@
     else
     {
         [[regAndLogTool shareTools] loginWithName:self.lv.userName.text password:self.lv.pwStr.text];
+        [self.navigationController dismissViewControllerAnimated:YES completion:^{
+            
+        }];
          //        if ([[[regAndLogTool shareTools] loginWithName:self.lv.userName.text password:self.lv.pwStr.text] isEqualToString:@"成功"]) {
 //            NSLog(@"登陆成功");
 //            

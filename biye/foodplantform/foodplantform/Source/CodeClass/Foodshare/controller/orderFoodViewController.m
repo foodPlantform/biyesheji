@@ -113,6 +113,7 @@
             addressViewController *addVc = [[addressViewController alloc]init];
             addVc.foodID  = self.foodmodel_ord.fid;
             addVc.phone = self.foodmodel_ord.phone;
+            addVc.fm = self.foodmodel_ord;
             [_parentVc.navigationController pushViewController:addVc animated:YES];
             [_parentVc setHidesBottomBarWhenPushed:YES];
 

@@ -28,6 +28,9 @@
 @property(nonatomic,strong)NSMutableString *returnCityStr;
 @property(nonatomic,strong)UIBarButtonItem *showCity;
 
+@property(nonatomic,assign)CGFloat score;
+@property(nonatomic,assign)NSInteger num;
+
 @end
 
 @implementation foodlistTableViewController

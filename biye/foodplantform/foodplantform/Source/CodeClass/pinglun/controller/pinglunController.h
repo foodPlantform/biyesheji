@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface pinglunController : UIViewController
-
+@property(nonatomic,strong) NSString *ordID;
 @end

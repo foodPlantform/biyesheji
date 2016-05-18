@@ -54,36 +54,10 @@
     [self p_setupProgressHud];
     BmobUser *user = [BmobUser getCurrentUser];
     
-//    BmobQuery *query = [BmobQuery queryWithClassName:@"pinglun"];
-//    [query whereKey:@"ordid" equalTo:];
-//    [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
-//        for (BmobObject *obj in array) {
-//            _score += [[obj objectForKey:@"star"] floatValue];
-//            _num+=1;
-//            
-//        }
-//        _score = _score/_num;
-//        NSString *foodscore = [NSString stringWithFormat:@"%f0.1",_score];
-//        
-//        BmobQuery *foodquery = [BmobQuery queryWithClassName:@"food_message"];
-//        [foodquery whereKey:@"objectId" equalTo:];
-//        [foodquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
-//           
-//            for (BmobObject *foodObj in array) {
-//                [foodObj setObject:foodscore forKey:@"score"];
-//                [foodObj updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
-//                    
-//                }];
-//                
-//            }
-//        }];
-//        
-//      
-//        
-//        
-//    }];
+
     
     BmobObject *obj = [BmobObject objectWithClassName:@"pinglun"];
+    [obj setObject:self.ordID forKey:@"ordid"];
     [obj setObject:user.username forKey:@"username"];
     [obj setObject:user.mobilePhoneNumber forKey:@"userphone"];
     [obj setObject:self.pv.pinglun.text forKey:@"content"];
@@ -97,6 +71,41 @@
         if (isSuccessful) {
             [[regAndLogTool shareTools] messageShowWith:@"评论成功" cancelStr:@"确定"];
             self.hud.hidden = YES;
+                BmobQuery *query = [BmobQuery queryWithClassName:@"pinglun"];
+                [query whereKey:@"ordid" equalTo:self.ordID];
+                [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+                    if (array.count>0) {
+                        for (BmobObject *obj in array) {
+                            _score += [[obj objectForKey:@"star"] floatValue];
+                            _num+=1;
+                            
+                        }
+                        _score = _score/_num;
+                        NSString *foodscore = [NSString stringWithFormat:@"%f0.1",_score];
+                        
+                        BmobQuery *foodquery = [BmobQuery queryWithClassName:@"food_message"];
+                        [foodquery whereKey:@"objectId" equalTo:self.ordID];
+                        [foodquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+                            
+                            for (BmobObject *foodObj in array) {
+                                [foodObj setObject:foodscore forKey:@"score"];
+                                [foodObj updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+                                    
+                                }];
+                                
+                            }
+                        }];
+
+                    }
+                    else
+                    {
+                        
+                    }
+                    
+                  
+                    
+                    
+                }];
         }
     }];
     
