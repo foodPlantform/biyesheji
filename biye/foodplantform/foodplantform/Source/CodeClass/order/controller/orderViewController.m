@@ -108,15 +108,11 @@
 - (UIViewController *)slideSwitchView:(SUNSlideSwitchView *)view viewOfTab:(NSUInteger)number
 {
 
-    if (view.tag == 0) {
-        _doneVc =[[doneOrderTableViewController alloc]init];
-        _doneVc.orderType = [NSString stringWithFormat:@"%lu",(unsigned long)number];
-        return _doneVc;
-    }else
-    {
-        return _doneVc;
-    }
-    
+    _doneVc =[[doneOrderTableViewController alloc]init];
+    _doneVc.orderType = [NSString stringWithFormat:@"%lu",(unsigned long)number];
+    _doneVc.orderOrFoodType = [NSString stringWithFormat:@"%lu",(unsigned long)view.tag];
+
+     return _doneVc;
 }
 
 - (void)didReceiveMemoryWarning {

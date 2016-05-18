@@ -268,6 +268,12 @@
    // [user_order setObject:@78 forKey:@"score"];
     [user_order saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
         //进行操作
+        if (isSuccessful) {
+            BmobPush *push = [BmobPush push];
+            [push setMessage:@"有新的订单发布了"];
+            [push sendPushInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
+            }];
+        }
 //        NSLog(@"error----------%@",error);
 //        NSLog(@"isSuccessful--------%d",isSuccessful);
         _sendPindanHud.hidden = YES;

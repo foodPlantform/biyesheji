@@ -48,5 +48,26 @@ static FileManager *_manager;
     [vc presentViewController:alertController animated:YES completion:nil];
     
 }
-
+//用户当前的currentDeviceToken
+-(NSString *)currentDeviceToken
+{
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    NSData *data = [userDefault objectForKey:@"currentDeviceToken"] ;
+    NSMutableString *deviceTokenString = [NSMutableString string];
+    
+    const char *bytes = data.bytes;
+    
+    int iCount = data.length;
+    
+    for (int i = 0; i < iCount; i++) {
+        
+        [deviceTokenString appendFormat:@"%02x", bytes[i]&0x000000FF];
+        
+    }
+    
+    //NSLog(@"方式1：%@", deviceTokenString);
+    
+    
+    return deviceTokenString;
+}
 @end

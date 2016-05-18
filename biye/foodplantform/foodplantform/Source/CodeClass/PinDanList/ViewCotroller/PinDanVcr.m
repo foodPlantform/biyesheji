@@ -507,6 +507,7 @@
             [self presentViewController:alertController animated:YES completion:nil];
         }else
         {
+            
             if ([model.applyUserIDArr containsObject:bUser.objectId])
             {
                 // 1.跳出弹出框，提示用户打开步骤。
@@ -516,6 +517,20 @@
                 }]];
                 [self presentViewController:alertController animated:YES completion:nil];
             }else{
+                BmobQuery *userquery = [BmobQuery queryForUser];
+                [userquery whereKey:@"objectId" equalTo:model.senderID];
+                [userquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+                    
+                    BmobObject *obj = array[0];
+                    BmobPush *push = [BmobPush push];
+                    BmobQuery *query = [BmobInstallation query];
+                    [query whereKey:@"deviceToken" equalTo:[obj objectForKey:@"deviceToken"]];
+                    [push setQuery:query];
+                    [push setMessage:@"有人申请你的订单了，去看看吧"];
+                    [push sendPushInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
+                        NSLog(@"error %@",[error description]);
+                    }];
+                }];
                 //订单 申请的人数 及状态 5 通过 4待审核  拼单人的状态
                 //订单状态 1已完成   2待处理的 3 已处理 发单人的订单状态
                 [addOrder incrementKey:@"order_currentNum"];

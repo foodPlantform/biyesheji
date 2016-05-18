@@ -14,5 +14,6 @@
 -(BOOL)isUserLogin;
 //没有登陆 跳到登陆界面
 - (void)LoginWithVc:(UIViewController *)vc;
-
+//保存 用户的当前的currentDeviceToken
+-(NSString *)currentDeviceToken;
 @end

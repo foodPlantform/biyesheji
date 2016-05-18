@@ -45,6 +45,7 @@
 //已完成的订单  apply表里面的订单
 @property(nonatomic,strong)UserApplyListModel *applyedModel;
 @property(nonatomic,strong)NSString *vcOrderType;
+@property(nonatomic,strong)NSString *vcOrderOrFoodType;
 
 -(instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier;
 @end

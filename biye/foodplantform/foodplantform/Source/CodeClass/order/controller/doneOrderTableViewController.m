@@ -16,6 +16,7 @@
 @property (nonatomic,strong)NSMutableArray *noHandelOrderArr;
 
 @property (nonatomic,strong)BmobQuery   *userOrderQuery;
+@property (nonatomic,strong)BmobQuery   *userFoodQuery;
 
 @property (nonatomic,strong)BmobQuery   *applyOrderQuery;
 //已完成的订单  apply表里面的订单 的订单数
@@ -29,7 +30,7 @@
     [super viewDidLoad];
     _orderDataArr = [[NSMutableArray alloc] initWithCapacity:0];
     _userOrderQuery = [BmobQuery queryWithClassName:@"user_order"];
-    _applyOrderQuery = [BmobQuery queryWithClassName:@"user_apply"];
+    _applyOrderQuery = [BmobQuery queryWithClassName:@"food_message"];
     self.view.backgroundColor = [UIColor whiteColor];
     self.tableView.rowHeight = 150+10;
      [self.tableView registerClass:[OrderCell class] forCellReuseIdentifier:@"OrderCell"];
@@ -62,26 +63,48 @@
     //订单 申请的人数 及状态  4待审核 5已审核  拼单人的状态
     //订单状态 1已完成   2待处理的  3已处理 发单人的订单状态
     if (_orderType.integerValue == 0) {
-        queryArr =[[NSArray alloc] initWithObjects:@{@"order_senderID":bUser.objectId}, nil];
-        [_userOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
-
-        [_userOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
-            [_orderDataArr removeAllObjects];
-            for (BmobObject *obj in array)
-            {
-                if (obj) {
-                    BmobOrderModel *model = [[BmobOrderModel alloc] initWithBomdModel:obj];
-                    [ _orderDataArr addObject:model];
-                    
+        if (_orderOrFoodType.integerValue == 0) {//订单表
+            queryArr =[[NSArray alloc] initWithObjects:@{@"order_senderID":bUser.objectId}, nil];
+            [_userOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
+            
+            [_userOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+                [_orderDataArr removeAllObjects];
+                for (BmobObject *obj in array)
+                {
+                    if (obj) {
+                        BmobOrderModel *model = [[BmobOrderModel alloc] initWithBomdModel:obj];
+                        [ _orderDataArr addObject:model];
+                        
+                    }
                 }
-            }
-            [self.tableView reloadData];
-            _allOrderHud.hidden = YES;
-        }];
+                [self.tableView reloadData];
+                _allOrderHud.hidden = YES;
+            }];
+        }
+        if (_orderOrFoodType.integerValue == 1)//Food表
+        {
+            queryArr =[[NSArray alloc] initWithObjects:@{@"username":bUser.username}, nil];
+
+            [_userFoodQuery addTheConstraintByAndOperationWithArray:queryArr];
+            
+            [_userFoodQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+                [_orderDataArr removeAllObjects];
+                for (BmobObject *obj in array)
+                {
+                    if (obj) {
+                        BmobOrderModel *model = [[BmobOrderModel alloc] initWithBomdModel:obj];
+                        [ _orderDataArr addObject:model];
+                        
+                    }
+                }
+                [self.tableView reloadData];
+                _allOrderHud.hidden = YES;
+            }];
+        }
     }else if(_orderType.integerValue == 2 ||_orderType.integerValue ==3)
     {
         
-        queryArr =[[NSArray alloc] initWithObjects:@{@"sender_userID":bUser.objectId},@{@"sender_OrderType":_orderType},@{@"apply_type":@"0"},nil];
+        queryArr =[[NSArray alloc] initWithObjects:@{@"sender_userID":bUser.objectId},@{@"sender_OrderType":_orderType},@{@"apply_type":_orderOrFoodType},nil];
         [_applyOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
 
         [_applyOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
@@ -100,7 +123,7 @@
         
     }else if(_orderType.integerValue == 5 ||_orderType.integerValue ==4)
     {
-        queryArr =[[NSArray alloc] initWithObjects:@{@"apply_userID":bUser.objectId},@{@"apply_orderType":_orderType},@{@"apply_type":@"0"},nil];
+        queryArr =[[NSArray alloc] initWithObjects:@{@"apply_userID":bUser.objectId},@{@"apply_orderType":_orderType},@{@"apply_type":_orderOrFoodType},nil];
         [_applyOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
 
         [_applyOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
@@ -119,7 +142,7 @@
         }];
     }else if(_orderType.integerValue == 1) //已完成订单  去评价
     {
-        queryArr =[[NSArray alloc] initWithObjects:@{@"sender_userID":bUser.objectId},@{@"sender_OrderType":_orderType},@{@"apply_type":@"0"},nil];
+        queryArr =[[NSArray alloc] initWithObjects:@{@"sender_userID":bUser.objectId},@{@"sender_OrderType":_orderType},@{@"apply_type":_orderOrFoodType},nil];
         BmobQuery * _senderOrderQuery = [BmobQuery queryWithClassName:@"user_apply"];
         [_senderOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
         [_senderOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
@@ -134,7 +157,7 @@
             }
         }];
         BmobQuery * _applyedOrderQuery = [BmobQuery queryWithClassName:@"user_apply"];
-        queryArr =[[NSArray alloc] initWithObjects:@{@"apply_userID":bUser.objectId},@{@"apply_orderType":_orderType},@{@"apply_type":@"0"},nil];
+        queryArr =[[NSArray alloc] initWithObjects:@{@"apply_userID":bUser.objectId},@{@"apply_orderType":_orderType},@{@"apply_type":_orderOrFoodType},nil];
         [_applyedOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
         
         [_applyedOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
@@ -210,9 +233,9 @@
         
     }
     cell.vcOrderType = _orderType;
-    
+    cell.vcOrderOrFoodType = _orderOrFoodType;
     cell.model = _orderDataArr[indexPath.row];
-   cell.delegate =self;
+    cell.delegate =self;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     // Configure the cell...
     
@@ -235,6 +258,24 @@
         [user_apply setObject:@"3" forKey:@"sender_OrderType"];
         [user_apply setObject:@"5" forKey:@"apply_orderType"];
         [user_apply updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+            if (isSuccessful)
+            {
+                BmobQuery *userquery = [BmobQuery queryForUser];
+                [userquery whereKey:@"objectId" equalTo:model.applyListobjectId];
+                [userquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+                    BmobObject *obj = array[0];
+                    BmobPush *push = [BmobPush push];
+                    BmobQuery *query = [BmobInstallation query];
+                    [query whereKey:@"deviceToken" equalTo:[obj objectForKey:@"deviceToken"]];
+                    [push setQuery:query];
+                    [push setMessage:@"你有订单已经审核了"];
+                    [push sendPushInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
+                        NSLog(@"error %@",[error description]);
+                    }];
+                }];
+               
+
+            }
             [[regAndLogTool shareTools]  messageShowWith:@"已审核" cancelStr:@"确定"];
             [self loadDataArr];
         }];
@@ -257,6 +298,15 @@
                        //[batch deleteBmobObjectWithClassName:@"GameScore" objectId:@"30752bb92f"];
                        [batch batchObjectsInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
                           NSLog(@"batch error %@",[error description]);
+                       }];
+                       
+                       BmobPush *push = [BmobPush push];
+                       BmobQuery *query = [BmobInstallation query];
+                       [query whereKey:@"deviceToken" equalTo:[obj objectForKey:@"deviceToken"]];
+                       [push setQuery:query];
+                       [push setMessage:@"组队就餐"];
+                       [push sendPushInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
+                           NSLog(@"error %@",[error description]);
                        }];
                    }
                   

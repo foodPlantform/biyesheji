@@ -86,6 +86,13 @@ static regAndLogTool *rlt;
 //                    _usermodel.head_img = [obj valueForKey:@"head_img"];
                 }
             }];
+            //更新用户的 deviceToken
+            [user setObject:[[FileManager shareManager] currentDeviceToken] forKey:@"deviceToken"];
+
+            [user updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+                
+            }];
+
         }
         else
         {

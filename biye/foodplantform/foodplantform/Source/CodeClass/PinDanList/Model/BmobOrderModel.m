@@ -45,13 +45,13 @@
 
         self.target = [user_order objectForKey:@"order_target"];
         self.applyUserAndTypeArr = [[NSMutableArray alloc] initWithCapacity:0];
-        NSArray *applyArr = [user_order objectForKey:@"apply_userArr"];
-        for (NSDictionary *dic in  applyArr )
-        {
-            ApplyOrderModel *applyModel =  [[ApplyOrderModel alloc] initWithBomdModel:dic];
-            
-            [self.applyUserAndTypeArr addObject:applyModel];
-        }
+//        NSArray *applyArr = [user_order objectForKey:@"apply_userArr"];
+//        for (NSDictionary *dic in  applyArr )
+//        {
+//            ApplyOrderModel *applyModel =  [[ApplyOrderModel alloc] initWithBomdModel:dic];
+//            
+//            [self.applyUserAndTypeArr addObject:applyModel];
+//        }
         self.userOrderTyoe = [user_order objectForKey:@"user_orderType"];
         self.applyUserIDArr = [user_order objectForKey:@"apply_userIDArr"];
        self.foodPayType = [user_order objectForKey:@"order_payType"];

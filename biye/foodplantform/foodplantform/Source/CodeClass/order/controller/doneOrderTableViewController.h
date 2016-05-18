@@ -10,6 +10,8 @@
 
 @interface doneOrderTableViewController : UITableViewController
 @property (nonatomic,strong)NSString *orderType;
+@property (nonatomic,strong)NSString *orderOrFoodType;
+
 @property(nonatomic,strong)MBProgressHUD *allOrderHud;
 
 @end
