@@ -75,6 +75,7 @@
             fm.picUrl = [obj objectForKey:@"picurl"];
             fm.cityName = [obj objectForKey:@"city"];
             fm.phone = [obj objectForKey:@"phone"];
+            fm.userstar = [obj objectForKey:@"userscore"];
             [self.dataArr addObject:fm];
         }
 
@@ -116,6 +117,7 @@
             fm.picUrl = [obj objectForKey:@"picurl"];
             fm.cityName = [obj objectForKey:@"city"];
             fm.phone = [obj objectForKey:@"phone"];
+            fm.userstar = [obj objectForKey:@"userscore"];
             [self.dataArr addObject:fm];
         }
         
@@ -193,6 +195,7 @@
             fm.picUrl = [obj objectForKey:@"picurl"];
             fm.cityName = [obj objectForKey:@"city"];
             fm.phone = [obj objectForKey:@"phone"];
+            fm.userstar = [obj objectForKey:@"userscore"];
             [self.dataArr addObject:fm];
         }
         
@@ -309,6 +312,7 @@
                 fm.picUrl = [obj objectForKey:@"picurl"];
                 fm.cityName = [obj objectForKey:@"city"];
                 fm.phone = [obj objectForKey:@"phone"];
+                fm.userstar = [obj objectForKey:@"userscore"];
                 [self.dataArr addObject:fm];
             }
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -364,6 +368,7 @@
                     fm.picUrl = [obj objectForKey:@"picurl"];
                     fm.cityName = [obj objectForKey:@"city"];
                     fm.phone = [obj objectForKey:@"phone"];
+                    fm.userstar = [obj objectForKey:@"userscore"];
                     [self.dataArr addObject:fm];
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -391,6 +396,7 @@
                     fm.picUrl = [obj objectForKey:@"picurl"];
                     fm.cityName = [obj objectForKey:@"city"];
                     fm.phone = [obj objectForKey:@"phone"];
+                    fm.userstar = [obj objectForKey:@"userscore"];
                     [self.dataArr addObject:fm];
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -427,6 +433,7 @@
                     fm.picUrl = [obj objectForKey:@"picurl"];
                     fm.cityName = [obj objectForKey:@"city"];
                     fm.phone = [obj objectForKey:@"phone"];
+                    fm.userstar = [obj objectForKey:@"userscore"];
                     [self.dataArr addObject:fm];
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -455,6 +462,7 @@
                     fm.picUrl = [obj objectForKey:@"picurl"];
                     fm.cityName = [obj objectForKey:@"city"];
                     fm.phone = [obj objectForKey:@"phone"];
+                    fm.userstar = [obj objectForKey:@"userscore"];
                     [self.dataArr addObject:fm];
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -487,6 +495,7 @@
                     fm.picUrl = [obj objectForKey:@"picurl"];
                     fm.cityName = [obj objectForKey:@"city"];
                     fm.phone = [obj objectForKey:@"phone"];
+                    fm.userstar = [obj objectForKey:@"userscore"];
                     [self.dataArr addObject:fm];
                 }
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -541,6 +550,7 @@
     
     cell.starScore.value  = [fm.score floatValue];
     cell.addressLabel.text = fm.address;
+    cell.userStar.value = [fm.userstar floatValue];
     cell.sty.text = fm.sty;
     
     return cell;
@@ -548,7 +558,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 120;
+    return 150;
 }
 
 

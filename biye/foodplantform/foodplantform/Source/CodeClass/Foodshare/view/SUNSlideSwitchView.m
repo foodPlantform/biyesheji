@@ -189,15 +189,15 @@ static const NSUInteger kTagOfRightSideButton = 999;
         //选中颜色
         [button setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
         //累计每个tab文字的长度
-        //topScrollViewContentWidth += kWidthOfButtonMargin+textSize.width;
-        topScrollViewContentWidth = kScreenWidth;
+        topScrollViewContentWidth += kWidthOfButtonMargin+textSize.width;
+        //topScrollViewContentWidth = kScreenWidth;
         //设置按钮尺寸
         [button setFrame:CGRectMake(xOffset,0,
                                     textSize.width, kHeightOfTopScrollView)];
 
         //计算下一个tab的x偏移量
-       // xOffset += textSize.width + kWidthOfButtonMargin;
-        xOffset += kScreenWidth/3;
+       xOffset += textSize.width + kWidthOfButtonMargin;
+        //xOffset += kScreenWidth/3;
         
         [button setTag:i+100];
         if (i == 0) {

@@ -15,6 +15,7 @@
 #import "upListTableViewController.h"
 #import "myFoodTableViewController.h"
 #import "pinglunController.h"
+#import "allpinglunViewController.h"
 
 @interface mineTableViewController ()
 @property(nonatomic,strong)UITapGestureRecognizer *tap;
@@ -151,8 +152,8 @@
         [[regAndLogTool shareTools] messageShowWith:@"注销成功" cancelStr:@"确定"];
     }
     if (indexPath.section == 0 && indexPath.row == 5) {
-        pinglunController *pinglunVc = [[pinglunController alloc]init];
-        [self.navigationController pushViewController:pinglunVc animated:YES];
+        allpinglunViewController *allpinglunVc = [[allpinglunViewController alloc]init];
+        [self.navigationController pushViewController:allpinglunVc animated:YES];
     }
 }
 

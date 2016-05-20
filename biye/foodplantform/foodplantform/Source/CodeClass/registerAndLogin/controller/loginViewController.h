@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface loginViewController : UIViewController
-
+@property(nonatomic,strong)NSString *loginName;
+@property(nonatomic,strong)userModel *usermodel;
 
 @end

@@ -12,6 +12,7 @@
 #import "pinglunViewController.h"
 #import "orderFoodViewController.h"
 #import "userMessageViewController.h"
+#import "userPingLunViewController.h"
 
 @interface foodDetailController ()<SUNSlideSwitchViewDelegate>
 @property(nonatomic,strong)UIScrollView *scrollView;
@@ -34,7 +35,7 @@
     [self.pic sd_setImageWithURL:[NSURL URLWithString:self.foodmodel.picUrl]];
     self.menuView = [[SUNSlideSwitchView alloc] initWithFrame:CGRectMake(0, 150, kScreenWidth, kScreenHeight)];
     
-    self.menuView.dataArr = @[@"点餐",@"评论",@"用户"];
+    self.menuView.dataArr = @[@"点餐",@"订单评论",@"用户评论",@"用户"];
     self.menuView.slideSwitchViewDelegate =self;
     [self.scrollView addSubview:self.menuView];
     pinglunViewController *pinglunVc = [[pinglunViewController alloc]init];
@@ -47,7 +48,11 @@
     ordVc.parentVc = self;
     ordVc.foodmodel_ord = [[foodModel alloc]init];
     ordVc.foodmodel_ord = self.foodmodel;
-    self.arr = [NSArray arrayWithObjects:ordVc,pinglunVc,userVc, nil];
+    
+    userPingLunViewController *userpinglunVc = [[userPingLunViewController alloc]init];
+    userpinglunVc.foodmodel_userpinglun = self.foodmodel;
+    
+    self.arr = [NSArray arrayWithObjects:ordVc,pinglunVc,userpinglunVc,userVc, nil];
     //[self.menuView.viewArray addObjectsFromArray:_arr];
     [self.menuView buildUI];
     self.scrollView.contentSize = CGSizeMake(kScreenWidth, kScreenHeight+150);
@@ -65,7 +70,7 @@
 }
 - (NSUInteger)numberOfTab:(SUNSlideSwitchView *)view
 {
-    return 3;
+    return 4;
 }
 - (UIViewController *)slideSwitchView:(SUNSlideSwitchView *)view viewOfTab:(NSUInteger)number
 {

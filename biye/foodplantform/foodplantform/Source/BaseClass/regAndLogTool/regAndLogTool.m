@@ -8,6 +8,7 @@
 
 #import "regAndLogTool.h"
 #import "userModel.h"
+#import "loginViewController.h"
 
 static regAndLogTool *rlt;
 @implementation regAndLogTool
@@ -74,7 +75,7 @@ static regAndLogTool *rlt;
         if (user) {
             NSLog(@"phoneSuccess");
             NSLog(@"%@",user);
-           
+            [self messageShowWith:@"登陆成功" cancelStr:@"确定"];
             [self setValue:userName forKey:@"loginName"];
             BmobQuery *q = [BmobQuery queryWithClassName:@"_User"];
             [q whereKey:@"mobilePhoneNumber" equalTo:userName];
@@ -92,11 +93,16 @@ static regAndLogTool *rlt;
             [user updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
                 
             }];
+            loginViewController *log = [[loginViewController alloc]init];
+            [log.navigationController dismissViewControllerAnimated:YES completion:^{
+                
+            }];
             
 
         }
         else
         {
+            [self messageShowWith:@"登陆失败" cancelStr:@"确定"];
             
         }
     }];
@@ -121,6 +127,14 @@ static regAndLogTool *rlt;
 //                            _usermodel.head_img = [obj valueForKey:@"head_img"];
                         }
                     }];
+                    loginViewController *log = [[loginViewController alloc]init];
+                    [log.navigationController dismissViewControllerAnimated:YES completion:^{
+                        
+                    }];
+                }
+                else
+                {
+                    [self messageShowWith:@"登陆失败" cancelStr:@"确定"];
                 }
             }];
         }

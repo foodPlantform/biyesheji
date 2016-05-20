@@ -20,5 +20,6 @@
 @property(nonatomic,strong)NSString *score;
 @property(nonatomic,strong)NSString *cityName;
 @property(nonatomic,strong)NSString *phone;
+@property(nonatomic,strong)NSString * userstar;
 -(void)setValue:(id)value forUndefinedKey:(NSString *)key;
 @end
