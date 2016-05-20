@@ -74,14 +74,14 @@
     [self.seg addTarget:self action:@selector(segmentControlPageChange:) forControlEvents:UIControlEventValueChanged];
     //订单
     _orderMenuView = [[SUNSlideSwitchView alloc] initWithFrame:CGRectMake(0, 64, kScreenWidth, kScreenHeight-44-20)];
-    _orderMenuView.tag = 0;
+    _orderMenuView.tag = 100;
     self.orderMenuView.dataArr = @[@"已发布拼单",@"已完成拼单",@" 待处理拼单",@"已处理拼单",@"待审核拼单",@"已审核拼单"];
     self.orderMenuView.slideSwitchViewDelegate =self;
     [self.menuScrollView addSubview:self.orderMenuView];
     [self.orderMenuView buildUI];
     //美食
     _foodMenuView = [[SUNSlideSwitchView alloc] initWithFrame:CGRectMake(kScreenWidth, 64, kScreenWidth, kScreenHeight-44-20)];
-    _foodMenuView.tag = 1;
+    _foodMenuView.tag = 101;
     _foodMenuView.dataArr = @[@"已发布美食",@"已完成美食",@"已处理美食",@"待处理美食",@"待审核美食",@"已审核美食"];
     _foodMenuView.slideSwitchViewDelegate =self;
     [self.menuScrollView addSubview:_foodMenuView];
@@ -103,14 +103,17 @@
 
 - (NSUInteger)numberOfTab:(SUNSlideSwitchView *)view
 {
-    return  view.tag ==0?_orderMenuView.dataArr.count:_foodMenuView.dataArr.count;
+    return  view.tag-100 ==0?_orderMenuView.dataArr.count:_foodMenuView.dataArr.count;
 }
 - (UIViewController *)slideSwitchView:(SUNSlideSwitchView *)view viewOfTab:(NSUInteger)number
 {
+//    NSLog(@"number------------%lu",(unsigned long)number);
+//    NSLog(@"view.tag------------%lu",(unsigned long)view.tag-100);
 
     _doneVc =[[doneOrderTableViewController alloc]init];
+    _doneVc.vc  = self;
     _doneVc.orderType = [NSString stringWithFormat:@"%lu",(unsigned long)number];
-    _doneVc.orderOrFoodType = [NSString stringWithFormat:@"%lu",(unsigned long)view.tag];
+    _doneVc.orderOrFoodType = [NSString stringWithFormat:@"%lu",(unsigned long)view.tag-100];
 
      return _doneVc;
 }

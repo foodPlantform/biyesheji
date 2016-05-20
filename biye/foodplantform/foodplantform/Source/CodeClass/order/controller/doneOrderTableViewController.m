@@ -9,12 +9,14 @@
 #import "doneOrderTableViewController.h"
 #import "OrderCell.h"
 #import "BmobOrderModel.h"
+#import "FoodListModel.h"
 #import "PindanPesVC.h"
 #import "UserApplyListModel.h"
-@interface doneOrderTableViewController ()<OrderCelllDelegate>
+#import "pinglunController.h"
+@interface doneOrderTableViewController ()<OrderCelllDelegate,BmobEventDelegate>
 @property (nonatomic,strong)NSMutableArray *orderDataArr;
 @property (nonatomic,strong)NSMutableArray *noHandelOrderArr;
-
+@property (nonatomic,strong)BmobEvent *bmobEvent;
 @property (nonatomic,strong)BmobQuery   *userOrderQuery;
 @property (nonatomic,strong)BmobQuery   *userFoodQuery;
 
@@ -30,11 +32,13 @@
     [super viewDidLoad];
     _orderDataArr = [[NSMutableArray alloc] initWithCapacity:0];
     _userOrderQuery = [BmobQuery queryWithClassName:@"user_order"];
-    _applyOrderQuery = [BmobQuery queryWithClassName:@"food_message"];
+    _applyOrderQuery = [BmobQuery queryWithClassName:@"user_apply"];
+    _userFoodQuery = [BmobQuery queryWithClassName:@"food_message"];
     self.view.backgroundColor = [UIColor whiteColor];
     self.tableView.rowHeight = 150+10;
      [self.tableView registerClass:[OrderCell class] forCellReuseIdentifier:@"OrderCell"];
     [self loadDataArr];
+    [self listen];
     [self setupAllOrderProgressHud];
     _allOrderHud.hidden =YES;
     // Uncomment the following line to preserve selection between presentations.
@@ -63,38 +67,37 @@
     //订单 申请的人数 及状态  4待审核 5已审核  拼单人的状态
     //订单状态 1已完成   2待处理的  3已处理 发单人的订单状态
     if (_orderType.integerValue == 0) {
-        if (_orderOrFoodType.integerValue == 0) {//订单表
-            queryArr =[[NSArray alloc] initWithObjects:@{@"order_senderID":bUser.objectId}, nil];
-            [_userOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
-            
-            [_userOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
-                [_orderDataArr removeAllObjects];
-                for (BmobObject *obj in array)
-                {
-                    if (obj) {
-                        BmobOrderModel *model = [[BmobOrderModel alloc] initWithBomdModel:obj];
-                        [ _orderDataArr addObject:model];
-                        
-                    }
-                }
-                [self.tableView reloadData];
-                _allOrderHud.hidden = YES;
-            }];
-        }
-        if (_orderOrFoodType.integerValue == 1)//Food表
+         if (_orderOrFoodType.integerValue == 0)//Order表 已发布
+         {
+             queryArr =[[NSArray alloc] initWithObjects:@{@"order_senderID":bUser.objectId}, nil];
+             [_userOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
+             
+             [_userOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+                 [_orderDataArr removeAllObjects];
+                 for (BmobObject *obj in array)
+                 {
+                     if (obj) {
+                         BmobOrderModel *model = [[BmobOrderModel alloc] initWithBomdModel:obj];
+                         [ _orderDataArr addObject:model];
+                         
+                     }
+                 }
+                 [self.tableView reloadData];
+                 _allOrderHud.hidden = YES;
+             }];
+         }else if (_orderOrFoodType.integerValue == 1)//Food表 已发布
         {
-            queryArr =[[NSArray alloc] initWithObjects:@{@"username":bUser.username}, nil];
-
-            [_userFoodQuery addTheConstraintByAndOperationWithArray:queryArr];
+            //queryArr =[[NSArray alloc] initWithObjects:@{@"username":bUser.username}, nil];
+            [_userFoodQuery whereKey:@"username" equalTo:bUser.username];
+            //[_userFoodQuery addTheConstraintByAndOperationWithArray:queryArr];
             
             [_userFoodQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
                 [_orderDataArr removeAllObjects];
                 for (BmobObject *obj in array)
                 {
                     if (obj) {
-                        BmobOrderModel *model = [[BmobOrderModel alloc] initWithBomdModel:obj];
+                        FoodListModel *model = [[FoodListModel alloc] initWithFoodListBomdModel:obj];
                         [ _orderDataArr addObject:model];
-                        
                     }
                 }
                 [self.tableView reloadData];
@@ -105,6 +108,7 @@
     {
         
         queryArr =[[NSArray alloc] initWithObjects:@{@"sender_userID":bUser.objectId},@{@"sender_OrderType":_orderType},@{@"apply_type":_orderOrFoodType},nil];
+        
         [_applyOrderQuery addTheConstraintByAndOperationWithArray:queryArr];
 
         [_applyOrderQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
@@ -112,7 +116,7 @@
             for (BmobObject *obj in array)
             {
                 if (obj) {
-                    UserApplyListModel *model = [[UserApplyListModel alloc] initWithBomdModel:obj];
+                    UserApplyListModel *model = [[UserApplyListModel alloc] initWithUserApplyListBomdModel:obj];
                     [ _orderDataArr addObject:model];
                     
                 }
@@ -131,7 +135,7 @@
             for (BmobObject *obj in array)
             {
                 if (obj) {
-                    UserApplyListModel *model = [[UserApplyListModel alloc] initWithBomdModel:obj];
+                    UserApplyListModel *model = [[UserApplyListModel alloc] initWithUserApplyListBomdModel:obj];
                     [ _orderDataArr addObject:model];
                 }
             }
@@ -150,7 +154,7 @@
             for (BmobObject *obj in array)
             {
                 if (obj) {
-                    UserApplyListModel *model = [[UserApplyListModel alloc] initWithBomdModel:obj];
+                    UserApplyListModel *model = [[UserApplyListModel alloc] initWithUserApplyListBomdModel:obj];
                     [ _orderDataArr addObject:model];
                     
                 }
@@ -164,7 +168,7 @@
             for (BmobObject *obj in array)
             {
                 if (obj) {
-                    UserApplyListModel *model = [[UserApplyListModel alloc] initWithBomdModel:obj];
+                    UserApplyListModel *model = [[UserApplyListModel alloc] initWithUserApplyListBomdModel:obj];
                     [ _orderDataArr addObject:model];
                     
                 }
@@ -173,11 +177,8 @@
             _allOrderHud.hidden = YES;
         }];
 
+   
     }
-
-   
-   
-
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -193,33 +194,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 #warning Incomplete implementation, return the number of rows
-//    if (_orderType.integerValue == 0) {
-//        return _orderDataArr.count;
-//        
-//    }else if(_orderType.integerValue == 2 ||_orderType.integerValue ==3)
-//    {
-//        NSMutableArray *noHandelArr = [[NSMutableArray alloc] initWithCapacity:0];//待处理
-//        NSMutableArray *HandeledArr = [[NSMutableArray alloc] initWithCapacity:0];//已处理
-//        for(BmobOrderModel *model  in _orderDataArr)
-//        {
-//            if (model.userOrderTyoe.intValue == 2)
-//            {
-//                for (ApplyOrderModel *applyModel in model.applyUserAndTypeArr)
-//                {
-//                    if (applyModel.orderType.intValue == 5) {
-//                        [noHandelArr addObject:applyModel];
-//                    }else if (applyModel.orderType.intValue == 4 )
-//                    {
-//                        [noHandelArr addObject:applyModel];
-//                    }
-//                }
-//            }
-//        }
-//
-//    }else
-//    {
-//        return _orderDataArr.count;
-//    }
     
     return _orderDataArr.count;
 
@@ -233,8 +207,15 @@
         
     }
     cell.vcOrderType = _orderType;
+    if (_orderType.integerValue ==0 &&_orderOrFoodType.integerValue==1) {
+        cell.foodListModel = _orderDataArr[indexPath.row];
+    }else
+    {
+        cell.model = _orderDataArr[indexPath.row];
+    }
+    
     cell.vcOrderOrFoodType = _orderOrFoodType;
-    cell.model = _orderDataArr[indexPath.row];
+    
     cell.delegate =self;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     // Configure the cell...
@@ -247,7 +228,7 @@
     vc.model = _orderDataArr[indexPath.row];
     [self.navigationController pushViewController:vc animated:YES];
 }
-//处理拼单时间
+//处理拼单时间 order 表中 0
 - (void)handleOrderCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(BmobOrderModel *)handeledModel
 {
     
@@ -261,7 +242,7 @@
             if (isSuccessful)
             {
                 BmobQuery *userquery = [BmobQuery queryForUser];
-                [userquery whereKey:@"objectId" equalTo:model.applyListobjectId];
+                [userquery whereKey:@"objectId" equalTo:model.applyUserListID];
                 [userquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
                     BmobObject *obj = array[0];
                     BmobPush *push = [BmobPush push];
@@ -312,10 +293,64 @@
                   
                }
            }];
+          BmobObjectsBatch    *updateOrderList = [[BmobObjectsBatch alloc] init] ;
+          //在GameScore表中创建一条数据
+          //在GameScore表中更新objectId为27eabbcfec的数据 @{@"apply_orderType":_orderType}
+          [updateOrderList updateBmobObjectWithClassName:@"user_order" objectId:handeledModel.orderID parameters:@{@"order_Type": @"1"}];
+          //在GameScore表中删除objectId为30752bb92f的数据
+          //[batch deleteBmobObjectWithClassName:@"GameScore" objectId:@"30752bb92f"];
+          [updateOrderList batchObjectsInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+//              NSLog(@"batch error %@",[error description]);
+          }];
           
           
       }
-    
+    if (_orderType.integerValue == 1)//评论
+    {
+        pinglunController *vc=  [[pinglunController alloc] init];
+        [_vc.navigationController pushViewController:vc animated:YES];
+    }
+
+}
+//处理拼单时间 order  不同意 拼单
+- (void)ChatOrderCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(BmobOrderModel *)handeledModel
+{
+    //修改状态 之后重新加载数据
+    if (_orderType.integerValue == 2)//不同意的订单
+    {
+        BmobObject *bmobObject = [BmobObject objectWithoutDatatWithClassName:@"user_apply"  objectId:model.applyListobjectId];
+        [bmobObject deleteInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
+            if (isSuccessful) {
+                //删除成功后的动作
+                NSLog(@"successful");
+            } else if (error){
+                NSLog(@"%@",error);
+            } else {
+                NSLog(@"UnKnow error");
+            }
+        }];
+    }
+}
+-(void)listen{
+    //创建BmobEvent对象
+    _bmobEvent          = [BmobEvent defaultBmobEvent];
+    //设置代理
+    _bmobEvent.delegate = self;
+    //启动连接
+    [_bmobEvent start];
+}
+//在代理的函数，进行操作
+
+//可以进行监听或者取消监听事件
+-(void)bmobEventCanStartListen:(BmobEvent *)event{
+    //监听Post表更新
+    [_bmobEvent listenTableChange:BmobActionTypeUpdateTable tableName:@"user_apply"];
+}
+//接收到得数据
+-(void)bmobEvent:(BmobEvent *)event didReceiveMessage:(NSString *)message{
+    //打印数据
+    //NSLog(@"didReceiveMessage:%@",message);
+    [self loadDataArr];
 }
 /*
 // Override to support conditional editing of the table view.

@@ -14,6 +14,7 @@
 #import "MJRefresh.h"
 #import "PindanPesVC.h"
 #import "PinDanCell.h"
+#import "OldPindDanVC.h"
 #define OnceLoadPageRow 5
 
 @interface PinDanVcr ()<LrdOutputViewDelegate,CLLocationManagerDelegate,CLAlertViewDelegate,PindanCelllDelegate>
@@ -86,6 +87,8 @@
     _orderArr = [[NSMutableArray alloc] initWithCapacity:0];
     //查找user_order表
     _user_orderQuery = [BmobQuery queryWithClassName:@"user_order"];
+    //未完成
+    [_user_orderQuery whereKey:@"order_Type" equalTo:@"0"];
     _user_orderQuery.limit =OnceLoadPageRow;
     _user_orderQuery.skip = 0;
     //查找user_order表里面里面的所有数据
@@ -231,7 +234,7 @@
         // 刷新表格
         [self.tableView reloadData];
         
-         _pindanHud.hidden =NO;
+         _pindanHud.hidden =YES;
         // (最好在刷新表格后调用)调用endRefreshing可以结束刷新状态
         [self.tableView.mj_footer endRefreshing];
     });
@@ -256,7 +259,7 @@
 //    }
     CGFloat x = kScreenWidth-30;
     CGFloat y = 44 + 10;
-     LrdOutputView *_outputView = [[LrdOutputView alloc] initWithDataArray:@[@"约会时间",@"约会对象",@"付款方式",@"约会人数",@"附近"] origin:CGPointMake(x, y) width:125 height:44 direction:kLrdOutputViewDirectionRight];
+     LrdOutputView *_outputView = [[LrdOutputView alloc] initWithDataArray:@[@"约会时间",@"约会对象",@"付款方式",@"大约价格",@"约会人数",@"附近"] origin:CGPointMake(x, y) width:125 height:44 direction:kLrdOutputViewDirectionRight];
     _outputView.delegate = self;
     _outputView.dismissOperation = ^(){
         //设置成nil，以防内存泄露
@@ -289,14 +292,20 @@
             bottomView.titleArray = @[@"我付",@"AA"];
         }
             break;
-        case 3://约会人数
+        case 4://约会人数
         {
             bottomView.titleArray = @[@"人数⬆️",@"人数⬇️",@"2人",@"3人",@"4人",@"5人",@"6人",@"7人",@"8人",@"9人",@"10人"];
         }
             break;
-        case 4://附近
+        case 5://附近
         {
             bottomView.titleArray = @[@1,@3,@7,@10,@30,@40,@50,@100,];
+            
+        }
+            break;
+        case 3://付款价格
+        {
+            bottomView.titleArray = @[@"价格⬆️",@"价格⬇️"];
             
         }
             break;
@@ -382,7 +391,26 @@
             }
         }
             break;
-        case 3://人数
+        case 3://金额
+        {
+            switch ((long)index) {
+                case 0://升序
+                {
+                   [_user_orderQuery orderByAscending:@"order_Price"];
+                }
+                    break;
+                case 1://降序
+                {
+                    [_user_orderQuery orderByDescending:@"order_Price"];
+                    
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
+            break;
+        case 4://人数
         {
             switch ((long)index) {
                 case 0://升序
@@ -408,7 +436,7 @@
             
         }
             break;
-        case 4://附近
+        case 5://附近
         {
             [_user_orderQuery whereKey:@"order_loaction" nearGeoPoint:_currentBmobLocation withinKilometers:[titleArr[lastRow] doubleValue]];
         }
@@ -457,9 +485,9 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PindanPesVC *vc=  [[PindanPesVC alloc] init];
-    vc.model = _orderArr[indexPath.row];
-    [self.navigationController pushViewController:vc animated:YES];
+//    PindanPesVC *vc=  [[PindanPesVC alloc] init];
+//    vc.model = _orderArr[indexPath.row];
+//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 
@@ -479,6 +507,19 @@
     // Configure the cell...
     
     return cell;
+}
+#pragma mark - PindanCelllDelegate  加好友
+-(void)addSenderFriendOrderPinDanCell:(PinDanCell *)cell model:(BmobOrderModel *)model
+{
+    
+}
+#pragma mark - PindanCelllDelegate 显示已完成拼单
+-(void)showOldOrderPinDanCell:(PinDanCell *)cell model:(BmobOrderModel *)model
+{
+    OldPindDanVC *vc  =[[OldPindDanVC alloc] init];
+    vc.title = [NSString stringWithFormat:@"%@的历史完成顶单",model.niCheng];
+    vc.userID = model.senderID;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 #pragma mark - PindanCelllDelegate 加入拼单
 -(void)addOrderPinDanCell:(PinDanCell *)cell model:(BmobOrderModel *)model

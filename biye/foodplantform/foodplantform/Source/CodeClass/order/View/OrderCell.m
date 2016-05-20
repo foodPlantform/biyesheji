@@ -10,6 +10,8 @@
 #define PinDanCellJianJu 10
 @interface OrderCell ()
 @property (nonatomic,strong)BmobOrderModel *handelModel;
+@property (nonatomic,strong)FoodListModel *handelFoodModel;
+
 
 @end
 @implementation OrderCell
@@ -23,19 +25,28 @@
     }
     return self;
 }
--(void)setModel:(UserApplyListModel *)model
+-(void)setVcOrderOrFoodType:(NSString *)vcOrderOrFoodType
 {
-    _model = model;
-    
-   
+    _vcOrderOrFoodType= vcOrderOrFoodType;
     if (_vcOrderType.integerValue == 0 )
     {
-        _foodNameLB.text = [NSString stringWithFormat:@"   我要吃 :  %@",_model.name] ;
-        _foodNumLB.text = [NSString stringWithFormat:@"拼单人数:  %ld／%ld",(long)_model.currentPersonNum,(long)_model.personMaxNum] ;
-        _foodLocationLB.text = [NSString stringWithFormat:@"拼单地点:  %@",_model.foodLocation] ;
+        if (_vcOrderOrFoodType.integerValue ==0) {
+            _foodNameLB.text = [NSString stringWithFormat:@"   我要吃 :  %@",_model.name] ;
+            _foodNumLB.text = [NSString stringWithFormat:@"拼单人数:  %ld／%ld",(long)_model.currentPersonNum,(long)_model.personMaxNum] ;
+            _foodLocationLB.text = [NSString stringWithFormat:@"拼单地点:  %@",_model.foodLocation] ;
+            
+            //时间
+            _foodTimeLB.text = [NSString stringWithFormat:@"拼单时间:  %@",_model.timeDateStr] ;
+        }else
+        {
+            _foodNameLB.text = [NSString stringWithFormat:@"美食名称 :  %@",_foodListModel.foodName] ;
+            
+            _foodLocationLB.text = [NSString stringWithFormat:@" 美食地点:  %@",_foodListModel.address] ;
+            
+            //时间
+            _foodNumLB.text = [NSString stringWithFormat:@"美食详情:  %@",_foodListModel.foodDes] ;
+        }
         
-        //时间
-        _foodTimeLB.text = [NSString stringWithFormat:@"拼单时间:  %@",_model.timeDateStr] ;
     }else if(_vcOrderType.integerValue == 2||_vcOrderType.integerValue == 3)
         //当ordeType 为2  3  4 5 需要处理 重新查找order表
     {
@@ -54,8 +65,8 @@
             _foodUserNameLB.text = [NSString stringWithFormat:@"申请人:   %@" ,_model.applyUserListName] ;
             _foodUserNameLB.hidden = NO;
         }];
-
-    
+        
+        
     }else if (_vcOrderType.integerValue == 4||_vcOrderType.integerValue == 5) {
         BmobQuery   *handelOrderQuery = [BmobQuery queryWithClassName:@"user_order" ];
         [handelOrderQuery whereKey:@"objectId" equalTo:_model.orderListID];
@@ -94,26 +105,38 @@
     if (_vcOrderType.integerValue == 1)//已完成订单
     {
         [_orderBtn setTitle:@"评论" forState:0];
+        _orderBtn.hidden = NO;
     }else if (_vcOrderType.integerValue == 2)
     {
         [_orderBtn setTitle:@"同意拼单" forState:0];
+         [_orderChatBtn setTitle:@"不同意" forState:0];
         _foodUserNameLB.hidden = NO;
+        _orderBtn.hidden = NO;
+        _orderChatBtn.hidden =NO;
     }else if (_vcOrderType.integerValue == 3)
     {
-        [_orderBtn setTitle:@"组队就餐" forState:0];
+        [_orderBtn setTitle:@"已完成" forState:0];
+         [_orderChatBtn setTitle:@"群聊" forState:0];
+        _foodUserNameLB.hidden = NO;
+        _orderBtn.hidden = NO;
+        _orderChatBtn.hidden =NO;
     }else if (_vcOrderType.integerValue == 4)//待审核订单
     {
-        [_orderBtn setTitle:@"取消拼单" forState:0];
+         //[_orderBtn setTitle:@"取消拼单" forState:0];
         _orderBtn.hidden = YES;
-
+        
     }else if (_vcOrderType.integerValue == 5)//已审核订单
     {
-         //[_orderBtn setTitle:@"删除" forState:0];
-        _orderBtn.hidden = YES;
+       
     }else
     {
-       _orderBtn.hidden = YES;
+        _orderBtn.hidden = YES;
     }
+}
+-(void)setModel:(UserApplyListModel *)model
+{
+    _model = model;
+   
 }
 - (void)setOrderCellView
 {
@@ -132,13 +155,21 @@
     
     [self.contentView addSubview:_foodNumLB];
     _orderBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    _orderBtn.frame = CGRectMake(CGRectGetMaxX(_foodNumLB.frame)+PinDanCellJianJu*2, CGRectGetMinY(_foodNumLB.frame), kScreenWidth/4.0, 25);
+    _orderBtn.frame = CGRectMake(CGRectGetMaxX(_foodNumLB.frame)+PinDanCellJianJu, CGRectGetMinY(_foodNumLB.frame), kScreenWidth/5.0, 25);
     [_orderBtn addTarget:self action:@selector(handleOrder) forControlEvents:UIControlEventTouchUpInside];
     _orderBtn.backgroundColor = [UIColor redColor];
     [_orderBtn setTitleColor:[UIColor whiteColor] forState:0];
     [_orderBtn setTitle:@"aaaaaaa" forState:0];
-    
+    _orderBtn.hidden = YES;
     [self.contentView addSubview:_orderBtn];
+    _orderChatBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    _orderChatBtn.frame = CGRectMake(CGRectGetMaxX(_orderBtn.frame)+PinDanCellJianJu*2, CGRectGetMinY(_foodNumLB.frame), kScreenWidth/6.0, 25);
+    [_orderChatBtn addTarget:self action:@selector(orderChatBtnAction) forControlEvents:UIControlEventTouchUpInside];
+    _orderChatBtn.backgroundColor = [UIColor redColor];
+    [_orderChatBtn setTitleColor:[UIColor whiteColor] forState:0];
+   
+    _orderChatBtn.hidden = YES;
+    [self.contentView addSubview:_orderChatBtn];
     _foodTimeLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(_foodNameLB.frame), CGRectGetMaxY(_foodNumLB.frame)+PinDanCellJianJu*2, kScreenWidth/1.2, 10)];
    
     NSLog(@"%.f",CGRectGetMinX(_orderBtn.frame));
@@ -153,10 +184,17 @@
     
     NSLog(@"%.f",CGRectGetMaxY(_foodLocationLB.frame));
 }
+//处理的第一个按钮
  - (void)handleOrder
 {
     if ([_delegate respondsToSelector:@selector(handleOrderCell:model:handeledModel:)]) {
         [_delegate handleOrderCell:self model:_model handeledModel:_handelModel];
+    }
+}
+//处理的第 二个按钮
+- (void)orderChatBtnAction{
+    if ([_delegate respondsToSelector:@selector(ChatOrderCell:model:handeledModel:)]) {
+        [_delegate ChatOrderCell:self model:_model handeledModel:_handelModel];
     }
 }
 - (void)awakeFromNib {

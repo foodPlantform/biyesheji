@@ -19,7 +19,7 @@
  
  [user_applyList setObject:model.orderID forKey:@"order_ID"];
  */
--(instancetype)initWithBomdModel :(BmobObject *)UserApply
+-(instancetype)initWithUserApplyListBomdModel :(BmobObject *)UserApply
 {
     self = [super init];
     if (self)

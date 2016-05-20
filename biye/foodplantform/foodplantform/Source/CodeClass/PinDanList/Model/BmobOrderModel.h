@@ -43,6 +43,12 @@
 @property(nonatomic,strong)NSDate *timeDate;
 //拼单时间str
 @property(nonatomic,strong)NSString *timeDateStr;
+//拼单价格
+@property(nonatomic,strong)NSString *orderPrice;
+//pinLunOrderArr  评论数
+@property(nonatomic,strong)NSArray *pinLunOrderArr;
+//综合评价
+@property(nonatomic,assign)float allPinLunStar;
 
 //拼单地点经度
 

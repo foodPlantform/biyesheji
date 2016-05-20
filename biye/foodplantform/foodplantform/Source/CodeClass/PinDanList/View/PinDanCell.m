@@ -25,12 +25,13 @@
 {
     _model = model;
     [_userImgV sd_setImageWithURL:[NSURL URLWithString: _model.userImgeUrl ]];
-    _userNiChengLB.text = [NSString stringWithFormat:@" 发单人:  %@" ,_model.niCheng];
+    [_userNiChengBtn setTitle:[NSString stringWithFormat:@" 发单人:  %@" ,_model.niCheng] forState:0];
+    //_userNiChengLB.text = [NSString stringWithFormat:@" 发单人:  %@" ,_model.niCheng];
 
     _foodNameLB.text = [NSString stringWithFormat:@"   我要吃 :  %@",_model.name] ;
     _foodPersonNumLB.text = [NSString stringWithFormat:@"拼单人数:  %ld／%ld",(long)_model.currentPersonNum,(long)_model.personMaxNum] ;
     _foodLocationLB.text = [NSString stringWithFormat:@"拼单地点:  %@",_model.foodLocation] ;
-    
+    _userSexAgeLB.text = [NSString stringWithFormat:@"预算金额: ¥%@",_model.orderPrice] ;
     _foodPayTypeLB.text = [NSString stringWithFormat:@"付款方式: %@",_model.foodPayType.intValue==0?@"我付":@"AA制"];
 
     //时间
@@ -73,6 +74,22 @@
     
 
 }
+//显示已完成的拼单
+- (void)showOldOrder
+{
+    if ([_delegate respondsToSelector:@selector(showOldOrderPinDanCell:model:)])
+    {
+        [_delegate showOldOrderPinDanCell:self model:_model];
+    }
+}
+//加好友
+- (void)addSendOrderPriend
+{
+    if ([_delegate respondsToSelector:@selector(addSenderFriendOrderPinDanCell:model:)])
+    {
+        [_delegate addSenderFriendOrderPinDanCell:self model:_model];
+    }
+}
 - (void)setPanDanCellView
 {
    /*
@@ -87,14 +104,30 @@
     _userImgV = [[UIImageView alloc]initWithFrame:CGRectMake(PinDanCellJianJu, PinDanCellJianJu, 100, 100) ];
     [self.contentView addSubview:_userImgV];
     _userImgV.backgroundColor = [UIColor yellowColor];
+    _userNiChengBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_userNiChengBtn addTarget:self action:@selector(showOldOrder) forControlEvents:UIControlEventTouchUpInside];
+    _userNiChengBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [_userNiChengBtn setTitleColor:[UIColor blackColor] forState:0];
+    // _userNiChengBtn.backgroundColor = [UIColor blackColor];
+    _userNiChengBtn.frame = CGRectMake(CGRectGetMaxX(_userImgV.frame)+PinDanCellJianJu, CGRectGetMinY(_userImgV.frame), kScreenWidth/3.0, 30);
     
-    _userNiChengLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_userImgV.frame)+PinDanCellJianJu, CGRectGetMinY(_userImgV.frame), kScreenWidth/3.0, 10)];
-    _userNiChengLB.text = [NSString stringWithFormat:@"昵称:  测试昵称"];
-    [self.contentView addSubview:_userNiChengLB];
+    [self.contentView addSubview:_userNiChengBtn];
+    _addSenderFriendBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_addSenderFriendBtn addTarget:self action:@selector(addSendOrderPriend) forControlEvents:UIControlEventTouchUpInside];
+    [_addSenderFriendBtn setTitle:@"加好友" forState:0];
+    [_addSenderFriendBtn setTitleColor:[UIColor redColor] forState:0];
+    _addSenderFriendBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    // _userNiChengBtn.backgroundColor = [UIColor blackColor];
+    _addSenderFriendBtn.frame = CGRectMake(CGRectGetMaxX(_userNiChengBtn.frame)+PinDanCellJianJu, CGRectGetMinY(_userImgV.frame), kScreenWidth/3.0, 30);
     
-    _userSexAgeLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_userImgV.frame)+PinDanCellJianJu,  CGRectGetMaxY(_userNiChengLB.frame)+PinDanCellJianJu*2, kScreenWidth/2.0, 10)];
-    _userSexAgeLB.hidden =YES;
-
+    [self.contentView addSubview:_addSenderFriendBtn];
+//    _userNiChengLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_userImgV.frame)+PinDanCellJianJu, CGRectGetMinY(_userImgV.frame), kScreenWidth/3.0, 10)];
+//    _userNiChengLB.text = [NSString stringWithFormat:@"昵称:  测试昵称"];
+//    [self.contentView addSubview:_userNiChengLB];
+    
+    _userSexAgeLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_userImgV.frame)+PinDanCellJianJu,  CGRectGetMaxY(_userNiChengBtn.frame)+PinDanCellJianJu*2, kScreenWidth/2.0, 10)];
+//    _userSexAgeLB.hidden =YES;
+    
     _userSexAgeLB.text = [NSString stringWithFormat:@"性别／年龄: 测试性别＋年龄"];
     [self.contentView addSubview:_userSexAgeLB];
     _foodPayTypeLB = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(_userImgV.frame)+PinDanCellJianJu,  CGRectGetMaxY(_userSexAgeLB.frame)+PinDanCellJianJu*2, kScreenWidth/2.0, 10)];

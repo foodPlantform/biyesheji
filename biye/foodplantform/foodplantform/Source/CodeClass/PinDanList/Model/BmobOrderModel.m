@@ -42,6 +42,7 @@
         self.currentPersonNum = [[user_order objectForKey:@"order_currentNum"] integerValue];
         self.name = [user_order objectForKey:@"order_name"];
         self.niCheng = [user_order objectForKey:@"order_userName"];
+        self.orderPrice = [user_order objectForKey:@"order_Price"];
 
         self.target = [user_order objectForKey:@"order_target"];
         self.applyUserAndTypeArr = [[NSMutableArray alloc] initWithCapacity:0];

@@ -19,6 +19,8 @@
 @optional
 
 - (void)addOrderPinDanCell:(PinDanCell *)cell model:(BmobOrderModel *)model;
+- (void)showOldOrderPinDanCell:(PinDanCell *)cell model:(BmobOrderModel *)model;
+- (void)addSenderFriendOrderPinDanCell:(PinDanCell *)cell model:(BmobOrderModel *)model;
 
 @end
 #import <CoreLocation/CoreLocation.h>
@@ -31,6 +33,10 @@
 @property(nonatomic,strong)UIImageView *userImgV;
 //昵称
 @property(nonatomic,strong)UILabel *userNiChengLB;
+//名称btn
+@property(nonatomic,strong)UIButton *userNiChengBtn;
+//加好友
+@property(nonatomic,strong)UIButton *addSenderFriendBtn;
 @property(nonatomic,strong)UILabel *userSexAgeLB;
 
 //拼单人数

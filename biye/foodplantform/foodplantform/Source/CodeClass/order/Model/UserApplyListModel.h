@@ -24,5 +24,5 @@
 //订单状态 1已完成   2待处理的 3 已处理 发单人的订单状态
 @property(nonatomic,strong)NSString *senderOrderListType;
 @property(nonatomic,strong)NSString *orderListID;
--(instancetype)initWithBomdModel :(BmobObject *)UserApply;
+-(instancetype)initWithUserApplyListBomdModel :(BmobObject *)UserApply;
 @end
