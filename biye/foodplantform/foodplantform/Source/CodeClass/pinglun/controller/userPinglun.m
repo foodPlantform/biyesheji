@@ -59,6 +59,7 @@
     [obj setObject:self.pv.pinglun.text forKey:@"content"];
     [obj setObject:user.username forKey:@"username"];
     [obj setObject:[NSNumber numberWithFloat:self.starStr] forKey:@"star"];
+    [obj setObject:self.orderid forKey:@"orderid"];
     [obj saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
         if (isSuccessful) {
             [[regAndLogTool shareTools] messageShowWith:@"评论成功" cancelStr:@"确定"];

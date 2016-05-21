@@ -10,4 +10,5 @@
 
 @interface userPinglun : UIViewController
 @property(nonatomic,strong)NSString *rec_userid;
+@property(nonatomic,strong)NSString *orderid;
 @end

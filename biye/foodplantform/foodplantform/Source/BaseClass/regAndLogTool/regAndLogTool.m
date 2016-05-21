@@ -86,6 +86,9 @@ static regAndLogTool *rlt;
 //                    _usermodel.gender = [obj valueForKey:@"gender"];
 //                    _usermodel.head_img = [obj valueForKey:@"head_img"];
                 }
+                [self.parentVc dismissViewControllerAnimated:YES completion:^{
+                    
+                }];
             }];
             //更新用户的 deviceToken
             [user setObject:[[FileManager shareManager] currentDeviceToken] forKey:@"deviceToken"];
@@ -93,10 +96,7 @@ static regAndLogTool *rlt;
             [user updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
                 
             }];
-            loginViewController *log = [[loginViewController alloc]init];
-            [log.navigationController dismissViewControllerAnimated:YES completion:^{
-                
-            }];
+            
             
 
         }

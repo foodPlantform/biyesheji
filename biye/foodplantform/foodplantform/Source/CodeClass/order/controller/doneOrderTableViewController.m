@@ -13,6 +13,11 @@
 #import "PindanPesVC.h"
 #import "UserApplyListModel.h"
 #import "pinglunController.h"
+#import "replyTableViewController.h"
+#import "allpinglunViewController.h"
+#import "userPinglun.h"
+
+
 @interface doneOrderTableViewController ()<OrderCelllDelegate,BmobEventDelegate>
 @property (nonatomic,strong)NSMutableArray *orderDataArr;
 @property (nonatomic,strong)NSMutableArray *noHandelOrderArr;
@@ -330,10 +335,26 @@
        }
     if (_orderType.integerValue == 1)//评论
     {
-        pinglunController *vc=  [[pinglunController alloc] init];
-        vc.ordID = handeledModel.orderID;
+        BmobUser *user = [BmobUser getCurrentUser];
+        if ([user.objectId isEqualToString:handeledModel.senderID]) {
+            replyTableViewController *reply = [[replyTableViewController alloc]init];
+            reply.dataArr = handeledModel.applyUserIDArr;
+            
+            [_vc.navigationController pushViewController:reply animated:YES];
+        }
+        else
+        {
+            allpinglunViewController *allVc = [[allpinglunViewController alloc]init];
+            pinglunController *vc=  [[pinglunController alloc] init];
+            vc.ordID = handeledModel.orderID;
+            userPinglun *userVc = [[userPinglun alloc]init];
+            userVc.rec_userid = handeledModel.senderID;
+            userVc.orderid = handeledModel.orderID;
+            [_vc.navigationController pushViewController:allVc animated:YES];
+        }
+       
         
-        [_vc.navigationController pushViewController:vc animated:YES];
+        
     }
 
 }

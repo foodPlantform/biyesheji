@@ -13,6 +13,7 @@
 @interface regAndLogTool : NSObject
 @property(nonatomic,strong)NSString *loginName;
 @property(nonatomic,strong)userModel *usermodel;
+@property(nonatomic,strong) UIViewController *parentVc;
 
 
 +(regAndLogTool *)shareTools;

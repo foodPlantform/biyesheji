@@ -21,6 +21,7 @@
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [regAndLogTool shareTools].parentVc  = self;
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleDone target:self action:@selector(leftAction)];
     [self.lv.regBtn addTarget:self action:@selector(regAction) forControlEvents:UIControlEventTouchUpInside];
     [self.lv.loginBtn addTarget:self action:@selector(loginBtnAction) forControlEvents:UIControlEventTouchUpInside];

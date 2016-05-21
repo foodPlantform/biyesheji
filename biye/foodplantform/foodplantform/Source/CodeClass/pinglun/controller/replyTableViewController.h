@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface replyTableViewController : UITableViewController
-
+@property(nonatomic,strong)NSMutableArray *dataArr;
 @end
