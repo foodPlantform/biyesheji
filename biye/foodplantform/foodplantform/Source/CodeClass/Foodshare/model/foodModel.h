@@ -10,6 +10,7 @@
 
 @interface foodModel : NSObject
 @property(nonatomic,strong)NSString *fid;
+@property(nonatomic,strong)NSString *userid;
 @property(nonatomic,strong)NSString *foodName;
 @property(nonatomic,strong)NSString *userName;
 @property(nonatomic,strong)NSString *foodDes;

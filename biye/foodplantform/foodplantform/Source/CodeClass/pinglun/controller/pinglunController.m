@@ -51,26 +51,33 @@
 }
 -(void)sureAction
 {
-    [self p_setupProgressHud];
-    BmobUser *user = [BmobUser getCurrentUser];
-    
-
-    
-    BmobObject *obj = [BmobObject objectWithClassName:@"pinglun"];
-    [obj setObject:self.ordID forKey:@"ordid"];
-    [obj setObject:user.username forKey:@"username"];
-    [obj setObject:user.mobilePhoneNumber forKey:@"userphone"];
-    [obj setObject:self.pv.pinglun.text forKey:@"content"];
-    [obj setObject:[NSNumber numberWithFloat:_starStr] forKey:@"star"];
-    
-    
-    
-    
-    [obj saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
-       
-        if (isSuccessful) {
-            [[regAndLogTool shareTools] messageShowWith:@"评论成功" cancelStr:@"确定"];
-            self.hud.hidden = YES;
+    if ([self.pv.pinglun.text isEqualToString:@""]) {
+        
+        [[regAndLogTool shareTools] messageShowWith:@"请输入评论内容" cancelStr:@"确定"];
+        return;
+    }
+    else
+    {
+        [self p_setupProgressHud];
+        BmobUser *user = [BmobUser getCurrentUser];
+        
+        
+        
+        BmobObject *obj = [BmobObject objectWithClassName:@"pinglun"];
+        [obj setObject:self.ordID forKey:@"ordid"];
+        [obj setObject:user.username forKey:@"username"];
+        [obj setObject:user.mobilePhoneNumber forKey:@"userphone"];
+        [obj setObject:self.pv.pinglun.text forKey:@"content"];
+        [obj setObject:[NSNumber numberWithFloat:_starStr] forKey:@"star"];
+        
+        
+        
+        
+        [obj saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+            
+            if (isSuccessful) {
+                [[regAndLogTool shareTools] messageShowWith:@"评论成功" cancelStr:@"确定"];
+                self.hud.hidden = YES;
                 BmobQuery *query = [BmobQuery queryWithClassName:@"pinglun"];
                 [query whereKey:@"ordid" equalTo:self.ordID];
                 [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
@@ -95,19 +102,21 @@
                                 
                             }
                         }];
-
+                        
                     }
                     else
                     {
                         
                     }
                     
-                  
+                    
                     
                     
                 }];
-        }
-    }];
+            }
+        }];
+    }
+   
     
 }
 - (void)didReceiveMemoryWarning {

@@ -16,6 +16,7 @@
 @property(nonatomic,assign)BOOL isFullScreen;
 @property(nonatomic,assign)BOOL isupload;
 @property(nonatomic,strong)NSString *phone;
+@property(nonatomic,strong) NSString *userid;
 @end
 
 @implementation uploadFoodViewController
@@ -42,6 +43,7 @@
     
     BmobUser *user = [BmobUser getCurrentUser];
     self.phone = user.mobilePhoneNumber;
+    self.userid = user.objectId;
     
     [self.lv.imgBtn addTarget:self action:@selector(imgBtnAction) forControlEvents:UIControlEventTouchUpInside];
     [self.lv.chooseRec addTarget:self action:@selector(chooseRecAction) forControlEvents:UIControlEventTouchUpInside];
@@ -76,6 +78,7 @@
     [file saveInBackground:^(BOOL isSuccessful, NSError *error) {
         if (isSuccessful) {
             [_uploadObject setObject:file forKey:@"file"];
+            [_uploadObject setObject:self.userid forKey:@"userid"];
             [_uploadObject setObject:userName forKey:@"username"];
             [_uploadObject setObject:stuff.foodName forKey:@"foodname"];
             [_uploadObject setObject:stuff.foodDes forKey:@"fooddes"];
