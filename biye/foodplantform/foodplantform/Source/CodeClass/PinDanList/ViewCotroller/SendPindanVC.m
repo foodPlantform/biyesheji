@@ -263,7 +263,7 @@
     
     BmobObject *user_order = [BmobObject objectWithClassName:@"user_order"];
     [user_order setObject:_headUrlStr forKey:@"user_headUrl"];
-    [user_order setObject: _foodPriceTf.text forKey:@"order_Price"];
+    [user_order setObject: [NSNumber numberWithInteger:_foodPriceTf.text.integerValue]  forKey:@"order_Price"];
     [user_order setObject:_userNameStr forKey:@"order_userName"];
     [user_order setObject:@"0" forKey:@"order_Type"];
     [user_order setObject:bUser.objectId forKey:@"order_senderID"];
@@ -294,12 +294,15 @@
         // 1.跳出弹出框，提示用户打开步骤。
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"你发送拼单情况" message:isSuccessful==1?@"发步成功":@"发布失败请重新发布"  preferredStyle:UIAlertControllerStyleAlert];
         [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            _foodNameTf.text = nil;
-            [_foodLocationBtn setTitle:@" 点击获取地址" forState:0] ;
-            _foodTimeTf.text = nil;
-            _foodPayTypeTf.text = nil;
-            _foodPersonLBTf.text = nil;
-            _foodPersonNumTf.text = nil;
+            if (isSuccessful) {
+                _foodNameTf.text = nil;
+                [_foodLocationBtn setTitle:@" 点击获取地址" forState:0] ;
+                _foodTimeTf.text = nil;
+                _foodPayTypeTf.text = nil;
+                _foodPersonLBTf.text = nil;
+                _foodPersonNumTf.text = nil;
+            }
+            
         }]];
         [self presentViewController:alertController animated:YES completion:nil];
     }];

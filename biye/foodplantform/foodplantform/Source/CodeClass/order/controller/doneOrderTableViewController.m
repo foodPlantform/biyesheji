@@ -261,7 +261,7 @@
             [self loadDataArr];
         }];
        
-    }else if(_orderType.integerValue == 3)// 组队就餐
+    }else if(_orderType.integerValue == 3)// 点击完成事件
       {
          BmobQuery  *    _handelOrderQuery = [BmobQuery queryWithClassName:@"user_apply"];
           //添加user_order是gauge订单的信息
@@ -285,7 +285,7 @@
                        BmobQuery *query = [BmobInstallation query];
                        [query whereKey:@"deviceToken" equalTo:[obj objectForKey:@"deviceToken"]];
                        [push setQuery:query];
-                       [push setMessage:@"组队就餐"];
+                       [push setMessage:@"已完成就餐"];
                        [push sendPushInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
                            NSLog(@"error %@",[error description]);
                        }];
@@ -293,21 +293,46 @@
                   
                }
            }];
-          BmobObjectsBatch    *updateOrderList = [[BmobObjectsBatch alloc] init] ;
-          //在GameScore表中创建一条数据
-          //在GameScore表中更新objectId为27eabbcfec的数据 @{@"apply_orderType":_orderType}
-          [updateOrderList updateBmobObjectWithClassName:@"user_order" objectId:handeledModel.orderID parameters:@{@"order_Type": @"1"}];
-          //在GameScore表中删除objectId为30752bb92f的数据
-          //[batch deleteBmobObjectWithClassName:@"GameScore" objectId:@"30752bb92f"];
-          [updateOrderList batchObjectsInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
-//              NSLog(@"batch error %@",[error description]);
+//          BmobObjectsBatch    *updateOrderList = [[BmobObjectsBatch alloc] init] ;
+//          //在GameScore表中创建一条数据
+//          //在GameScore表中更新objectId为27eabbcfec的数据 @{@"apply_orderType":_orderType}
+//          [updateOrderList updateBmobObjectWithClassName:@"user_order" objectId:handeledModel.orderID parameters:@{@"order_Type": @"1"}];
+//          //在GameScore表中删除objectId为30752bb92f的数据
+//          //[batch deleteBmobObjectWithClassName:@"GameScore" objectId:@"30752bb92f"];
+//          [updateOrderList batchObjectsInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+////              NSLog(@"batch error %@",[error description]);
+//          }];
+          //在oldOrder表中创建一条数据
+          BmobUser *bUser = [BmobUser getCurrentUser];
+          
+          BmobObject *user_oldorder = [BmobObject objectWithClassName:@"user_oldorder"];
+          [user_oldorder setObject:handeledModel.userImgeUrl forKey:@"user_headUrl"];
+          [user_oldorder setObject: handeledModel.orderPrice forKey:@"order_Price"];
+          [user_oldorder setObject:handeledModel.niCheng forKey:@"order_userName"];
+          [user_oldorder setObject:@"1" forKey:@"order_Type"];
+          [user_oldorder setObject:bUser.objectId forKey:@"order_senderID"];
+          [user_oldorder setObject:@(handeledModel.currentPersonNum) forKey:@"order_currentNum"];
+          [user_oldorder setObject:@(handeledModel.personMaxNum)forKey:@"order_maxNum"];
+          [user_oldorder setObject:handeledModel.name forKey:@"order_name"];
+          
+          [user_oldorder setObject:handeledModel.target  forKey:@"order_target"];
+          
+          [user_oldorder setObject:handeledModel.timeDate forKey:@"order_time"];
+          [user_oldorder setObject:handeledModel.foodLocation forKey:@"order_locationStr"];
+          
+          //[user_oldorder setObject:handeledModel. forKey:@"order_loaction"];
+          [user_oldorder setObject:handeledModel.foodPayType forKey:@"order_payType"];
+          
+          // [user_order setObject:@78 forKey:@"score"];
+          [user_oldorder saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+              //添加到oldOrder 表
           }];
-          
-          
-      }
+       }
     if (_orderType.integerValue == 1)//评论
     {
         pinglunController *vc=  [[pinglunController alloc] init];
+        vc.ordID = handeledModel.orderID;
+        
         [_vc.navigationController pushViewController:vc animated:YES];
     }
 

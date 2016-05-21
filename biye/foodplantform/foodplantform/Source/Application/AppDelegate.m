@@ -37,7 +37,9 @@
     //2.设置窗口的跟控制器(这个tabbar是我封装的，在BaseClass文件夹里
     BaseTabBarController * tabBarVC = [[BaseTabBarController alloc]init];
     self.window.rootViewController = tabBarVC;
-    [self listen];
+    //[self listen];
+    //注册推送
+    [self RegisterBombPush];
     //3.显示窗口
     [self.window makeKeyAndVisible];
     
@@ -63,13 +65,61 @@
         
     }
    // [BmobUser logout];
+//    BmobQuery *query = [BmobInstallation query];
+//    //设置查询条件
+//    BmobPush *push = [BmobPush push];
+//      [push setQuery:query];
+//    //设置推送消息
+//    [push setMessage:@"所有人的推送的消息"];
+//    //发送推送
+//    [push sendPushInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
+//        NSLog(@"error %@",[error description]);
+//    }];
     
-    
+
     // 获取城市名
     [[getCity shareCity] startGetCityName];
     NSLog(@"==%@==",[getCity shareCity].cityName);
     
     return YES;
+}
+//注册推送
+- (void)RegisterBombPush
+{
+    //注册推送，iOS 8的推送机制与iOS 7有所不同，这里需要分别设置
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] >= 8.0) {
+        UIMutableUserNotificationCategory *categorys = [[UIMutableUserNotificationCategory alloc]init];
+        //注意：此处的Bundle ID要与你申请证书时填写的一致。
+        categorys.identifier=@"com.MWH.foodplantform";
+        
+        UIUserNotificationSettings *userNotifiSetting = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound) categories:[NSSet setWithObjects:categorys,nil]];
+        
+        [[UIApplication sharedApplication] registerUserNotificationSettings:userNotifiSetting];
+        
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+    }else {
+        //注册远程推送
+        UIRemoteNotificationType myTypes = UIRemoteNotificationTypeBadge|UIRemoteNotificationTypeAlert|UIRemoteNotificationTypeSound;
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:myTypes];
+    }
+}
+-(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken{
+    
+    //注册成功后上传Token至服务器
+    BmobInstallation  *currentIntallation = [BmobInstallation installation];
+    [currentIntallation setDeviceTokenFromData:deviceToken];
+    
+    [currentIntallation saveInBackground];
+    //保存的当前的currentDeviceToken
+    NSUserDefaults *userDefault = [NSUserDefaults standardUserDefaults];
+    [userDefault  setObject:deviceToken forKey:@"currentDeviceToken"];
+}
+// 处理推送消息
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
+    // 处理推送消息
+    NSLog(@"userinfo:%@",userInfo);
+    
+    NSLog(@"收到推送消息:%@",[[userInfo objectForKey:@"aps"] objectForKey:@"alert"]);
 }
 -(void)listen{
     //创建BmobEvent对象
