@@ -211,6 +211,8 @@
     KCMainViewController *vc =[[KCMainViewController alloc ] init];
     vc.delegate = self;
     vc.navigationItem.title = @"长按选择地址";
+    vc.currentCLLocationCoordinate2D = _currentCLLocationCoordinate2D;
+
     vc.tabBarController.tabBar.hidden=YES;
     [self.navigationController pushViewController:vc animated:YES];
 

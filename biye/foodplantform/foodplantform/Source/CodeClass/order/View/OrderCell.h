@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@class FoodListModel;
 @class OrderCell;
 @class BmobOrderModel;
 @class UserApplyListModel;
@@ -18,9 +19,18 @@
  *  @param index <#index description#>
  */
 @optional
-
+#pragma mark -  order表的处理方法
 - (void)handleOrderCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(BmobOrderModel *)handeledModel;
 - (void)ChatOrderCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(BmobOrderModel *)handeledModel;
+//显示评论
+- (void)showPinlunCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(BmobOrderModel *)handeledModel;
+//加好友
+- (void)AddFriendPinlunCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(BmobOrderModel *)handeledModel;
+
+#pragma mark -  美食表的处理方法
+// 评论 同意 已完成
+- (void)handleFoodCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(FoodListModel *)handeledModel;
+- (void)noAgreeFoodCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(FoodListModel *)handeledModel;
 @end
 #import "BmobOrderModel.h"
 #import "UserApplyListModel.h"
@@ -32,11 +42,14 @@
 @property(nonatomic,strong)UILabel *foodNameLB;
 //拼单加入人 或者是发单人
 @property(nonatomic,strong)UILabel *foodUserNameLB;
+@property(nonatomic,strong)UIButton *foodUserNameBtn;
 
 //拼单处理事件
 @property(nonatomic,strong)UIButton *orderBtn;
 //拼单聊天事件
 @property(nonatomic,strong)UIButton *orderChatBtn;
+//拼单聊天事件
+@property(nonatomic,strong)UIButton * addFriendBtn;
 //拼单时间
 @property(nonatomic,strong)UILabel *foodTimeLB;
 //拼单地点

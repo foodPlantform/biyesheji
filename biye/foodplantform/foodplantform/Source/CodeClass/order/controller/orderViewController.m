@@ -82,7 +82,7 @@
     //美食
     _foodMenuView = [[SUNSlideSwitchView alloc] initWithFrame:CGRectMake(kScreenWidth, 64, kScreenWidth, kScreenHeight-44-20)];
     _foodMenuView.tag = 101;
-    _foodMenuView.dataArr = @[@"已发布美食",@"已完成美食",@"已处理美食",@"待处理美食",@"待审核美食",@"已审核美食"];
+    _foodMenuView.dataArr = @[@"已发布美食",@"已完成美食",@"待处理美食",@"已处理美食",@"待审核美食",@"已审核美食"];
     _foodMenuView.slideSwitchViewDelegate =self;
     [self.menuScrollView addSubview:_foodMenuView];
     [_foodMenuView buildUI];
