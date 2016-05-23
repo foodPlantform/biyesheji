@@ -27,6 +27,7 @@
 #import <BmobSDK/Bmob.h>
 #import "UIImageView+WebCache.h"
 #import "MBProgressHUD.h"
+#import "IQKeyboardManager.h"
 
 
 #endif

@@ -17,7 +17,7 @@
 #import "pinglunController.h"
 #import "allpinglunViewController.h"
 
-@interface mineTableViewController ()
+@interface mineTableViewController ()<UIAlertViewDelegate>
 @property(nonatomic,strong)UITapGestureRecognizer *tap;
 @end
 
@@ -87,7 +87,7 @@
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
         
         if (indexPath.section == 0 && indexPath.row == 1) {
-            cell.textLabel.text = @"上传美食";
+            cell.textLabel.text = @"我的美食";
         }
         if (indexPath.section == 0 && indexPath.row == 2) {
             cell.textLabel.text = @"我的订单";
@@ -99,7 +99,7 @@
             cell.textLabel.text = @"注销登录";
         }
         if (indexPath.section == 0 && indexPath.row == 5) {
-            cell.textLabel.text  = @"评论";
+            cell.textLabel.text  = @"清除缓存";
         }
         
         
@@ -147,16 +147,51 @@
         [self.navigationController pushViewController:userVc animated:YES];
     }
     if (indexPath.section == 0 && indexPath.row ==4) {
+        [self regAction];
+    }
+    if (indexPath.section == 0 && indexPath.row == 5) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"确定要清除缓存吗?" message:@"将清除本地缓存" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确认", nil];
+        alert.delegate = self;
+        alert.tag = 103;
+        [alert show];    }
+}
+-(void)regAction
+{
+    if ([regAndLogTool shareTools].loginName == nil) {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您还未登陆" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+        alert.tag = 101;
+        alert.delegate = self;
+        [alert show];
+        return;
+    }
+    else
+    {
+        UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"您确定要注销吗?" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"确定", nil];
+        alert.tag = 102;
+        alert.delegate =self;
+        [alert show];
+    }
+}
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView.tag == 102 && buttonIndex == 1) {
         [BmobUser logout];
         [[regAndLogTool shareTools] setValue:nil forKey:@"loginName"];
         [[regAndLogTool shareTools] messageShowWith:@"注销成功" cancelStr:@"确定"];
     }
-    if (indexPath.section == 0 && indexPath.row == 5) {
-        allpinglunViewController *allpinglunVc = [[allpinglunViewController alloc]init];
-        [self.navigationController pushViewController:allpinglunVc animated:YES];
+    if (alertView.tag == 103 && buttonIndex == 1) {
+        UIAlertView *a = [[UIAlertView alloc]initWithTitle:@"已清除缓存!" message:nil delegate:self cancelButtonTitle:@"确认" otherButtonTitles:nil];
+        NSString *cachesPath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
+        
+        NSFileManager *manager = [NSFileManager defaultManager];
+        
+        //删除
+        [manager removeItemAtPath:cachesPath error:nil];
+        
+        a.tag = 104;
+        [a show];
     }
 }
-
 
 // 返回高度
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{

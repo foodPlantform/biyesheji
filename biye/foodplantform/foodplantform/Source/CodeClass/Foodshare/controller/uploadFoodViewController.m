@@ -11,7 +11,7 @@
 #import "uploadTool.h"
 #import "AddressPickerDemo.h"
 
-@interface uploadFoodViewController ()
+@interface uploadFoodViewController ()<UITextFieldDelegate>
 @property(nonatomic,strong)loadupFoodView *lv;
 @property(nonatomic,assign)BOOL isFullScreen;
 @property(nonatomic,assign)BOOL isupload;
@@ -37,7 +37,12 @@
 {
     self.lv = [[loadupFoodView alloc]init];
     self.view = _lv;
+    //[DaiDodgeKeyboard addRegisterTheViewNeedDodgeKeyboard:self.view];
 }
+//-(void)textFieldDidEndEditing:(UITextField *)textField
+//{
+//    self.lv.frame = [[UIScreen mainScreen]bounds];
+//}
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -51,7 +56,28 @@
     [self.lv.upBtn addTarget:self action:@selector(upBtnAction) forControlEvents:UIControlEventTouchUpInside];
     
     [self.lv.chooseCity addTarget:self action:@selector(chooseCityAction) forControlEvents:UIControlEventTouchUpInside];
+    UIToolbar * topView = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 30)];
+    [topView setBarStyle:UIBarStyleDefault];
+    
+    UIBarButtonItem * btnSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+    
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = CGRectMake(2, 5, 30, 25);
+    [btn addTarget:self action:@selector(dismissKeyBoard) forControlEvents:UIControlEventTouchUpInside];
+    [btn setBackgroundImage:[UIImage imageNamed:@"down"] forState:UIControlStateNormal];
+    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithCustomView:btn];
+    NSArray * buttonsArray = [NSArray arrayWithObjects:btnSpace,doneBtn,nil];
+    [topView setItems:buttonsArray];
+    [self.lv.foodName setInputAccessoryView:topView];
+    [self.lv.foodDes setInputAccessoryView:topView];
+    [self.lv.address setInputAccessoryView:topView];
     // Do any additional setup after loading the view.
+}
+-(void)dismissKeyBoard
+{
+    [self.lv.foodName resignFirstResponder];
+    [self.lv.foodDes resignFirstResponder];
+    [self.lv.address resignFirstResponder];
 }
 #pragma ====chooseCity=====
 -(void)chooseCityAction
