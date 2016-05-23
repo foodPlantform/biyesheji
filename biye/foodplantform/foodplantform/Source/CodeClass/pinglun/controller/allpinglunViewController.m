@@ -23,10 +23,13 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
     self.pingVc = [[pinglunController alloc]init];
+    self.pingVc.ordID = self.ordid;
     self.pingVc.view.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight);
     [self addChildViewController:_pingVc];
     
     self.userVc  = [[userPinglun alloc]init];
+    self.userVc.rec_userid = self.rec_userid;
+    self.ordid = self.ordid;
     [self addChildViewController:_userVc];
     self.userVc.view.frame = CGRectMake(0, 66, kScreenWidth, kScreenHeight);
     

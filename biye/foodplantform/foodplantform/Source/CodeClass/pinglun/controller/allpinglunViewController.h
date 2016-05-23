@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface allpinglunViewController : UIViewController
-
+@property(nonatomic,strong)NSString *ordid;
+@property(nonatomic,strong)NSString *rec_userid;
 @end
