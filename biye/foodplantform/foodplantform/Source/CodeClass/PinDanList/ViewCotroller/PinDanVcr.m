@@ -243,6 +243,8 @@
 - (void)leftItemBtnAction
 {
     SendPindanVC *sendPindanVc = [[SendPindanVC alloc] init];
+    CLLocationCoordinate2D coords = CLLocationCoordinate2DMake(_currentBmobLocation.latitude,_currentBmobLocation.longitude);//纬度，经度
+    sendPindanVc.currentCLLocationCoordinate2D  = coords;
     [self.navigationController pushViewController:sendPindanVc animated:YES];
 
 }

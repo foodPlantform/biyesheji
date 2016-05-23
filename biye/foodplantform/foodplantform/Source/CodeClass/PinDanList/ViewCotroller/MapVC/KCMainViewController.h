@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import <CoreLocation/CoreLocation.h>
+#import <MapKit/MapKit.h>
+#import "KCAnnotation.h"
+#import "KCCalloutAnnotation.h"
+#import "KCCalloutAnnotationView.h"
 @class CLPlacemark;
 @protocol KCLocationLongPressToDoDelegate <NSObject>
 
@@ -20,6 +24,6 @@
 //搜索地理位置
 @property(nonatomic,strong)UISearchBar *searchBar;
 
-
+@property(nonatomic,assign)CLLocationCoordinate2D currentCLLocationCoordinate2D ;
 @property (assign, nonatomic) id <KCLocationLongPressToDoDelegate> delegate;
 @end

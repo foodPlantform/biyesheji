@@ -10,5 +10,6 @@
 
 @interface SendPindanVC : UIViewController
 @property(nonatomic,strong)MBProgressHUD *sendPindanHud;
+@property(nonatomic,assign)CLLocationCoordinate2D currentCLLocationCoordinate2D ;
 
 @end

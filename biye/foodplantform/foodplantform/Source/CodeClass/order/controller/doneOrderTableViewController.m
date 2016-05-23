@@ -233,6 +233,7 @@
     vc.model = _orderDataArr[indexPath.row];
     [self.navigationController pushViewController:vc animated:YES];
 }
+#pragma mark - 拼单表的处理方法
 //处理拼单时间 order 表中 0
 - (void)handleOrderCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(BmobOrderModel *)handeledModel
 {
@@ -352,8 +353,6 @@
             userVc.orderid = handeledModel.orderID;
             [_vc.navigationController pushViewController:allVc animated:YES];
         }
-       
-        
         
     }
 
@@ -369,6 +368,13 @@
             if (isSuccessful) {
                 //删除成功后的动作
                 NSLog(@"successful");
+                BmobObject *deleteUserOrder = [BmobObject objectWithoutDatatWithClassName:@"user_order" objectId:handeledModel.orderID];
+                [deleteUserOrder decrementKey:@"order_currentNum"];
+                [deleteUserOrder removeObjectsInArray:@[model.applyUserListID] forKey:@"apply_userIDArr"];
+                [deleteUserOrder updateInBackground];
+                //人数-1
+               
+                [self loadDataArr];
             } else if (error){
                 NSLog(@"%@",error);
             } else {
@@ -376,7 +382,104 @@
             }
         }];
     }
+    //修改状态 之后重新加载数据
+    if (_orderType.integerValue == 3) //群聊
+    {
+        
+    }
 }
+//查看对申请人的历史评论
+- (void)showPinlunCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(BmobOrderModel *)handeledModel
+{
+    
+    
+}
+//加好友
+- (void)AddFriendPinlunCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(BmobOrderModel *)handeledModel
+{
+    
+}
+
+#pragma mark -  美食表的处理方法
+// 评论 同意 已完成
+- (void)handleFoodCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(FoodListModel *)handeledModel
+{
+    //修改状态 之后重新加载数据
+    if (_orderType.integerValue == 2)//同意的美食
+    {
+        BmobObject  *user_apply = [BmobObject objectWithoutDatatWithClassName:@"user_apply" objectId:model.applyListobjectId];
+        [user_apply setObject:@"3" forKey:@"sender_OrderType"];
+        [user_apply setObject:@"5" forKey:@"apply_orderType"];
+        [user_apply updateInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+            if (isSuccessful)
+            {
+                BmobQuery *userquery = [BmobQuery queryForUser];
+                [userquery whereKey:@"objectId" equalTo:model.applyUserListID];
+                [userquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+                    BmobObject *obj = array[0];
+                    BmobPush *push = [BmobPush push];
+                    BmobQuery *query = [BmobInstallation query];
+                    [query whereKey:@"deviceToken" equalTo:[obj objectForKey:@"deviceToken"]];
+                    [push setQuery:query];
+                    [push setMessage:@"你有美食已经审核了"];
+                    [push sendPushInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
+                        NSLog(@"error %@",[error description]);
+                    }];
+                }];
+                
+                [[regAndLogTool shareTools]  messageShowWith:@"已审核" cancelStr:@"确定"];
+                [self loadDataArr];
+            }
+            
+        }];
+    }
+    if (_orderType.integerValue == 1)//评论
+    {
+        BmobUser *user = [BmobUser getCurrentUser];
+        if ([user.objectId isEqualToString:handeledModel.senderID]) {
+            replyTableViewController *reply = [[replyTableViewController alloc]init];
+            reply.dataArr = handeledModel.applyUserIDArr;
+            
+            [_vc.navigationController pushViewController:reply animated:YES];
+        }
+        else
+        {
+            allpinglunViewController *allVc = [[allpinglunViewController alloc]init];
+            pinglunController *vc=  [[pinglunController alloc] init];
+            vc.ordID = handeledModel.orderID;
+            userPinglun *userVc = [[userPinglun alloc]init];
+            userVc.rec_userid = handeledModel.senderID;
+            userVc.orderid = handeledModel.orderID;
+            [_vc.navigationController pushViewController:allVc animated:YES];
+        }
+        
+    }
+     if (_orderType.integerValue == 5)//已完成
+     {
+         BmobObjectsBatch    *batch = [[BmobObjectsBatch alloc] init] ;
+         //在GameScore表中创建一条数据
+         //在GameScore表中更新objectId为27eabbcfec的数据 @{@"apply_orderType":_orderType}
+         [batch updateBmobObjectWithClassName:@"user_apply" objectId:model.applyListobjectId parameters:@{@"apply_orderType": @"1",@"sender_OrderType": @"1"}];
+         //在GameScore表中删除objectId为30752bb92f的数据
+         //[batch deleteBmobObjectWithClassName:@"GameScore" objectId:@"30752bb92f"];
+         [batch batchObjectsInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+             NSLog(@"batch error %@",[error description]);
+         }];
+     }
+}
+//不同意food
+ - (void)noAgreeFoodCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(FoodListModel *)handeledModel
+{
+    BmobObject *bmobObject = [BmobObject objectWithoutDatatWithClassName:@"user_apply"  objectId:model.applyListobjectId];
+    [bmobObject deleteInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
+        if (isSuccessful) {
+            [[regAndLogTool shareTools]  messageShowWith:@"已审核" cancelStr:@"确定"];
+            [self loadDataArr];
+        }
+    } ];
+}
+#pragma mark -  监听user_apply表的变化
+
 -(void)listen{
     //创建BmobEvent对象
     _bmobEvent          = [BmobEvent defaultBmobEvent];
