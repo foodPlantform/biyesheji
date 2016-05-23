@@ -35,6 +35,7 @@
     self.pwStr.layer.borderWidth = 0.5;
     self.pwStr.layer.borderColor = [UIColor grayColor].CGColor;
     self.pwStr.textAlignment = UITextAlignmentCenter;
+    [self.pwStr setSecureTextEntry:YES];
     [self addSubview:_pwStr];
     
     // 确认密码
@@ -43,6 +44,7 @@
     self.ensurePwStr.layer.borderWidth = 0.5;
     self.ensurePwStr.layer.borderColor = [UIColor grayColor].CGColor;
     self.ensurePwStr.textAlignment = UITextAlignmentCenter;
+    [self.ensurePwStr setSecureTextEntry:YES];
     [self addSubview:_ensurePwStr];
     _sureSmsTf = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMinX(self.ensurePwStr.frame), CGRectGetMaxY(self.ensurePwStr.frame)+10, CGRectGetWidth(self.ensurePwStr.frame)-100, CGRectGetHeight(self.ensurePwStr.frame))];
     _sureSmsTf.backgroundColor = [UIColor greenColor];

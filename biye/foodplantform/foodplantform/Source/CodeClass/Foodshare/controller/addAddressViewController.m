@@ -65,7 +65,7 @@
 }
 -(void)sureAction
 {
-    if ([self.av.name.text isEqualToString:@""] || [self.av.phone.text isEqualToString:@""] || [self.av.address.text isEqualToString:@""] || [self.av.cityLabel.text isEqualToString:@""]) {
+    if ([self.av.name.text isEqualToString:@""] || [self.av.phone.text isEqualToString:@""] || [self.av.address.text isEqualToString:@""] || self.av.cityLabel.text == nil) {
         [[regAndLogTool shareTools] messageShowWith:@"请输入完整内容" cancelStr:@"确定"];
     }
     else

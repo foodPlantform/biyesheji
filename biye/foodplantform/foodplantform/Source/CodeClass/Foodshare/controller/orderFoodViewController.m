@@ -41,6 +41,13 @@
    
     // Do any additional setup after loading the view.
 }
+-(CGFloat)heightforstring:(NSString *)str
+{
+    NSDictionary *dic = @{NSFontAttributeName:[UIFont systemFontOfSize:18.0]};
+    CGRect rect = [str boundingRectWithSize:CGSizeMake(kScreenWidth-20, 5000) options:NSStringDrawingUsesLineFragmentOrigin attributes:dic context:nil];
+    
+    return rect.size.height;
+}
 -(void)addNumAction
 {
     if (self.num<0) {
@@ -68,7 +75,11 @@
 -(void)p_data
 {
     self.ov.foodName.text = self.foodmodel_ord.foodName;
-    self.ov.fooddes.text = self.foodmodel_ord.foodDes;
+    CGRect rect1 = self.ov.fooddes.frame;
+    rect1.size.height = [self heightforstring:self.foodmodel_ord.foodDes];
+    self.ov.fooddes.frame = rect1;
+
+    self.ov.fooddes.text = [NSString stringWithFormat:@"美食描述：%@",self.foodmodel_ord.foodDes];
     self.ov.rec.text = self.foodmodel_ord.rec;
     self.ov.sty.text = self.foodmodel_ord.sty;
 }
@@ -106,6 +117,9 @@
         {
             //[[regAndLogTool shareTools] messageShowWith:@"预订成功" cancelStr:@"确定"];
             chooseTimeViewController *chVc =  [[chooseTimeViewController alloc]init];
+            chVc.foodID  = self.foodmodel_ord.fid;
+            chVc.phone = self.foodmodel_ord.phone;
+            chVc.fm = self.foodmodel_ord;
             [self.parentVc.navigationController pushViewController:chVc animated:YES];
         }
         else

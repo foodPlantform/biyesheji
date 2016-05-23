@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface chooseTimeViewController : UIViewController
-
+@property(nonatomic,strong)NSString * foodID;
+@property(nonatomic,strong)NSString *phone;
+@property(nonatomic,strong)foodModel *fm;
 @end

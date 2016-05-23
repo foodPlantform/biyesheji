@@ -114,11 +114,13 @@
 #pragma ====上传按钮事件=====
 -(void)upBtnAction
 {
+    NSLog(@"rec%@",self.lv.rec.text);
     
     [self p_setupProgressHud];
-    if ([self.lv.foodName.text isEqualToString:@""] || [self.lv.foodDes.text isEqualToString:@""] || [self.lv.address.text isEqualToString:@""] || [self.lv.rec.text isEqualToString:@""] || [self.lv.sty.text isEqualToString:@""] || self.lv.picture.image == nil) {
+    if ([self.lv.foodName.text isEqualToString:@""] || [self.lv.foodDes.text isEqualToString:@""] || [self.lv.address.text isEqualToString:@""] || self.lv.rec.text == nil || self.lv.sty.text == nil || self.lv.picture.image == nil || self.lv.cityLabel.text == nil) {
         UIAlertView *message = [[UIAlertView alloc]initWithTitle:@"提示" message:@"请输入完整内容" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
         [message show];
+        self.hud.hidden = YES;
     }
     else
     {

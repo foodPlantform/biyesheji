@@ -51,6 +51,7 @@
                 fm.userName  =[obj objectForKey:@"username"];
                 fm.picUrl = [obj objectForKey:@"picurl"];
                 fm.cityName = [obj objectForKey:@"city"];
+                fm.phone = [obj objectForKey:@"phone"];
                 [self.dataArr addObject:fm];
                 
             }

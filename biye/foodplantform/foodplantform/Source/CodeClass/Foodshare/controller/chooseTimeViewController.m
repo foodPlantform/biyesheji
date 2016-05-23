@@ -17,6 +17,7 @@
 @interface chooseTimeViewController ()<KMDatePickerDelegate,UITextFieldDelegate>
 @property(nonatomic,strong)chooseTimeView *cv;
 @property(nonatomic,strong)NSDate *date;
+@property(nonatomic,strong)NSString *senderID;
 @end
 
 @implementation chooseTimeViewController
@@ -38,6 +39,54 @@
 }
 -(void)sureAction
 {
+    BmobUser *user =[BmobUser getCurrentUser];
+    BmobObject *user_applyList = [BmobObject objectWithClassName:@"user_apply"];
+    //订单 申请的人数 及状态 5 通过 4待审核  拼单人的状态
+    //订单状态 1已完成   2待处理的 3 已处理 发单人的订单状态
+    
+    [user_applyList setObject:@"4" forKey:@"apply_orderType"];
+    [user_applyList setObject:@"2" forKey:@"sender_OrderType"];
+    //0 表示order表 1 food表
+    [user_applyList setObject:@"1" forKey:@"apply_type"];
+    [user_applyList setObject:user.objectId forKey:@"apply_userID"];
+    [user_applyList setObject:user.username forKey:@"apply_userName"];
+    [user_applyList setObject:self.foodID forKey:@"order_ID"];
+    NSLog(@"phone%@",_fm.phone);
+    BmobQuery *query = [BmobQuery queryWithClassName:@"_User"];
+    [query whereKey:@"mobilePhoneNumber" equalTo:_fm.phone];
+    [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        
+        BmobObject *obj = array[0];
+        [user_applyList setObject:[obj objectForKey:@"objectId"] forKey:@"sender_userID"];
+        
+        [user_applyList setObject:[obj objectForKey:@"username"] forKey:@"sender_userName"];
+        self.senderID = [obj objectForKey:@"objectId"];
+        
+        [user_applyList saveInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+            if (isSuccessful) {
+                [[regAndLogTool shareTools] messageShowWith:@"预订成功" cancelStr:@"确定"];
+                BmobQuery *userquery = [BmobQuery queryForUser];
+                [userquery whereKey:@"objectId" equalTo:_senderID];
+                
+                [userquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+                    
+                    BmobObject *obj = array[0];
+                    BmobPush *push = [BmobPush push];
+                    BmobQuery *query = [BmobInstallation query];
+                    [query whereKey:@"deviceToken" equalTo:[obj objectForKey:@"deviceToken"]];
+                    [push setQuery:query];
+                    [push setMessage:@"有人申请你的订单了，去看看吧"];
+                    [push sendPushInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
+                        NSLog(@"error %@",[error description]);
+                    }];
+                }];
+                
+            }
+        }];
+        
+        
+    }];
+
     [[regAndLogTool shareTools] messageShowWith:@"预订成功" cancelStr:@"确定"];
 }
 #pragma mark - KMDatePickerdelegate

@@ -107,9 +107,10 @@
     
     cell.selectedBackgroundView.backgroundColor = [UIColor greenColor];
     addressModel *am = self.dataArr[indexPath.row];
-    cell.name.text = am.nickname;
-    cell.phone.text = am.phonenow;
-    cell.address.text  = am.address;
+    
+    cell.name.text = [NSString stringWithFormat:@"姓名：%@",am.nickname];
+    cell.phone.text = [NSString stringWithFormat:@"电话：%@",am.phonenow];
+    cell.address.text  = [NSString stringWithFormat:@"收货地址：%@",am.address];
     return cell;
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

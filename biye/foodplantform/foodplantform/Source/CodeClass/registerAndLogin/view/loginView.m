@@ -34,6 +34,7 @@
     self.pwStr.layer.borderWidth = 0.5;
     self.pwStr.layer.borderColor = [UIColor grayColor].CGColor;
     self.pwStr.textAlignment = UITextAlignmentCenter;
+    [self.pwStr setSecureTextEntry:YES];
     [self addSubview:_pwStr];
     
     
