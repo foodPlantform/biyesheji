@@ -85,10 +85,12 @@
                     BmobQuery *foodquery = [BmobQuery queryWithClassName:@"food_message"];
                     [foodquery whereKey:@"userid" equalTo:self.rec_userid];
                     [foodquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+                        for (BmobObject *foodobj in array) {
+                            [foodobj setObject:[NSString stringWithFormat:@"%0.1f",self.userScore] forKey:@"userscore"];
+                            [foodobj updateInBackground];
+                        }
                         
-                        BmobObject *foodObj = array[0];
-                        [foodObj setObject:[NSString stringWithFormat:@"%0.1f",self.userScore] forKey:@"userscore"];
-                        [foodObj updateInBackground];
+                        
                         
                     }];
                 }];
