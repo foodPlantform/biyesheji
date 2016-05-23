@@ -11,24 +11,100 @@
 #import "addAddressViewController.h"
 #import "recAddressCell.h"
 #import "addressModel.h"
+#import "MJRefresh.h"
 
 @interface addressViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong)addressView *av;
 @property(nonatomic,strong)NSMutableArray *dataArr;
 @property(nonatomic,strong)NSString *nickname;
 @property(nonatomic,strong)NSString *username;
-
+@property(nonatomic,strong)MBProgressHUD *hud;
 @property(nonatomic,strong)NSString *phonenow;
 @property(nonatomic,strong)NSString *address;
 @property(nonatomic,strong)NSString *senderID;
+@property(nonatomic,strong) BmobQuery *bQuery;
 @end
 
 @implementation addressViewController
+- (void)p_setupProgressHud
+{
+    self.hud = [[MBProgressHUD alloc] initWithView:self.view];
+    _hud.frame = self.view.bounds;
+    _hud.minSize = CGSizeMake(100, 100);
+    _hud.mode = MBProgressHUDModeIndeterminate;
+    [self.view addSubview:_hud];
+    
+    [_hud show:YES];
+}
 -(void)loadView
 {
     self.av = [[addressView alloc]init];
     self.view = _av;
 }
+// 下拉刷新
+- (void)setupRefresh
+{
+    // 1.下拉刷新(进入刷新状态就会调用self的headerRereshing)
+    self.av.tableView.mj_header=[MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+    //[_mainTableView.mj_header beginRefreshing];
+    self.av.tableView.mj_footer=[MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+}
+-(void)loadNewData
+{
+    
+    self.bQuery.limit = 10;
+    self.bQuery.skip = 0;
+    
+    [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        [self.dataArr removeAllObjects];
+        for (BmobObject *obj in array) {
+            addressModel *am = [[addressModel alloc]init];
+            am.username = [obj objectForKey:@"username"];
+            am.nickname = [obj objectForKey:@"nickname"];
+            am.phonenow = [obj objectForKey: @"phonenow"];
+            am.address = [obj objectForKey:@"address"];
+            am.phone =  [obj objectForKey:@"phone"];
+            
+            [self.dataArr addObject:am];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.av.tableView reloadData];
+            self.hud.hidden = YES;
+            
+            [self.av.tableView.mj_header endRefreshing];
+            
+        });
+        
+    }];
+}
+-(void)loadMoreData
+{
+    self.bQuery.limit = 10;
+    self.bQuery.skip += 10;
+    [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        for (BmobObject *obj in array) {
+            addressModel *am = [[addressModel alloc]init];
+            am.username = [obj objectForKey:@"username"];
+            am.nickname = [obj objectForKey:@"nickname"];
+            am.phonenow = [obj objectForKey: @"phonenow"];
+            am.address = [obj objectForKey:@"address"];
+            am.phone =  [obj objectForKey:@"phone"];
+            
+            [self.dataArr addObject:am];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.av.tableView reloadData];
+            self.hud.hidden = YES;
+            
+            [self.av.tableView.mj_footer endRefreshing];
+            
+        });
+        
+    }];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.edgesForExtendedLayout = UIRectEdgeNone;
@@ -38,39 +114,21 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleDone target:self action:@selector(leftAction)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"添加地址" style:UIBarButtonItemStyleDone target:self action:@selector(rightAction)];
     [self.av.btn addTarget:self action:@selector(btnAction) forControlEvents:UIControlEventTouchUpInside];
-    self.av.btn.enabled = NO;
-    BmobUser *user = [BmobUser getCurrentUser];
     
-//    self.dataArr = [NSMutableArray array];
-//    BmobQuery *query = [BmobQuery queryWithClassName:@"address"];
-//    [query whereKey:@"username" equalTo:user.username];
-//    [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
-//       
-//        for (BmobObject *obj in array) {
-//            addressModel *am = [[addressModel alloc]init];
-//            am.username = [obj objectForKey:@"username"];
-//            am.nickname = [obj objectForKey:@"nickname"];
-//            am.phonenow = [obj objectForKey: @"phonenow"];
-//            am.address = [obj objectForKey:@"address"];
-//            am.phone =  [obj objectForKey:@"phone"];
-//            [self.dataArr addObject:am];
-//            
-//        }
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [self.av.tableView reloadData];
-//        });
-//    }];
     
-    // Do any additional setup after loading the view.
+ 
 }
 -(void)viewWillAppear:(BOOL)animated
 {
+    self.av.btn.enabled = NO;
+    [self p_setupProgressHud];
     BmobUser *user = [BmobUser getCurrentUser];
-    
     self.dataArr = [NSMutableArray array];
-    BmobQuery *query = [BmobQuery queryWithClassName:@"address"];
-    [query whereKey:@"username" equalTo:user.username];
-    [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+    self.bQuery.limit = 10;
+    self.bQuery.skip = 0;
+    self.bQuery = [BmobQuery queryWithClassName:@"address"];
+    [_bQuery whereKey:@"username" equalTo:user.username];
+    [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
         
         for (BmobObject *obj in array) {
             addressModel *am = [[addressModel alloc]init];
@@ -85,8 +143,10 @@
         }
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.av.tableView reloadData];
+            self.hud.hidden = YES;
         });
     }];
+    [self setupRefresh];
 
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -100,12 +160,15 @@
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     recAddressCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+    
+    // cell 选中的视图
     cell.selectedBackgroundView = [[UIView alloc]initWithFrame:cell.frame];
     UIImageView *img = [[UIImageView alloc]initWithFrame:CGRectMake(kScreenWidth - 30,40, 30, 30)];
     img.image = [UIImage imageNamed:@"check"];
     [cell.selectedBackgroundView addSubview:img];
     
-    cell.selectedBackgroundView.backgroundColor = [UIColor greenColor];
+    //cell.selectedBackgroundView.backgroundColor = [UIColor darkGrayColor];
+    /////////
     addressModel *am = self.dataArr[indexPath.row];
     
     cell.name.text = [NSString stringWithFormat:@"姓名：%@",am.nickname];
@@ -127,7 +190,7 @@
 -(void)leftAction
 {
     [self.navigationController popViewControllerAnimated:YES];
-    [self setHidesBottomBarWhenPushed:NO];
+    //[self setHidesBottomBarWhenPushed:NO];
 }
 -(void)rightAction
 {

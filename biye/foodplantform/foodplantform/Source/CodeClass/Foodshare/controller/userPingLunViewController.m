@@ -13,12 +13,16 @@
 
 @interface userPingLunViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong)NSMutableArray *dataArr;
+@property(nonatomic,assign)CGFloat height;
+@property(nonatomic,strong) NSMutableArray *heightArr;
+@property(nonatomic,assign) CGFloat max;
 @end
 
 @implementation userPingLunViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.heightArr = [NSMutableArray array];
     self.view.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight-170);
     self.tableView = [[UITableView alloc]initWithFrame:self.view.frame];
     [self.view addSubview:_tableView];
@@ -65,6 +69,14 @@
 {
     return self.dataArr.count;
 }
+-(CGFloat)heightforstring:(NSString *)str
+{
+    NSDictionary *dic = @{NSFontAttributeName:[UIFont systemFontOfSize:18.0]};
+    CGRect rect = [str boundingRectWithSize:CGSizeMake(kScreenWidth-20, 5000) options:NSStringDrawingUsesLineFragmentOrigin attributes:dic context:nil];
+    
+    return rect.size.height;
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // 1.重用标示符
@@ -78,7 +90,12 @@
     userpinglunModel *um = self.dataArr[indexPath.row];
     cell.userName.text = um.name;
     cell.star.value = [um.star floatValue];
+    
     cell.content.text = um.content;
+    CGRect rect1 = cell.content.frame;
+    rect1.size.height = [self heightforstring:um.content];
+    self.height = rect1.size.height;
+    [self.heightArr addObject:[NSNumber numberWithFloat:_height]];
     
     
     //cell.userName.text = @"qwer";
@@ -87,7 +104,14 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 80;
+    //return 80;
+    for (int i = 0; i<_heightArr.count; i++) {
+        _max = 0;
+        if ([_heightArr[i] floatValue] > _max) {
+            _max = [_heightArr[i] floatValue];
+        }
+    }
+    return _max+80;
 }
 
 - (void)didReceiveMemoryWarning {

@@ -42,11 +42,11 @@
     self.gender = [[UITextField alloc]initWithFrame:CGRectMake(CGRectGetMaxX(self.genderLabel.frame), CGRectGetMinY(self.genderLabel.frame), CGRectGetWidth(self.phone.frame), CGRectGetHeight(self.phone.frame))];
     self.gender.borderStyle = UITextBorderStyleRoundedRect;
     [self.scrollView addSubview:_gender];
-    self.sure = [UIButton buttonWithType: UIButtonTypeSystem];
-    self.sure.frame = CGRectMake(kScreenWidth/3, CGRectGetMaxY(self.gender.frame)+10, kScreenWidth/3, 50);
-    [self.sure setTitle:@"确定" forState:UIControlStateNormal];
-    [self.scrollView addSubview:_sure];
-    self.scrollView.contentSize = CGSizeMake(kScreenWidth, CGRectGetMaxY(self.sure.frame)+30);
+//    self.sure = [UIButton buttonWithType: UIButtonTypeSystem];
+//    self.sure.frame = CGRectMake(kScreenWidth/3, CGRectGetMaxY(self.gender.frame)+10, kScreenWidth/3, 50);
+//    [self.sure setTitle:@"确定" forState:UIControlStateNormal];
+//    [self.scrollView addSubview:_sure];
+    self.scrollView.contentSize = CGSizeMake(kScreenWidth, CGRectGetMaxY(self.gender.frame)+30);
 }
 /*
 // Only override drawRect: if you perform custom drawing.

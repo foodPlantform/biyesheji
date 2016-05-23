@@ -203,7 +203,7 @@
             [self.tableView reloadData];
             self.hud.hidden = YES;
             
-            [self.tableView.mj_footer endRefreshing];
+            //[self.tableView.mj_footer endRefreshing];
             
         });
         
@@ -571,6 +571,7 @@
 
     foodDetailController *foodVc = [[foodDetailController alloc]init];
     foodVc.foodmodel = fm;
+    foodVc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:foodVc  animated:YES];
     [self setHidesBottomBarWhenPushed:NO];
 }

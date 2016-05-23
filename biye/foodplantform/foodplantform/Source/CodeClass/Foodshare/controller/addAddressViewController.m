@@ -50,7 +50,29 @@
     
     [self.av.chooseCity addTarget:self action:@selector(chooseCityAction) forControlEvents:UIControlEventTouchUpInside];
     [self.av.sure addTarget:self action:@selector(sureAction) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIToolbar * topView = [[UIToolbar alloc]initWithFrame:CGRectMake(0, 0, 320, 30)];
+    [topView setBarStyle:UIBarStyleDefault];
+    
+    UIBarButtonItem * btnSpace = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:self action:nil];
+    
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = CGRectMake(2, 5, 30, 25);
+    [btn addTarget:self action:@selector(dismissKeyBoard) forControlEvents:UIControlEventTouchUpInside];
+    [btn setBackgroundImage:[UIImage imageNamed:@"down"] forState:UIControlStateNormal];
+    UIBarButtonItem *doneBtn = [[UIBarButtonItem alloc]initWithCustomView:btn];
+    NSArray * buttonsArray = [NSArray arrayWithObjects:btnSpace,doneBtn,nil];
+    [topView setItems:buttonsArray];
+    [self.av.name setInputAccessoryView:topView];
+    [self.av.phone setInputAccessoryView:topView];
+    [self.av.address setInputAccessoryView:topView];
     // Do any additional setup after loading the view.
+}
+-(void)dismissKeyBoard
+{
+    [self.av.name resignFirstResponder];
+    [self.av.phone resignFirstResponder];
+    [self.av.address resignFirstResponder];
 }
 -(void)chooseCityAction
 {

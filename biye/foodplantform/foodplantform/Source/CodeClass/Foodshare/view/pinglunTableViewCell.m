@@ -22,6 +22,7 @@
     self.name.text = @"用户:";
     [self.contentView addSubview:_name];
     self.userName = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(self.name.frame), CGRectGetMinY(self.name.frame), kScreenWidth-50, 10)];
+    self.userName.numberOfLines = 0;
     [self.contentView addSubview:_userName];
     self.star = [[HCSStarRatingView alloc]initWithFrame:CGRectMake(CGRectGetMinX(self.name.frame), CGRectGetMaxY(self.name.frame)+5, 100, 20)];
     self.star.maximumValue = 5;
@@ -33,6 +34,7 @@
     
     [self.contentView addSubview:_star];
     self.content  = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMinX(self.name.frame), CGRectGetMaxY(self.star.frame), kScreenWidth - 10, 30)];
+    self.content.numberOfLines = 0;
     [self.contentView addSubview:_content];
 }
 - (void)awakeFromNib {

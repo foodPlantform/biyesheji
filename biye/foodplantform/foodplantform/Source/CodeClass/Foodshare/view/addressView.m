@@ -21,7 +21,8 @@
     [self addSubview:_tableView];
     self.btn = [UIButton buttonWithType: UIButtonTypeSystem];
     self.btn.frame = CGRectMake(0, CGRectGetMaxY(self.tableView.frame), kScreenWidth, 50);
-    self.btn.backgroundColor = [UIColor blueColor];
+    self.btn.backgroundColor = [UIColor darkGrayColor];
+    self.btn.tintColor = [UIColor whiteColor];
     [self.btn setTitle:@"确定" forState:UIControlStateNormal];
     [self addSubview:_btn];
 }

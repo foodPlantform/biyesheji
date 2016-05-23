@@ -135,6 +135,7 @@
     if (indexPath.section == 0 && indexPath.row == 1) {
         
         myFoodTableViewController *myVC = [[myFoodTableViewController alloc]init];
+        myVC.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:myVC animated:YES];
         
     }
@@ -144,6 +145,7 @@
     }
     if (indexPath.row == 3 && indexPath.section == 0) {
         userViewController *userVc = [[userViewController alloc]init];
+        userVc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:userVc animated:YES];
     }
     if (indexPath.section == 0 && indexPath.row ==4) {
@@ -177,6 +179,7 @@
     if (alertView.tag == 102 && buttonIndex == 1) {
         [BmobUser logout];
         [[regAndLogTool shareTools] setValue:nil forKey:@"loginName"];
+        [self.tableView reloadData];
         [[regAndLogTool shareTools] messageShowWith:@"注销成功" cancelStr:@"确定"];
     }
     if (alertView.tag == 103 && buttonIndex == 1) {

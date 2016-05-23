@@ -12,12 +12,16 @@
 
 @interface pinglunViewController ()<UITableViewDataSource,UITableViewDelegate>
 @property(nonatomic,strong)NSMutableArray *dataArr;
+@property(nonatomic,assign)CGFloat height;
+@property(nonatomic,strong) NSMutableArray *heightArr;
+@property(nonatomic,assign) CGFloat max;
 @end
 
 @implementation pinglunViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.heightArr = [NSMutableArray array];
     //self.edgesForExtendedLayout = UIRectEdgeNone;
     self.view.frame = CGRectMake(0, 0, kScreenWidth, kScreenHeight-170);
     self.tableView = [[UITableView alloc]initWithFrame:self.view.frame];
@@ -66,15 +70,37 @@
     pinglunModel *pm = self.dataArr[indexPath.row];
     cell.name.text = pm.name;
     cell.star.value = [pm.star floatValue];
+    CGRect rect1 = cell.content.frame;
+    rect1.size.height = [self heightforstring:pm.content];
+    self.height = rect1.size.height;
+    cell.content.frame = rect1;
     cell.content.text = pm.content;
-    
+    [self.heightArr addObject:[NSNumber numberWithFloat:_height]];
     //cell.userName.text = @"qwer";
     return cell;
 
 }
+-(CGFloat)heightforstring:(NSString *)str
+{
+    NSDictionary *dic = @{NSFontAttributeName:[UIFont systemFontOfSize:18.0]};
+    CGRect rect = [str boundingRectWithSize:CGSizeMake(kScreenWidth-20, 5000) options:NSStringDrawingUsesLineFragmentOrigin attributes:dic context:nil];
+    
+    return rect.size.height;
+}
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 80;
+    NSLog(@"number%lu==",(unsigned long)_heightArr.count);
+    
+    
+        for (int i = 0; i<_heightArr.count; i++) {
+            _max = 0;
+            if ([_heightArr[i] floatValue] > _max) {
+                _max = [_heightArr[i] floatValue];
+            }
+        }
+            return _max+80;
+            
+      
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

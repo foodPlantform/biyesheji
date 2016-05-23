@@ -66,7 +66,7 @@
 -(void)leftAction
 {
     [self.navigationController popViewControllerAnimated:YES];
-    //self.hidesBottomBarWhenPushed = YES;
+    self.hidesBottomBarWhenPushed = NO;
 }
 - (NSUInteger)numberOfTab:(SUNSlideSwitchView *)view
 {

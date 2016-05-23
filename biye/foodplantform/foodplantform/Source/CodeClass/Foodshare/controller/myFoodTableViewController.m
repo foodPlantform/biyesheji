@@ -12,17 +12,105 @@
 #import "loginViewController.h"
 #import "myFoodTableViewCell.h"
 #import "foodDetailController.h"
+#import "MJRefresh.h"
 
 
 @interface myFoodTableViewController ()
 @property(nonatomic,strong)NSMutableArray *dataArr;
+@property(nonatomic,strong)MBProgressHUD *hud;
+@property(nonatomic,strong)BmobQuery *bQuery;
 @end
 
 @implementation myFoodTableViewController
 
+- (void)p_setupProgressHud
+{
+    self.hud = [[MBProgressHUD alloc] initWithView:self.view];
+    _hud.frame = self.view.bounds;
+    _hud.minSize = CGSizeMake(100, 100);
+    _hud.mode = MBProgressHUDModeIndeterminate;
+    [self.view addSubview:_hud];
+    
+    [_hud show:YES];
+}
+
+// 下拉刷新
+- (void)setupRefresh
+{
+    // 1.下拉刷新(进入刷新状态就会调用self的headerRereshing)
+    self.tableView.mj_header=[MJRefreshNormalHeader headerWithRefreshingTarget:self refreshingAction:@selector(loadNewData)];
+    //[_mainTableView.mj_header beginRefreshing];
+    self.tableView.mj_footer=[MJRefreshAutoNormalFooter footerWithRefreshingTarget:self refreshingAction:@selector(loadMoreData)];
+}
+-(void)loadNewData
+{
+    
+    self.bQuery.limit = 10;
+    self.bQuery.skip = 0;
+    
+    [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        [self.dataArr removeAllObjects];
+        for (BmobObject *obj in array) {
+            foodModel *fm = [[foodModel alloc]init];
+            fm.fid = [obj objectForKey:@"objectId"];
+            fm.foodName =[obj objectForKey:@"foodname"];
+            fm.foodDes =[obj objectForKey:@"fooddes"];
+            fm.address =[obj objectForKey:@"address"];
+            fm.rec =[obj objectForKey: @"rec"];
+            fm.sty =[obj objectForKey:@"sty"] ;
+            fm.score =[obj objectForKey:@"score"] ;
+            fm.userName  =[obj objectForKey:@"username"];
+            fm.picUrl = [obj objectForKey:@"picurl"];
+            fm.cityName = [obj objectForKey:@"city"];
+            fm.phone = [obj objectForKey:@"phone"];
+            [self.dataArr addObject:fm];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            self.hud.hidden = YES;
+            
+            [self.tableView.mj_header endRefreshing];
+            
+        });
+        
+    }];
+}
+-(void)loadMoreData
+{
+    self.bQuery.limit = 10;
+    self.bQuery.skip += 10;
+       [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        for (BmobObject *obj in array) {
+            foodModel *fm = [[foodModel alloc]init];
+            fm.fid = [obj objectForKey:@"objectId"];
+            fm.foodName =[obj objectForKey:@"foodname"];
+            fm.foodDes =[obj objectForKey:@"fooddes"];
+            fm.address =[obj objectForKey:@"address"];
+            fm.rec =[obj objectForKey: @"rec"];
+            fm.sty =[obj objectForKey:@"sty"] ;
+            fm.score =[obj objectForKey:@"score"] ;
+            fm.userName  =[obj objectForKey:@"username"];
+            fm.picUrl = [obj objectForKey:@"picurl"];
+            fm.cityName = [obj objectForKey:@"city"];
+            fm.phone = [obj objectForKey:@"phone"];
+            [self.dataArr addObject:fm];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            self.hud.hidden = YES;
+            
+            [self.tableView.mj_footer endRefreshing];
+            
+        });
+        
+    }];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.dataArr = [NSMutableArray array];
+    
     [self.tableView registerClass:[myFoodTableViewCell class] forCellReuseIdentifier:@"cell"];
     if ([regAndLogTool shareTools].loginName == nil) {
         loginViewController *logVc = [[loginViewController alloc]init];
@@ -33,12 +121,16 @@
     }
     else
     {
+        [self p_setupProgressHud];
+        self.bQuery.limit = 10;
+        self.bQuery.skip = 0;
+        self.dataArr = [NSMutableArray array];
         BmobUser *user = [BmobUser getCurrentUser];
         NSString *name = [NSString string];
         name = user.mobilePhoneNumber;
-        BmobQuery *query = [BmobQuery queryWithClassName:@"food_message"];
-        [query whereKey:@"phone" equalTo:name];
-        [query findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+        self.bQuery = [BmobQuery queryWithClassName:@"food_message"];
+        [_bQuery whereKey:@"phone" equalTo:name];
+        [_bQuery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
             for (BmobObject *obj in array) {
                 foodModel *fm = [[foodModel alloc]init];
                 fm.fid = [obj objectForKey:@"objectId"];
@@ -58,19 +150,27 @@
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
+                self.hud.hidden = YES;
             });
         }];
+        [self setupRefresh];
         
     }
     
     
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"上传" style:UIBarButtonItemStylePlain target:self action:@selector(rightAction)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleDone target:self action:@selector(leftAction)];
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+-(void)leftAction
+{
+    [self.navigationController popViewControllerAnimated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 }
 -(void)rightAction
 {
@@ -85,6 +185,7 @@
     else
     {
         uploadFoodViewController *upVc = [[uploadFoodViewController alloc]init];
+        self.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:upVc animated:YES];
     }
 }
@@ -148,6 +249,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    self.tabBarController.hidesBottomBarWhenPushed = YES;
     foodModel *fm = [[foodModel alloc]init];
     fm = self.dataArr[indexPath.row];
     foodDetailController *foodVc = [[foodDetailController alloc]init];

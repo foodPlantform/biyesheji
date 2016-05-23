@@ -71,7 +71,14 @@
     [self.lv.foodName setInputAccessoryView:topView];
     [self.lv.foodDes setInputAccessoryView:topView];
     [self.lv.address setInputAccessoryView:topView];
+    
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleDone target:self action:@selector(leftAction)];
     // Do any additional setup after loading the view.
+}
+-(void)leftAction
+{
+    [self.navigationController popViewControllerAnimated:YES];
+    self.hidesBottomBarWhenPushed = NO;
 }
 -(void)dismissKeyBoard
 {

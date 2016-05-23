@@ -21,10 +21,13 @@
 {
     
     self.name = [[UILabel alloc]initWithFrame:CGRectMake(10, 10, 100, 50)];
+    self.name.numberOfLines = 0;
     [self.contentView addSubview:_name];
     self.phone = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMaxX(self.name.frame)+10, CGRectGetMinY(self.name.frame), 200, 50)];
+    self.phone.numberOfLines = 0;
     [self.contentView addSubview:_phone];
     self.address = [[UILabel alloc]initWithFrame:CGRectMake(CGRectGetMinX(self.name.frame), CGRectGetMaxY(self.phone.frame)+10, kScreenWidth, 50)];
+    self.address.numberOfLines = 0;
     [self.contentView addSubview:_address];
 }
 - (void)awakeFromNib {

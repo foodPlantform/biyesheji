@@ -23,7 +23,7 @@
     self.backgroundColor = [UIColor whiteColor];
     // 用户名
     self.userName = [[UITextField alloc]initWithFrame:CGRectMake(0, 100, kScreenWidth, 50)];
-    self.userName.placeholder = @"用户名";
+    self.userName.placeholder = @"请输入手机号";
     self.userName.layer.borderWidth = 0.5;
     self.userName.layer.borderColor = [UIColor grayColor].CGColor;
     self.userName.textAlignment = UITextAlignmentCenter;
