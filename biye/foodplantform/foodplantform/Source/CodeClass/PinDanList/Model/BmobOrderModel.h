@@ -11,6 +11,8 @@
 
 //订单id
 @property(nonatomic,strong)NSString *orderID;
+@property(nonatomic,strong)NSString *orderType;
+
 //订单id
 @property(nonatomic,strong)NSString *senderID;
 //订单 申请的ID 及状态

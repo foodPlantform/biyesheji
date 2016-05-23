@@ -26,6 +26,7 @@
         self.picUrl = [FoodListObject objectForKey:@"picurl"];
         self.cityName = [FoodListObject objectForKey:@"city"];
         self.phone = [FoodListObject objectForKey:@"phone"];
+        self.senderFoodUserID = [FoodListObject objectForKey:@"userid"];
     }
     return self;
 }

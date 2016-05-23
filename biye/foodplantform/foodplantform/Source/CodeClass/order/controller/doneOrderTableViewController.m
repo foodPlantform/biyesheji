@@ -16,7 +16,7 @@
 #import "replyTableViewController.h"
 #import "allpinglunViewController.h"
 #import "userPinglun.h"
-
+# import "PinlunPesVC.h"
 
 @interface doneOrderTableViewController ()<OrderCelllDelegate,BmobEventDelegate>
 @property (nonatomic,strong)NSMutableArray *orderDataArr;
@@ -299,15 +299,15 @@
                   
                }
            }];
-//          BmobObjectsBatch    *updateOrderList = [[BmobObjectsBatch alloc] init] ;
-//          //在GameScore表中创建一条数据
-//          //在GameScore表中更新objectId为27eabbcfec的数据 @{@"apply_orderType":_orderType}
-//          [updateOrderList updateBmobObjectWithClassName:@"user_order" objectId:handeledModel.orderID parameters:@{@"order_Type": @"1"}];
-//          //在GameScore表中删除objectId为30752bb92f的数据
-//          //[batch deleteBmobObjectWithClassName:@"GameScore" objectId:@"30752bb92f"];
-//          [updateOrderList batchObjectsInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
-////              NSLog(@"batch error %@",[error description]);
-//          }];
+          BmobObjectsBatch    *updateOrderList = [[BmobObjectsBatch alloc] init] ;
+          //在GameScore表中创建一条数据
+          //在GameScore表中更新objectId为27eabbcfec的数据 @{@"apply_orderType":_orderType}
+          [updateOrderList updateBmobObjectWithClassName:@"user_order" objectId:handeledModel.orderID parameters:@{@"order_Type": @"1"}];
+          //在GameScore表中删除objectId为30752bb92f的数据
+          //[batch deleteBmobObjectWithClassName:@"GameScore" objectId:@"30752bb92f"];
+          [updateOrderList batchObjectsInBackgroundWithResultBlock:^(BOOL isSuccessful, NSError *error) {
+//              NSLog(@"batch error %@",[error description]);
+          }];
           //在oldOrder表中创建一条数据
           BmobUser *bUser = [BmobUser getCurrentUser];
           
@@ -393,7 +393,10 @@
 //查看对申请人的历史评论
 - (void)showPinlunCell:(OrderCell *)cell model:(UserApplyListModel *)model handeledModel:(BmobOrderModel *)handeledModel
 {
-    
+    PinlunPesVC *vc  =[[PinlunPesVC alloc] init];
+    vc.title = [NSString stringWithFormat:@"%@的历史完成订单",model.applyUserListName];
+    vc.userID = model.applyUserListID;
+    [_vc.navigationController pushViewController:vc animated:YES];
     
 }
 //加好友
@@ -447,11 +450,9 @@
         else
         {
             allpinglunViewController *allVc = [[allpinglunViewController alloc]init];
-            pinglunController *vc=  [[pinglunController alloc] init];
-            vc.ordID = handeledModel.orderID;
-            userPinglun *userVc = [[userPinglun alloc]init];
-            userVc.rec_userid = handeledModel.senderID;
-            userVc.orderid = handeledModel.orderID;
+            allVc.ordid = handeledModel.fid;
+            allVc.rec_userid =handeledModel.senderFoodUserID;
+
             [_vc.navigationController pushViewController:allVc animated:YES];
         }
         

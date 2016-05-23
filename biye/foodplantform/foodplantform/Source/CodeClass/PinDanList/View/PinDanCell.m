@@ -31,7 +31,16 @@
     _foodNameLB.text = [NSString stringWithFormat:@"   我要吃 :  %@",_model.name] ;
     _foodPersonNumLB.text = [NSString stringWithFormat:@"拼单人数:  %ld／%ld",(long)_model.currentPersonNum,(long)_model.personMaxNum] ;
     _foodLocationLB.text = [NSString stringWithFormat:@"拼单地点:  %@",_model.foodLocation] ;
-    _userSexAgeLB.text = [NSString stringWithFormat:@"预算金额: ¥%@",_model.orderPrice] ;
+    _userSexAgeLB.textColor = [UIColor redColor];
+    NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"预算金额: ¥%@",_model.orderPrice] ];
+    [str addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0,5)];
+//    [str addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(6,_model.orderPrice.length+1)];
+//    [str addAttribute:NSForegroundColorAttributeName value:[UIColor greenColor] range:NSMakeRange(19,6)];
+//    [str addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Arial-BoldItalicMT" size:30.0] range:NSMakeRange(0, 5)];
+//    [str addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"HelveticaNeue-Bold" size:30.0] range:NSMakeRange(6, 12)];
+//    [str addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"Courier-BoldOblique" size:30.0] range:NSMakeRange(19, 6)];
+    _userSexAgeLB.attributedText = str;
+    //_userSexAgeLB.text = [NSString stringWithFormat:@"预算金额: ¥%@",_model.orderPrice] ;
     _foodPayTypeLB.text = [NSString stringWithFormat:@"付款方式: %@",_model.foodPayType.intValue==0?@"我付":@"AA制"];
 
     //时间

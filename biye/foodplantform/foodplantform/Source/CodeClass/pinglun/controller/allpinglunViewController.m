@@ -29,7 +29,7 @@
     
     self.userVc  = [[userPinglun alloc]init];
     self.userVc.rec_userid = self.rec_userid;
-    self.ordid = self.ordid;
+    self.userVc.orderid = self.ordid;
     [self addChildViewController:_userVc];
     self.userVc.view.frame = CGRectMake(0, 66, kScreenWidth, kScreenHeight);
     

@@ -14,7 +14,7 @@
 #import "MJRefresh.h"
 #import "PindanPesVC.h"
 #import "PinDanCell.h"
-#import "OldPindDanVC.h"
+#import "PinlunPesVC.h"
 #define OnceLoadPageRow 5
 
 @interface PinDanVcr ()<LrdOutputViewDelegate,CLLocationManagerDelegate,CLAlertViewDelegate,PindanCelllDelegate>
@@ -518,7 +518,7 @@
 #pragma mark - PindanCelllDelegate 显示已完成拼单
 -(void)showOldOrderPinDanCell:(PinDanCell *)cell model:(BmobOrderModel *)model
 {
-    OldPindDanVC *vc  =[[OldPindDanVC alloc] init];
+    PinlunPesVC *vc  =[[PinlunPesVC alloc] init];
     vc.title = [NSString stringWithFormat:@"%@的历史完成顶单",model.niCheng];
     vc.userID = model.senderID;
     [self.navigationController pushViewController:vc animated:YES];
@@ -528,101 +528,107 @@
 {
     //注销登陆
   //[BmobUser logout];
-    if ([[FileManager shareManager] isUserLogin]) {
-        
-        //加入拼单
-        BmobUser *bUser = [BmobUser getCurrentUser];
-        BmobObject *addOrder = [BmobObject objectWithoutDatatWithClassName:@"user_order" objectId:model.orderID];
-        if (model.currentPersonNum ==model.personMaxNum) {
-            // 1.跳出弹出框，提示用户打开步骤。
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"该单已满" preferredStyle:UIAlertControllerStyleAlert];
-            [alertController addAction:[UIAlertAction actionWithTitle:@"重新选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            }]];
-            [self presentViewController:alertController animated:YES completion:nil];
-
+    if (model.orderType.integerValue == 0) {
+        if ([[FileManager shareManager] isUserLogin]) {
             
-        }else if ([model.senderID isEqualToString:bUser.objectId])//发单人不能加入该拼单
-        {
-            // 1.跳出弹出框，提示用户打开步骤。
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"你是发单人，不能加入该单" preferredStyle:UIAlertControllerStyleAlert];
-            [alertController addAction:[UIAlertAction actionWithTitle:@"重新选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            }]];
-            [self presentViewController:alertController animated:YES completion:nil];
-        }else
-        {
-            
-            if ([model.applyUserIDArr containsObject:bUser.objectId])
+            //加入拼单
+            BmobUser *bUser = [BmobUser getCurrentUser];
+            BmobObject *addOrder = [BmobObject objectWithoutDatatWithClassName:@"user_order" objectId:model.orderID];
+            if (model.currentPersonNum ==model.personMaxNum) {
+                // 1.跳出弹出框，提示用户打开步骤。
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"该单已满" preferredStyle:UIAlertControllerStyleAlert];
+                [alertController addAction:[UIAlertAction actionWithTitle:@"重新选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                }]];
+                [self presentViewController:alertController animated:YES completion:nil];
+                
+                
+            }else if ([model.senderID isEqualToString:bUser.objectId])//发单人不能加入该拼单
             {
                 // 1.跳出弹出框，提示用户打开步骤。
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"你已申请过该拼单" preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"你是发单人，不能加入该单" preferredStyle:UIAlertControllerStyleAlert];
                 [alertController addAction:[UIAlertAction actionWithTitle:@"重新选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    
                 }]];
                 [self presentViewController:alertController animated:YES completion:nil];
-            }else{
-                BmobQuery *userquery = [BmobQuery queryForUser];
-                [userquery whereKey:@"objectId" equalTo:model.senderID];
-                [userquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
-                    
-                    BmobObject *obj = array[0];
-                    BmobPush *push = [BmobPush push];
-                    BmobQuery *query = [BmobInstallation query];
-                    [query whereKey:@"deviceToken" equalTo:[obj objectForKey:@"deviceToken"]];
-                    [push setQuery:query];
-                    [push setMessage:@"有人申请你的订单了，去看看吧"];
-                    [push sendPushInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
-                        NSLog(@"error %@",[error description]);
+            }else
+            {
+                
+                if ([model.applyUserIDArr containsObject:bUser.objectId])
+                {
+                    // 1.跳出弹出框，提示用户打开步骤。
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"你已申请过该拼单" preferredStyle:UIAlertControllerStyleAlert];
+                    [alertController addAction:[UIAlertAction actionWithTitle:@"重新选择" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        
+                    }]];
+                    [self presentViewController:alertController animated:YES completion:nil];
+                }else{
+                    BmobQuery *userquery = [BmobQuery queryForUser];
+                    [userquery whereKey:@"objectId" equalTo:model.senderID];
+                    [userquery findObjectsInBackgroundWithBlock:^(NSArray *array, NSError *error) {
+                        
+                        BmobObject *obj = array[0];
+                        BmobPush *push = [BmobPush push];
+                        BmobQuery *query = [BmobInstallation query];
+                        [query whereKey:@"deviceToken" equalTo:[obj objectForKey:@"deviceToken"]];
+                        [push setQuery:query];
+                        [push setMessage:@"有人申请你的订单了，去看看吧"];
+                        [push sendPushInBackgroundWithBlock:^(BOOL isSuccessful, NSError *error) {
+                            NSLog(@"error %@",[error description]);
+                        }];
                     }];
-                }];
-                //订单 申请的人数 及状态 5 通过 4待审核  拼单人的状态
-                //订单状态 1已完成   2待处理的 3 已处理 发单人的订单状态
-                [addOrder incrementKey:@"order_currentNum"];
-                [addOrder setObject:@"4" forKey:@"apply_orderType"];
-                [addOrder setObject:@"2" forKey:@"user_orderType"];
-                [addOrder addUniqueObjectsFromArray:@[bUser.objectId] forKey:@"apply_userIDArr"];
-                [addOrder addUniqueObjectsFromArray:@[@{@"userOrderType":@"5",@"userID":bUser.objectId}] forKey:@"apply_userArr"];
-                [addOrder updateInBackground];
-                BmobObject *addUserApplyList = [BmobObject objectWithoutDatatWithClassName:@"_User" objectId:bUser.objectId
-                                                ];
-
-               
-                
-                [addUserApplyList addUniqueObjectsFromArray:@[model.orderID] forKey:@"apply_orderListArr" ];
-               [addUserApplyList updateInBackground];
-                
-                 //加到applyOrder表中 便于管理
-                BmobObject  *user_applyList = [BmobObject objectWithClassName:@"user_apply"];
-                //订单 申请的人数 及状态 5 通过 4待审核  拼单人的状态
-                //订单状态 1已完成   2待处理的 3 已处理 发单人的订单状态
-
-                [user_applyList setObject:@"4" forKey:@"apply_orderType"];
-                [user_applyList setObject:@"2" forKey:@"sender_OrderType"];
-                //0 表示order表 1 food表
-                [user_applyList setObject:@"0" forKey:@"apply_type"];
-                [user_applyList setObject:bUser.objectId forKey:@"apply_userID"];
-                [user_applyList setObject:bUser.username forKey:@"apply_userName"];
-                [user_applyList setObject:model.senderID forKey:@"sender_userID"];
-                [user_applyList setObject:model.niCheng forKey:@"sender_userName"];
-
-                [user_applyList setObject:model.orderID forKey:@"order_ID"];
-                [user_applyList saveInBackground];
-                // 1.跳出弹出框，提示用户打开步骤。
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"加入成功" preferredStyle:UIAlertControllerStyleAlert];
-                [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    [self loadNewData];
+                    //订单 申请的人数 及状态 5 通过 4待审核  拼单人的状态
+                    //订单状态 1已完成   2待处理的 3 已处理 发单人的订单状态
+                    [addOrder incrementKey:@"order_currentNum"];
+                    [addOrder setObject:@"4" forKey:@"apply_orderType"];
+                    [addOrder setObject:@"2" forKey:@"user_orderType"];
+                    [addOrder addUniqueObjectsFromArray:@[bUser.objectId] forKey:@"apply_userIDArr"];
+                    [addOrder addUniqueObjectsFromArray:@[@{@"userOrderType":@"5",@"userID":bUser.objectId}] forKey:@"apply_userArr"];
+                    [addOrder updateInBackground];
+                    BmobObject *addUserApplyList = [BmobObject objectWithoutDatatWithClassName:@"_User" objectId:bUser.objectId
+                                                    ];
                     
-                }]];
-                [self presentViewController:alertController animated:YES completion:nil];
+                    
+                    
+                    [addUserApplyList addUniqueObjectsFromArray:@[model.orderID] forKey:@"apply_orderListArr" ];
+                    [addUserApplyList updateInBackground];
+                    
+                    //加到applyOrder表中 便于管理
+                    BmobObject  *user_applyList = [BmobObject objectWithClassName:@"user_apply"];
+                    //订单 申请的人数 及状态 5 通过 4待审核  拼单人的状态
+                    //订单状态 1已完成   2待处理的 3 已处理 发单人的订单状态
+                    
+                    [user_applyList setObject:@"4" forKey:@"apply_orderType"];
+                    [user_applyList setObject:@"2" forKey:@"sender_OrderType"];
+                    //0 表示order表 1 food表
+                    [user_applyList setObject:@"0" forKey:@"apply_type"];
+                    [user_applyList setObject:bUser.objectId forKey:@"apply_userID"];
+                    [user_applyList setObject:bUser.username forKey:@"apply_userName"];
+                    [user_applyList setObject:model.senderID forKey:@"sender_userID"];
+                    [user_applyList setObject:model.niCheng forKey:@"sender_userName"];
+                    
+                    [user_applyList setObject:model.orderID forKey:@"order_ID"];
+                    [user_applyList saveInBackground];
+                    // 1.跳出弹出框，提示用户打开步骤。
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"提示" message:@"加入成功" preferredStyle:UIAlertControllerStyleAlert];
+                    [alertController addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        [self loadNewData];
+                        
+                    }]];
+                    [self presentViewController:alertController animated:YES completion:nil];
+                }
+                
+                
+                
             }
-
             
             
+        }else
+        {
+            [[FileManager shareManager ] LoginWithVc:self];
         }
-        
 
     }else
     {
-        [[FileManager shareManager ] LoginWithVc:self];
+        [[regAndLogTool shareTools] messageShowWith:@"这是已完成的订单" cancelStr:@"重新选择"];
     }
 }
 

@@ -12,6 +12,7 @@
 @property(nonatomic,strong)NSString *fid;
 @property(nonatomic,strong)NSString *foodName;
 @property(nonatomic,strong)NSString *userName;
+@property(nonatomic,strong)NSString *senderFoodUserID;
 @property(nonatomic,strong)NSString *foodDes;
 @property(nonatomic,strong)NSString *address;
 @property(nonatomic,strong)NSString *picUrl;
