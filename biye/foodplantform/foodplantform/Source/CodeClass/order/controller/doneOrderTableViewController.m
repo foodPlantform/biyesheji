@@ -346,11 +346,13 @@
         else
         {
             allpinglunViewController *allVc = [[allpinglunViewController alloc]init];
-            pinglunController *vc=  [[pinglunController alloc] init];
-            vc.ordID = handeledModel.orderID;
-            userPinglun *userVc = [[userPinglun alloc]init];
-            userVc.rec_userid = handeledModel.senderID;
-            userVc.orderid = handeledModel.orderID;
+            allVc.ordid = handeledModel.orderID;
+            allVc.rec_userid =handeledModel.senderID;
+//            pinglunController *vc=  [[pinglunController alloc] init];
+//            vc.ordID = handeledModel.orderID;
+//            userPinglun *userVc = [[userPinglun alloc]init];
+//            userVc.rec_userid = handeledModel.senderID;
+//            userVc.orderid = handeledModel.orderID;
             [_vc.navigationController pushViewController:allVc animated:YES];
         }
         
